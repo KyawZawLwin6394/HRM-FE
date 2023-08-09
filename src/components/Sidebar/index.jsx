@@ -35,14 +35,14 @@ export default function Sidebar() {
                         </CardHeader>
                         <Divider />
                         <CardBody className="px-0 py-0 m-0">
-                            <Accordion isCompact={true} variant="splited" itemClasses={itemClasses}>
+                            <Accordion isCompact={true} selectionMode="multiple" variant="splited" itemClasses={itemClasses}>
                                 <AccordionItem key="1" aria-label="Employee" title="Employee">
                                     <Button variant="light" className="rounded-none px-0 py-0 w-full text-left"><Link><BadgeIcon /><span className="m-auto">Employee List</span></Link> </Button>
                                 </AccordionItem>
-                                <AccordionItem key="2" aria-label="Accordion 2" title="Accordion 2">
+                                <AccordionItem key="2" aria-label="About Us" title="About Us">
                                     {defaultContent}
                                 </AccordionItem>
-                                <AccordionItem key="3" aria-label="Accordion 3" title="Accordion 3">
+                                <AccordionItem key="3" aria-label="Help" title="Help">
                                     {defaultContent}
                                 </AccordionItem>
                             </Accordion>
