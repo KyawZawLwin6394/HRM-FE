@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 :root {
-  background-color: black;
-  color: white;
+  background-color: rgb(233, 228, 228);
+  color: rgb(20, 19, 19);
 }

@@ -17,7 +17,7 @@ import { SearchIcon } from './search'
 export default function NavBar () {
   return (
     <Navbar isBordered>
-      <NavbarContent justify='start'>
+      <NavbarContent justify='flex'>
         <NavbarBrand className='mr-4'>
           <AcmeLogo />
           <p className='hidden sm:block font-bold text-inherit'>ACME</p>
