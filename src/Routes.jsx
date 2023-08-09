@@ -8,7 +8,7 @@ export default function RouteFile () {
   return (
     <>
       <BrowserRouter>
-        <Nav />
+        {/* <Nav /> */}
         <Routes>
           <Route path='/' element={<Home />}></Route>
           <Route path='/navbar' element={<Nav />}></Route>
