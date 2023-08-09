@@ -3,7 +3,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Input,
   DropdownItem,
   DropdownTrigger,
@@ -13,24 +12,25 @@ import {
 } from '@nextui-org/react'
 import { AcmeLogo } from './logo'
 import { SearchIcon } from './search'
+import { Link } from 'react-router-dom'
 
 export default function NavBar () {
   return (
     <Navbar isBordered>
+      {/* <h3>Hello</h3> */}
+      <AcmeLogo />
+
       <NavbarContent justify='flex'>
-        <NavbarBrand className='mr-4'>
-          <AcmeLogo />
-          <p className='hidden sm:block font-bold text-inherit'>ACME</p>
+        <NavbarBrand>
+          <p className='hidden sm:block font-bold text-inherit'>HRM</p>
         </NavbarBrand>
-        <NavbarContent className='hidden sm:flex gap-3'>
+        <NavbarContent className=' sm:flex gap-2 mt-16'>
           <NavbarItem>
-            <Link color='foreground' href='#'>
-              Features
-            </Link>
+            <Link to='/'>Home</Link>
           </NavbarItem>
           <NavbarItem isActive>
-            <Link href='#' aria-current='page' color='secondary'>
-              Customers
+            <Link to='/about' aria-current='page' color='secondary'>
+              About
             </Link>
           </NavbarItem>
           <NavbarItem>
@@ -40,20 +40,20 @@ export default function NavBar () {
           </NavbarItem>
         </NavbarContent>
       </NavbarContent>
+      <Input
+        classNames={{
+          base: 'max-w-full sm:max-w-[10rem] h-8',
+          input: 'text-small',
+          inputWrapper:
+            'font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20'
+        }}
+        placeholder='Type to search...'
+        size='sm'
+        startContent={<SearchIcon size={20} />}
+        type='search'
+      />
 
-      <NavbarContent as='div' className='items-center' justify='end'>
-        <Input
-          classNames={{
-            base: 'max-w-full sm:max-w-[10rem] h-10',
-            input: 'text-small',
-            inputWrapper:
-              'font-normal text-default-500 bg-default-400/20 dark:bg-default-500/20'
-          }}
-          placeholder='Type to search...'
-          size='sm'
-          startContent={<SearchIcon size={18} />}
-          type='search'
-        />
+      <NavbarContent as='div' className='items-center mt-8' justify='end'>
         <Dropdown placement='bottom-end'>
           <DropdownTrigger>
             <Avatar
