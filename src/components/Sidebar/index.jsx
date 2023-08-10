@@ -11,11 +11,11 @@ import {
 import BadgeIcon from '@mui/icons-material/Badge'
 import { Link } from 'react-router-dom'
 
-export default function Sidebar () {
+export default function Sidebar() {
   const defaultContent =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
   const itemClasses = {
-    base: ' px-1 w-full',
+    base: ' px-2 w-full',
     title: 'font-normal text-medium text-left',
     trigger: 'data-[hover=true]:bg-default-100 round',
     indicator: 'text-medium px-1 py-1',
@@ -23,7 +23,7 @@ export default function Sidebar () {
   }
   return (
     <>
-      <div className='w-1/5 grid grid-cols-1 grid-flow-col py-3 px-2'>
+      <div className='sidebar w-full grid grid-cols-1 grid-flow-col py-3 px-2'>
         <div className='nav-bar flex-grow'>
           <Card className='w-[250px] max-h rounded-lg'>
             <CardHeader className='flex gap-3'>
@@ -42,29 +42,158 @@ export default function Sidebar () {
             </CardHeader>
             <Divider />
             <CardBody className='px-0 py-0 m-0'>
+
               <Accordion
                 isCompact={true}
                 selectionMode='multiple'
                 variant='splited'
                 itemClasses={itemClasses}
               >
+
+                {/* Employee */}
                 <AccordionItem key='1' aria-label='Employee' title='Employee'>
                   <Button
                     variant='light'
-                    className='rounded-none px-0 py-0 w-full text-left'
+                    className='rounded-none px-4 py-0 text-left'
+                    startContent={<BadgeIcon />}
                   >
                     <Link>
-                      <BadgeIcon />
                       <span className='m-auto'>Employee List</span>
-                    </Link>{' '}
+                    </Link>
+                  </Button>
+                  <Divider></Divider>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-1 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+
+                      <span className='m-auto'>Employee Update</span>
+                    </Link>
                   </Button>
                 </AccordionItem>
-                <AccordionItem key='2' aria-label='About Us' title='About Us'>
-                  {defaultContent}
+
+                {/* Position */}
+                <AccordionItem key='2' aria-label='Position' title='Position'>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-0 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+                      <span className='m-auto'>Position List</span>
+                    </Link>
+                  </Button>
+                  <Divider></Divider>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-1 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+
+                      <span className='m-auto'>Position Update</span>
+                    </Link>
+                  </Button>
                 </AccordionItem>
-                <AccordionItem key='3' aria-label='Help' title='Help'>
-                  {defaultContent}
+
+                {/* Department */}
+                <AccordionItem key='3' aria-label='Department' title='Department'>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-0 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+                      <span className='m-auto'>Department List</span>
+                    </Link>
+                  </Button>
+                  <Divider></Divider>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-1 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+
+                      <span className='m-auto'>Department Update</span>
+                    </Link>
+                  </Button>
                 </AccordionItem>
+
+                {/* Attendance */}
+                <AccordionItem key='4' aria-label='Attendance' title='Attendance' >
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-0 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+                      <span className='m-auto'>Attendance List</span>
+                    </Link>
+                  </Button>
+                  <Divider></Divider>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-1 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+
+                      <span className='m-auto'>Attendance Update</span>
+                    </Link>
+                  </Button>
+                </AccordionItem>
+
+                {/* Leave */}
+                <AccordionItem key='5' aria-label='Leave' title='Leave'>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-0 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+                      <span className='m-auto'>Leave List</span>
+                    </Link>
+                  </Button>
+                  <Divider></Divider>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-1 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+
+                      <span className='m-auto'>Leave Update</span>
+                    </Link>
+                  </Button>
+                </AccordionItem>
+
+                {/* Payslip */}
+                <AccordionItem key='6' aria-label='Payslip' title='Payslip'>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-0 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+                      <span className='m-auto'>Payslip List</span>
+                    </Link>
+                  </Button>
+                  <Divider></Divider>
+                  <Button
+                    variant='light'
+                    className='rounded-none px-4 py-1 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+
+                      <span className='m-auto'>Payslip Update</span>
+                    </Link>
+                  </Button>
+                </AccordionItem>
+
               </Accordion>
               <Divider></Divider>
             </CardBody>
