@@ -8,7 +8,6 @@ export default function RouteFile () {
   return (
     <>
       <BrowserRouter>
-        <Nav />
         <Routes>
           <Route path='/' element={<Login />}></Route>
 
