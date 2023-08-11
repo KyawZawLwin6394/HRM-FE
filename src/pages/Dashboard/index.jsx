@@ -7,7 +7,7 @@ export default function Dashboard() {
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
             <div className="py-4">
-                <div className="head bg-white rounded-lg shadow-md min-w-[1240px]">  <Nav /></div>
+                <div className="head bg-white rounded-lg shadow-md min-w-[1080px]">  <Nav /></div>
                 <div className="body  py-1">
                     <Card className="rounded-md shadow-md py-3">
                         <CardHeader className="font-semibold">
