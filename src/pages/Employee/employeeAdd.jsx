@@ -18,7 +18,7 @@ export default function employeeAdd() {
         <Sidebar />
       </div>
       <div className="py-4">
-        <div className="head bg-white rounded-lg shadow-md min-w-[1240px]">
+        <div className="head bg-white rounded-lg shadow-md min-w-[1080px]">
           {" "}
           <Nav />
         </div>
