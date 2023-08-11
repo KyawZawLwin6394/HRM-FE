@@ -1,20 +1,16 @@
-const axios = require('axios');
-const config = require('../config/config.json');
+import axios from 'axios';
+const url = 'http://localhost:9000/api/';
 
-//const url = 'http://clinicdenovobackend.kwintechnologies.com:3000/api/';
-//const url = "http://localhost:900/api/";
-
-// Create an instance of Axios with common configuration
 const apiInstance = axios.create({
-    baseURL: config.url,
+    baseURL: url,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
-// Add an interceptor to automatically add the token to requests
 apiInstance.interceptors.request.use(config => {
-    const token = localStorage.getItem('token');
+    //const token = localStorage.getItem('token');
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjcmVkZW50aWFscyI6IjY0ZDMzY2ZiY2IzYjM4MTI5MTczOGY5My5tKnFmNjNHT2V1OSo5b0RldENiNjNZLnJvb3R1c2VyQGdtYWlsLmNvbSIsImlhdCI6MTY5MTc0MDI5NCwiZXhwIjoxNjkxODI2Njk0fQ.KUUxi86d3QKFVkTJV0jrG0vyh2f2NQmtTS8O23in5tk'
     if (token) {
         config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -23,5 +19,4 @@ apiInstance.interceptors.request.use(config => {
     return Promise.reject(error);
 });
 
-// Export the apiInstance
-module.exports = apiInstance;
+export default apiInstance;
