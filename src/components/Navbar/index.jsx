@@ -16,12 +16,12 @@ import { Link } from 'react-router-dom'
 
 export default function NavBar () {
   return (
-    <Navbar isBordered>
+    <Navbar >
       {/* <h3>Hello</h3> */}
 
-      <NavbarContent justify='flex'>
+      <NavbarContent>
         <NavbarBrand></NavbarBrand>
-        <NavbarContent className='hidden sm:flex gap-4'>
+        <NavbarContent className='sm:flex gap-4 mt-2'>
           <NavbarItem>
             <Link to='/home'>Home</Link>
           </NavbarItem>
@@ -38,7 +38,7 @@ export default function NavBar () {
         </NavbarContent>
       </NavbarContent>
 
-      <NavbarContent as='div' className='items-center' justify='end'>
+      <NavbarContent as='div' className='items-center mt-2' justify='end'>
         <Input
           classNames={{
             base: 'max-w-full sm:max-w-[28rem] h-8',
@@ -52,7 +52,7 @@ export default function NavBar () {
           type='search'
         />
 
-        <Dropdown placement='bottom-end'>
+        <Dropdown placement='bottom-end mt-1'>
           <DropdownTrigger>
             <Avatar
               isBordered

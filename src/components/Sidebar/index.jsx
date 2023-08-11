@@ -12,8 +12,7 @@ import BadgeIcon from '@mui/icons-material/Badge'
 import { Link } from 'react-router-dom'
 
 export default function Sidebar() {
-  const defaultContent =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+
   const itemClasses = {
     base: ' px-2 w-full',
     title: 'font-normal text-medium text-left',
@@ -23,9 +22,9 @@ export default function Sidebar() {
   }
   return (
     <>
-      <div className='sidebar w-full grid grid-cols-1 grid-flow-col py-3 px-2'>
+      <div className='sidebar w-full grid grid-cols-1 grid-flow-col py-4 px-2'>
         <div className='nav-bar flex-grow'>
-          <Card className='w-[250px] max-h rounded-lg'>
+          <Card className='w-[250px] max-h rounded-sm'>
             <CardHeader className='flex gap-3'>
               <div className='flex flex-row'>
                 <Image
@@ -48,16 +47,17 @@ export default function Sidebar() {
                 selectionMode='multiple'
                 variant='splited'
                 itemClasses={itemClasses}
+                defaultExpandedKeys={["1","2","3","4","5","6"]}
               >
 
                 {/* Employee */}
-                <AccordionItem key='1' aria-label='Employee' title='Employee'>
+                <AccordionItem key='1' aria-label='Employee' title='Master'>
                   <Button
                     variant='light'
                     className='rounded-none px-4 py-0 text-left'
                     startContent={<BadgeIcon />}
                   >
-                    <Link>
+                    <Link to='/emp'>
                       <span className='m-auto'>Employee List</span>
                     </Link>
                   </Button>
@@ -69,7 +69,18 @@ export default function Sidebar() {
                   >
                     <Link>
 
-                      <span className='m-auto'>Employee Update</span>
+                      <span className='m-auto'>Position</span>
+                    </Link>
+                  </Button>
+                     <Divider></Divider>
+                     <Button
+                    variant='light'
+                    className='rounded-none px-4 py-1 text-left'
+                    startContent={<BadgeIcon />}
+                  >
+                    <Link>
+
+                      <span className='m-auto'>Department</span>
                     </Link>
                   </Button>
                 </AccordionItem>
@@ -200,7 +211,7 @@ export default function Sidebar() {
             <Divider />
             <CardFooter>
               <User
-                name='Jane Doe'
+                name='HR Ma Ma'
                 description='Product Designer'
                 avatarProps={{
                   src: 'https://i.pravatar.cc/150?u=a04258114e29026702d'
