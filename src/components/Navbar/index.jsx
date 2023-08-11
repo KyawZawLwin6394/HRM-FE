@@ -21,7 +21,7 @@ export default function NavBar () {
 
       <NavbarContent>
         <NavbarBrand></NavbarBrand>
-        <NavbarContent className='sm:flex gap-4 mt-2'>
+        <NavbarContent className='invisible sm:flex gap-4 mt-2'>
           <NavbarItem>
             <Link to='/home'>Home</Link>
           </NavbarItem>
