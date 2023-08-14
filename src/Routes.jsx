@@ -17,6 +17,7 @@ export default function RouteFile() {
           <Route path='/' element={<Login />}></Route>
           <Route path='/home' element={<Dashboard />}></Route>
           <Route path='/about' element={<About />}></Route>
+          <Route path='/sidebar' element={<Sidebar/>}></Route>
 
           {/* Employee */}
           <Route path='/emp' element={<Employee />}></Route>
