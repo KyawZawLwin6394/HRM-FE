@@ -1,4 +1,4 @@
-import { Accordion, AccordionItem, Button } from '@nextui-org/react'
+import { Accordion, AccordionItem } from '@nextui-org/react'
 import {
   Card,
   CardBody,
@@ -37,166 +37,134 @@ export default function Sidebar() {
 
                 {/* Employee */}
                 <AccordionItem key='1' aria-label='Employee' title='Master'>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-0 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link to='/emp'>
-                      <span className='m-auto'>Employee List</span>
-                    </Link>
-                  </Button>
-                  <Divider></Divider>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-1 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link to='/position'>
+                  <Link to='/emp'>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
+                      <span className='m-auto'>Employee</span>
+                    </div>
+                  </Link>
 
+                  <Divider></Divider>
+                  <Link to='/position'>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Position</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                   <Divider></Divider>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-1 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-
+                  <Link to='/department'>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Department</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                 </AccordionItem>
 
                 {/* Position */}
                 <AccordionItem key='2' aria-label='Position' title='Position'>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-0 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link to='/position'>
-                      <span className='m-auto'>Position List</span>
-                    </Link>
-                  </Button>
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
+                      <span className='m-auto'>Position</span>
+                    </div>
+                  </Link>
                   <Divider></Divider>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-1 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Position Update</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                 </AccordionItem>
 
                 {/* Department */}
                 <AccordionItem key='3' aria-label='Department' title='Department'>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-0 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-                      <span className='m-auto'>Department List</span>
-                    </Link>
-                  </Button>
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
+                      <span className='m-auto'>Department</span>
+                    </div>
+                  </Link>
                   <Divider></Divider>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-1 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Department Update</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
+
                 </AccordionItem>
 
                 {/* Attendance */}
                 <AccordionItem key='4' aria-label='Attendance' title='Attendance' >
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-0 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Attendance List</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                   <Divider></Divider>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-1 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Attendance Update</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                 </AccordionItem>
 
                 {/* Leave */}
                 <AccordionItem key='5' aria-label='Leave' title='Leave'>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-0 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Leave List</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                   <Divider></Divider>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-1 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Leave Update</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                 </AccordionItem>
 
                 {/* Payslip */}
                 <AccordionItem key='6' aria-label='Payslip' title='Payslip'>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-0 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-                      <span className='m-auto'>Payslip List</span>
-                    </Link>
-                  </Button>
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
+                      <span className='m-auto'>PaySlip List</span>
+                    </div>
+                  </Link>
                   <Divider></Divider>
-                  <Button
-                    variant='light'
-                    className='rounded-none px-4 py-1 text-left'
-                    startContent={<BadgeIcon />}
-                  >
-                    <Link>
-
+                  <Link>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
                       <span className='m-auto'>Payslip Update</span>
-                    </Link>
-                  </Button>
+                    </div>
+                  </Link>
                 </AccordionItem>
-
               </Accordion>
               <Divider></Divider>
             </CardBody>
             <Divider />
             <CardFooter>
               <User
-                name='HR Ma Ma'
+                name='Alice'
                 description='Product Designer'
                 avatarProps={{
                   src: 'https://i.pravatar.cc/150?u=a04258114e29026702d'

@@ -24,7 +24,7 @@ export default function NavBar() {
   return (
     <>
       {location.pathname !== "/" && (
-        <Navbar className="flex flex-grow justify-between">
+        <Navbar className="flex flex-grow justify-between" isBlurred={false}>
           {/* <h3>Hello</h3> */}
 
           <div className="flex flex-row ">
