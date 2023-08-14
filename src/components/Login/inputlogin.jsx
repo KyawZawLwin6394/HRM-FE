@@ -23,13 +23,19 @@ export default function Login() {
       email:emailRef.current.value,
       password:passRef.current.value
     }
-    alert(JSON.stringify(data))
+    // alert(JSON.stringify(data))
     apiInstance
       .post('auth/login', data)
       .then(
-       function(){
-        alert('success')
-        navigate('/home')
+       function(res){
+        // alert('success')
+        console.log(res.data,'data')
+        if(res.data.user.email === 'rootuser@gmail.com' && res.data.user.name === 'RootUser'){
+  navigate('/home')
+        }else{
+          navigate('/')
+        }
+      
             })
       .catch( 
        ()=>{alert('error')}
