@@ -7,8 +7,8 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <NextUIProvider>
-          <NextThemesProvider attribute="class" defaultTheme="light">
-      <RouteFile />
+      <NextThemesProvider attribute="class" defaultTheme="light">
+        <RouteFile />
       </NextThemesProvider>
     </NextUIProvider>
   </React.StrictMode>
