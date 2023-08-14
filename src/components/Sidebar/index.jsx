@@ -5,7 +5,7 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  
+
   User
 } from '@nextui-org/react'
 import BadgeIcon from '@mui/icons-material/Badge'
@@ -26,7 +26,7 @@ export default function Sidebar() {
         <div className='nav-bar flex-grow'>
           <Card className='w-[250px] max-h rounded-sm'>
             <CardHeader className='flex gap-3'>
-             
+
             </CardHeader>
             <Divider />
             <CardBody className='px-0 py-0 m-0'>
@@ -36,7 +36,7 @@ export default function Sidebar() {
                 selectionMode='multiple'
                 variant='splited'
                 itemClasses={itemClasses}
-                defaultExpandedKeys={["1","2","3","4","5","6"]}
+                defaultExpandedKeys={["1", "2", "3", "4", "5", "6"]}
               >
 
                 {/* Employee */}
@@ -61,8 +61,8 @@ export default function Sidebar() {
                       <span className='m-auto'>Position</span>
                     </Link>
                   </Button>
-                     <Divider></Divider>
-                     <Button
+                  <Divider></Divider>
+                  <Button
                     variant='light'
                     className='rounded-none px-4 py-1 text-left'
                     startContent={<BadgeIcon />}
@@ -81,7 +81,7 @@ export default function Sidebar() {
                     className='rounded-none px-4 py-0 text-left'
                     startContent={<BadgeIcon />}
                   >
-                    <Link>
+                    <Link to='/position'>
                       <span className='m-auto'>Position List</span>
                     </Link>
                   </Button>
