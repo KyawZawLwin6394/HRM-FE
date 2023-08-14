@@ -19,10 +19,10 @@ export default function Employee() {
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
-            <div className="py-3">
+            <div className="py-3 flex-grow">
                 
-                <div className="body  py-1">
-                    <Card className="flex w-full rounded-sm shadow-md py-3 min-w-[1080px]">
+                <div className="py-1">
+                    <Card className="flex w-full rounded-sm shadow-md py-3">
                         <CardHeader className="justify-between">
                             <div></div>
                             <div className='font-semibold'>Employee List</div>

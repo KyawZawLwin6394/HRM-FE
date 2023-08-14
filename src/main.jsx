@@ -4,6 +4,7 @@ import RouteFile from './Routes'
 import { NextUIProvider } from '@nextui-org/react'
 import './index.css'
 import { ThemeProvider as NextThemesProvider } from "next-themes";
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <NextUIProvider>

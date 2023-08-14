@@ -1,7 +1,6 @@
 import { Accordion, AccordionItem, Button } from '@nextui-org/react'
 import {
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
   Divider,
@@ -25,9 +24,6 @@ export default function Sidebar() {
       <div className='sidebar w-full grid grid-cols-1 grid-flow-col py-4 px-2'>
         <div className='nav-bar flex-grow'>
           <Card className='w-[250px] max-h rounded-sm'>
-            <CardHeader className='flex gap-3'>
-
-            </CardHeader>
             <Divider />
             <CardBody className='px-0 py-0 m-0'>
 
@@ -56,7 +52,7 @@ export default function Sidebar() {
                     className='rounded-none px-4 py-1 text-left'
                     startContent={<BadgeIcon />}
                   >
-                    <Link>
+                    <Link to='/position'>
 
                       <span className='m-auto'>Position</span>
                     </Link>

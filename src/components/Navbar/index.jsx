@@ -11,20 +11,20 @@ import {
 import { Image } from "@nextui-org/react";
 import { SearchIcon } from "./search";
 // import { Link } from 'react-router-dom'
-import Theme from "../ThemeSwitch/index";
-import { useLocation,useNavigate } from "react-router-dom";
+import ThemeSwitch from "../ThemeSwitch/index";
+import { useLocation } from "react-router-dom";
 
 export default function NavBar() {
-  const navigate=useNavigate()
-  const logOut=()=>{
-navigate('/')
+  const logOut = () => {
+    localStorage.removeItem('token')
+    window.location.reload()
   }
   const location = useLocation();
   // const NavCheck = location.pathname === '/'
   return (
     <>
       {location.pathname !== "/" && (
-        <Navbar className="justify-between">
+        <Navbar className="flex flex-grow justify-between">
           {/* <h3>Hello</h3> */}
 
           <div className="flex flex-row ">
@@ -40,7 +40,7 @@ navigate('/')
             </div>
           </div>
 
-          <NavbarContent as="div" className="items-center mt-2" justify="end">
+          <NavbarContent as="div" className="items-center mt-2 flex-grow" justify="end">
             <Input
               classNames={{
                 base: "max-w-full sm:max-w-[28rem] h-8",
@@ -85,7 +85,7 @@ navigate('/')
               </DropdownMenu>
             </Dropdown>
           </NavbarContent>
-          <Theme />
+          <ThemeSwitch />
         </Navbar>
       )}
     </>
