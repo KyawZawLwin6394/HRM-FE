@@ -17,15 +17,16 @@ export default function Position() {
 
     let list = useAsyncList({
         async load({ signal, cursor }) {
+            console.log(cursor)
             if (cursor) {
                 setPage((prev) => prev + 1);
             }
 
             // If no cursor is available, then we're loading the first page.
             // Otherwise, the cursor is the next URL to load, as returned from the previous page.
-            const res = await apiInstance.get(cursor || 'positions', { signal });
-            let json = await res.data.data.json();
-            console.log(json)
+            const res = await fetch(cursor || "https://swapi.py4e.com/api/people/?search=", { signal });
+            let json = await res.json();
+
             if (!cursor) {
                 setIsLoading(false);
             }
@@ -37,6 +38,7 @@ export default function Position() {
     });
 
     const hasMore = page < 9;
+    
     useEffect(() => {
         const getPositionLists = async () => {
             await apiInstance.get('positions').then(response => { console.log(response.data.data, 'here') })
