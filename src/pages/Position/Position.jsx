@@ -23,9 +23,9 @@ export default function Position() {
 
             // If no cursor is available, then we're loading the first page.
             // Otherwise, the cursor is the next URL to load, as returned from the previous page.
-            const res = await fetch(cursor || "https://swapi.py4e.com/api/people/?search=", { signal });
-            let json = await res.json();
-
+            const res = await apiInstance.get(cursor || 'positions', { signal });
+            let json = await res.data.data.json();
+            console.log(json)
             if (!cursor) {
                 setIsLoading(false);
             }

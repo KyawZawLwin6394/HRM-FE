@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 const url = 'http://hrmbackend.kwintechnologykw11.com:5000/api/';
-    const storeToken = localStorage.getItem('token');
+const storeToken = localStorage.getItem('token');
 const apiInstance = axios.create({
     baseURL: url,
-    headers: {Authorization: `Bearer ${storeToken}`,
+    headers: {
+        Authorization: `Bearer ${storeToken}`,
         'Content-Type': 'application/json'
     }
 });
