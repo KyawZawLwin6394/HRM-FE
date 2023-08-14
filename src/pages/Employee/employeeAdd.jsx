@@ -6,7 +6,7 @@ import {
   CardFooter,
   Divider,
 } from "@nextui-org/react";
-import Nav from "../../components/Navbar/index";
+
 import { Button } from "@nextui-org/react";
 // import {Button} from "@nextui-org/react";
 import { Link } from "react-router-dom";
@@ -17,11 +17,8 @@ export default function employeeAdd() {
       <div className="sidebar">
         <Sidebar />
       </div>
-      <div className="py-4">
-        <div className="head bg-white rounded-lg shadow-md min-w-[1080px]">
-          {" "}
-          <Nav />
-        </div>
+      <div className="py-4 min-w-[1080px]">
+     
         <div className="body  py-1">
           <Card className="rounded-md shadow-md py-3">
             <CardHeader className="justify-between">
@@ -30,7 +27,7 @@ export default function employeeAdd() {
                 className="rounded-none px-4 py-0 text-left">
                 <Link to="/emp">Back</Link>
               </Button>
-              <div className="font">Employee List</div>
+              <div className="font-semibold">Employee List</div>
               <div></div>
             </CardHeader>
             <Divider></Divider>

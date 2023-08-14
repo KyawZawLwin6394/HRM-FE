@@ -1,8 +1,6 @@
 import {
   Navbar,
-  NavbarBrand,
   NavbarContent,
-  NavbarItem,
   Input,
   DropdownItem,
   DropdownTrigger,
@@ -10,33 +8,39 @@ import {
   DropdownMenu,
   Avatar
 } from '@nextui-org/react'
+import {
 
+  Image,
+
+} from '@nextui-org/react'
 import { SearchIcon } from './search'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
+import Theme from '../ThemeSwitch/index'
+import {useLocation} from 'react-router-dom'
 
 export default function NavBar () {
+  const location=useLocation()
+  // const NavCheck = location.pathname === '/'
   return (
-    <Navbar >
+    <>
+    {location.pathname !== '/' && 
+    <Navbar className='justify-between'>
       {/* <h3>Hello</h3> */}
 
-      <NavbarContent>
-        <NavbarBrand></NavbarBrand>
-        <NavbarContent className='invisible sm:flex gap-4 mt-2'>
-          <NavbarItem>
-            <Link to='/home'>Home</Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link to='/about' aria-current='page' color='secondary'>
-              About
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link to='/' color='foreground'>
-              Login
-            </Link>
-          </NavbarItem>
-        </NavbarContent>
-      </NavbarContent>
+
+ <div className='flex flex-row '>
+                <Image
+                  alt='nextui logo'
+                  height={40}
+                  radius='sm'
+                  src='https://avatars.githubusercontent.com/u/86160567?s=200&v=4'
+                  width={40}
+                />
+                <div className='flex ml-4'>
+                  <p className='text-md m-auto'>HR Management</p>
+                </div>
+              </div>
+ 
 
       <NavbarContent as='div' className='items-center mt-2' justify='end'>
         <Input
@@ -58,7 +62,7 @@ export default function NavBar () {
               isBordered
               as='button'
               className='transition-transform'
-              color='secondary'
+              color='primary'
               name='Jason Hughes'
               size='sm'
               src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
@@ -81,6 +85,9 @@ export default function NavBar () {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
+      <Theme/>
     </Navbar>
+    }
+    </>
   )
 }

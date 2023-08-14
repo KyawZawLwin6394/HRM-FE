@@ -1,6 +1,5 @@
 import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
-import Nav from '../../components/Navbar/index'
 import Table from '../../components/Table/table'
 import { Button } from "@nextui-org/react";
 import { Link } from 'react-router-dom';
@@ -20,16 +19,19 @@ export default function Employee() {
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
-            <div className="py-4">
-                <div className="head bg-white rounded-lg shadow-md min-w-[1080px]">  <Nav /></div>
+            <div className="py-3">
+                
                 <div className="body  py-1">
-                    <Card className="rounded-md shadow-md py-3">
+                    <Card className="flex w-full rounded-sm shadow-md py-3 min-w-[1080px]">
                         <CardHeader className="justify-between">
                             <div></div>
-                            <div className='font'>Employee List</div>
-                            <Link to='/emp-add'> <Button size='sm' radius="sm" className="bg-gradient-to-tr from-pink-500 to-green-500 text-white shadow-sm ">
+                            <div className='font-semibold'>Employee List</div>
+                            <Button size='sm' radius="sm" className="text-white shadow-sm" color='primary'>
+       <Link to='/emp-add'> 
                                 Add
-                            </Button></Link>
+                         </Link>
+                            </Button>
+                     
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>
