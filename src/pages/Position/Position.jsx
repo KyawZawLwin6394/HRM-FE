@@ -32,6 +32,7 @@ export default function Position() {
         },
     });
 
+
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
@@ -43,7 +44,7 @@ export default function Position() {
                             <div></div>
                             <div className='font-semibold'>Position List</div>
                             <Button size='sm' radius="sm" className="text-white shadow-sm" color='primary'>
-                                <Link to='/emp-add'>
+                                <Link to='/position/register'>
                                     Add
                                 </Link>
                             </Button>
@@ -70,7 +71,6 @@ export default function Position() {
                                 }}
                             >
                                 <TableHeader>
-                                    <TableColumn >No.</TableColumn>
                                     <TableColumn key="name">Name</TableColumn>
                                     <TableColumn key="description">Description</TableColumn>
                                     <TableColumn key="workingDay">Working Days</TableColumn>

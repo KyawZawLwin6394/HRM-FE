@@ -6,6 +6,7 @@ import Employee from './pages/Employee/employeeList'
 import EmployeeAdd from './pages/Employee/employeeAdd'
 import Position from './pages/Position/Position.jsx'
 import AuthContainer from './util/AuthContainer.jsx'
+import PositionRegsiter from './pages/Position/Add'
 
 
 export default function RouteFile() {
@@ -24,6 +25,7 @@ export default function RouteFile() {
 
             {/* Position */}
             <Route path='/position' element={<Position />} />
+            <Route path='/position/register' element={<PositionRegsiter />} />
           </Route>
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
 

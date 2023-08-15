@@ -1,21 +1,21 @@
 import { Input } from "@nextui-org/react";
 import { RadioGroup, Radio } from "@nextui-org/react";
-import {Modal, Button, useDisclosure} from "@nextui-org/react"
+import { Modal, Button, useDisclosure } from "@nextui-org/react"
 import OtherDoc from './otherDocInput'
-import {useRef,useState} from 'react'
+import { useRef, useState } from 'react'
 
 import apiInstance from '../../util/api.js'
-import  Swal  from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 export default function EmployeeInput() {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const variant = ["faded"];
 
   const emailRef = useRef()
   const passRef = useRef()
-  const nrcRef=useRef()
-  const nameRef=useRef()
-  const addressRef=useRef()
+  const nrcRef = useRef()
+  const nameRef = useRef()
+  const addressRef = useRef()
   // const ageRef=useRef()
   const DOBRef=useRef()
   const ECRef=useRef()
@@ -36,10 +36,11 @@ export default function EmployeeInput() {
   const genderRef=useRef()
   
 
-const handlefile=(e)=>{
-  if(e.target.files){
-    setCV(e.target.files[0])
-    console.log(e.target.files,'file')
+  const handlefile = (e) => {
+    if (e.target.files) {
+      setCV(e.target.files[0])
+      console.log(e.target.files, 'file')
+    }
   }
 }
 // const handleCer=(e)=>{
@@ -54,7 +55,7 @@ const handlefile=(e)=>{
   const create = () => {
 // console.log(cv,'cv')
     const data = {
-      givenName:nameRef.current.value,
+      givenName: nameRef.current.value,
       email: emailRef.current.value,
       password: passRef.current.value,
       NRC:nrcRef.current.value,
@@ -81,19 +82,21 @@ const handlefile=(e)=>{
     }
     alert(JSON.stringify(data))
     apiInstance
-      .post('user', data,{headers:{
-        "Content-Type":"multipart/form-data",
-      }})
+      .post('user', data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      })
       .then(
-function(){
-             Swal.fire({
-      icon: 'success',
-      title: 'Login Successful',
-      text: 'Welcome back!',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6',
-    });
-   
+        function () {
+          Swal.fire({
+            icon: 'success',
+            title: 'Login Successful',
+            text: 'Welcome back!',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#3085d6',
+          });
+
         })
       .catch(
         (error) => { alert(error) }
@@ -153,7 +156,6 @@ function(){
           <label className="text-sm font-semibold">Gender</label>
           <select
           ref={genderRef}
-          
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Gender</option>
@@ -405,7 +407,7 @@ function(){
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-    <Input
+        <Input
           type="file"
           ref={recLetterRef}
           label="Recommendation Letter"
@@ -413,17 +415,17 @@ function(){
           labelPlacement="outside"
           variant={variant}
         />
-     <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
-        <label className="text-sm font-semibold">Other Document</label> &nbsp;
-        <Button isIconOnly size='sm' color='primary' variant='shadow'
-          className='rounded-xl px-4 py-0 text-left' onPress={onOpen}>+</Button>
-           <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-           <OtherDoc/>
-           </Modal>
+        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
+          <label className="text-sm font-semibold">Other Document</label> &nbsp;
+          <Button isIconOnly size='sm' color='primary' variant='shadow'
+            className='rounded-xl px-4 py-0 text-left' onPress={onOpen}>+</Button>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <OtherDoc />
+          </Modal>
+        </div>
       </div>
-      </div>
-     
-  
+
+
       <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
 
         <Button size='sm' color='primary' variant='shadow'
