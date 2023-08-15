@@ -17,23 +17,24 @@ export default function EmployeeInput() {
   const nameRef = useRef()
   const addressRef = useRef()
   // const ageRef=useRef()
-  const DOBRef = useRef()
-  const ECRef = useRef()
-  const phoneRef = useRef()
-  const passportRef = useRef()
-  const EuBackRef = useRef()
-  const EuCerRef = useRef()
-  const workExpRef = useRef()
-  const [cv, setCV] = useState(null)
+  const DOBRef=useRef()
+  const ECRef=useRef()
+  const phoneRef=useRef()
+  const passportRef=useRef()
+  const EuBackRef=useRef()
+  // const [euCer,setEuCer]=useState(null)
+  const workExpRef=useRef()
+  const [cv,setCV]=useState(null)
   // const otheRef=useRef()
-  const recLetterRef = useRef()
-  const firstInRef = useRef()
-  const firstResRef = useRef()
-  const secInRef = useRef()
-  const secResRef = useRef()
-  const fatherRef = useRef()
-  const empDateRef = useRef()
-  const genderRef = useRef()
+  const recLetterRef=useRef()
+  const firstInRef=useRef()
+  const firstResRef=useRef()
+  const secInRef=useRef()
+  const secResRef=useRef()
+  const fatherRef=useRef()
+  const empDateRef=useRef()
+  const genderRef=useRef()
+  
 
   const handlefile = (e) => {
     if (e.target.files) {
@@ -41,32 +42,40 @@ export default function EmployeeInput() {
       console.log(e.target.files, 'file')
     }
   }
+}
+// const handleCer=(e)=>{
+//   if(e.target.files){
+//     setEuCer(e.target.files[0])
+   
+
+//   }
+// }
   //array list
   // const [userList,setUserList]=useState([])
   const create = () => {
-    console.log(cv, 'cv')
+// console.log(cv,'cv')
     const data = {
       givenName: nameRef.current.value,
       email: emailRef.current.value,
       password: passRef.current.value,
-      NRC: nrcRef.current.value,
-      address: addressRef.current.value,
-      DOB: DOBRef.current.value,
-      emergencyContact: ECRef.current.value,
-      phone: phoneRef.current.value,
-      passportNo: passportRef.current.value,
-      educationBackground: EuBackRef.current.value,
-      educationCertificate: EuCerRef.current.value,
-      workExperience: workExpRef.current.value,
-      cv: cv,
-      recommendationLetter: recLetterRef.current.value,
-      firstInterviewDate: firstInRef.current.value,
-      firstInterviewResult: firstResRef.current.value,
-      secondInterviewDate: secInRef.current.value,
-      secondInterviewResult: secResRef.current.value,
-      fatherName: fatherRef.current.value,
-      gender: genderRef.current.value,
-      employedDate: empDateRef.current.value,
+      NRC:nrcRef.current.value,
+      address:addressRef.current.value,
+      DOB:DOBRef.current.value,
+      emergencyContact:ECRef.current.value,
+      phone:phoneRef.current.value,
+      passportNo:passportRef.current.value,
+      educationBackground:EuBackRef.current.value,
+      // educationCertificate:euCer,
+      workExperience:workExpRef.current.value,
+      cv:cv,
+      // recommendationLetter:recLetterRef.current.value,
+      firstInterviewDate:firstInRef.current.value,
+      firstInterviewResult:firstResRef.current.value,
+      secondInterviewDate:secInRef.current.value,
+      secondInterviewResult:secResRef.current.value,
+      fatherName:fatherRef.current.value,
+      gender:genderRef.current.value,
+      employedDate:empDateRef.current.value,
 
 
 
@@ -146,7 +155,7 @@ export default function EmployeeInput() {
         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <label className="text-sm font-semibold">Gender</label>
           <select
-            ref={genderRef}
+          ref={genderRef}
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Gender</option>
@@ -158,7 +167,7 @@ export default function EmployeeInput() {
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
-          isRequired
+       isRequired
           type="email"
           variant={variant}
           ref={emailRef}
@@ -167,6 +176,7 @@ export default function EmployeeInput() {
           labelPlacement="outside"
         />
         <Input
+        isRequired
           type="text"
           label="Password"
           ref={passRef}
@@ -212,7 +222,7 @@ export default function EmployeeInput() {
           type="file"
           label="Education Certificate"
           variant={variant}
-          ref={EuCerRef}
+          // onChange={handleCer}
           placeholder=" "
           labelPlacement="outside"
         />
