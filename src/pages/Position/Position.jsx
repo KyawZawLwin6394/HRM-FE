@@ -1,80 +1,34 @@
 import Sidebar from "../../components/Sidebar";
-import { Tooltip, Card, CardHeader, CardBody, CardFooter, Divider, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Button } from "@nextui-org/react";
+import { Tooltip, Card, CardHeader, CardBody, CardFooter, Divider, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button } from "@nextui-org/react";
 import { Link } from 'react-router-dom';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
-import React from "react";
-import { useAsyncList } from "@react-stately/data";
 import { EditIcon } from "../../components/Table/editicon";
 import { DeleteIcon } from "../../components/Table/deleteicon";
 import { EyeIcon } from "../../components/Table/eyeicon";
 
 export default function Position() {
+    const [positionList, setPositionList] = useState([])
 
-    const [page, setPage] = React.useState(10);
-    const [isLoading, setIsLoading] = React.useState(true);
-    const [loadable, setLoadable] = useState(true);
 
-    const renderCell = React.useCallback((user, columnKey) => {
-        const cellValue = user[columnKey];
-        switch (columnKey) {
-            case "actions":
-                return (
-                    <div className="relative flex items-center gap-2">
-                        <Tooltip content="Details">
-                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EyeIcon />
-                            </span>
-                        </Tooltip>
-                        <Tooltip content="Edit user">
-                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                <EditIcon />
-                            </span>
-                        </Tooltip>
-                        <Tooltip color="danger" content="Delete user">
-                            <span data-key={user._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleDelete(e)}>
-                                <DeleteIcon />
-                            </span>
-                        </Tooltip>
-                    </div>
-                );
-            default:
-                return cellValue;
+    useEffect(() => {
+        const getPositions = async () => {
+            await apiInstance.get(`positions`)
+                .then(res => {
+                    setPositionList(res.data.data)
+                })
         }
-    }, []);
+        getPositions()
+    }, [])
 
-    let list = useAsyncList({
-        async load({ cursor }) {
-            // If no cursor is available, then we're loading the first page.
-            // Otherwise, the cursor is the next URL to load, as returned from the previous page.
-            const response = await apiInstance.get(cursor || 'positions?limit=10&skip=0')
-            if (!cursor) {
-                setIsLoading(false);
-            }
-            setPage((prev) => prev + 10);
-            response.data.data.length === 0 ? setLoadable(false) : setLoadable(true)
-            return {
-                items: response.data.data,
-                cursor: cursor || `positions?limit=10&skip=${page}`,
-            };
-        },
-    });
-
-    const handleDelete = async (event) => {
-        const id = event.currentTarget.getAttribute('data-key')
-        event.preventDefault();
-        console.log(list.items)
-        list.items = list.items.filter(item => item._id !== id);
-        // await apiInstance.delete(`position/${id}`).then(() => {
-        //     list.remove(id)
-        //     setIsLoading(prev => !prev);
-        // }).catch(error => console.log(error))
+    const handleDelete = async () => {
+        console.log(positionList)
     }
+
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
             <div className="py-3 flex-grow">
-                {console.log(list.items)}
                 <div className="body  py-1">
                     <Card className="rounded-sm shadow-md py-3 min-h-[890px]">
                         <CardHeader className="justify-between">
@@ -92,16 +46,6 @@ export default function Position() {
                             <Table
                                 isHeaderSticky
                                 aria-label="Example table with client side sorting"
-                                bottomContent={
-                                    loadable && !isLoading ? (
-                                        <div className="flex w-full justify-center">
-                                            <Button isDisabled={list.isLoading} variant="flat" onPress={list.loadMore}>
-                                                {list.isLoading && <Spinner color="white" size="sm" />}
-                                                Load More
-                                            </Button>
-                                        </div>
-                                    ) : null
-                                }
                                 classNames={{
                                     base: "max-h-[719px] overflow-scroll",
                                     table: "min-h-[600px]",
@@ -122,15 +66,40 @@ export default function Position() {
                                 </TableHeader>
                                 <TableBody
                                     emptyContent={"No Positions to display."}
-                                    isLoading={isLoading}
-                                    items={list.items}
-                                    loadingContent={<Spinner label="Loading..." />}
                                 >
-                                    {(item) => (
+                                    {positionList.map((item, index) => (
                                         <TableRow key={item._id}>
-                                            {(columnKey,) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                                            <TableCell>{index++}</TableCell>
+                                            <TableCell>{item.name}</TableCell>
+                                            <TableCell>{item.description}</TableCell>
+                                            <TableCell>{item.workingDay}</TableCell>
+                                            <TableCell>{item.workingFrom}</TableCell>
+                                            <TableCell>{item.workingUntil}</TableCell>
+                                            <TableCell>{item.casualLeaves}</TableCell>
+                                            <TableCell>{item.medicalLeaves}</TableCell>
+                                            <TableCell>{item.vacationLeaves}</TableCell>
+                                            <TableCell>{item.basicSalary}</TableCell>
+                                            <TableCell>
+                                                <div className="relative flex items-center gap-2">
+                                                    <Tooltip content="Details">
+                                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                                            <EyeIcon />
+                                                        </span>
+                                                    </Tooltip>
+                                                    <Tooltip content="Edit user">
+                                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                                            <EditIcon />
+                                                        </span>
+                                                    </Tooltip>
+                                                    <Tooltip color="danger" content="Delete user">
+                                                        <span data-key={item._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleDelete(e)}>
+                                                            <DeleteIcon />
+                                                        </span>
+                                                    </Tooltip>
+                                                </div>
+                                            </TableCell>
                                         </TableRow>
-                                    )}
+                                    ))}
                                 </TableBody>
                             </Table>
                         </CardBody>
