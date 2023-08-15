@@ -3,7 +3,6 @@ import { RadioGroup, Radio } from "@nextui-org/react";
 import { Modal, Button, useDisclosure } from "@nextui-org/react"
 import OtherDoc from './otherDocInput'
 import { useRef, useState } from 'react'
-
 import apiInstance from '../../util/api.js'
 import Swal from 'sweetalert2';
 
@@ -42,16 +41,7 @@ export default function EmployeeInput() {
       console.log(e.target.files, 'file')
     }
   }
-}
-// const handleCer=(e)=>{
-//   if(e.target.files){
-//     setEuCer(e.target.files[0])
-   
-
-//   }
-// }
-  //array list
-  // const [userList,setUserList]=useState([])
+  
   const create = () => {
 // console.log(cv,'cv')
     const data = {
