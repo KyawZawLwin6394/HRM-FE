@@ -1,66 +1,54 @@
 
 import { Button, Input, Radio, RadioGroup } from "@nextui-org/react";
 import apiInstance from "../../util/api";
-import React, { useRef } from "react";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function PositionInputForm() {
     const variant = 'faded';
-    const name = useRef();
-    const description = useRef();
-    const workingFrom = useRef();
-    const workingUntil = useRef();
-    const basicSalary = useRef();
-    const relatedDepartment = useRef();
-    const casualLeaves = useRef();
-    const workingDays = useRef();
-    const medicalLeave = useRef();
-    const vacationLeave = useRef();
-    const mleaveMale = useRef();
-    const mleaveFemale = useRef();
-    const isTravel = useRef();
-    const travel = useRef();
-    const isMeal = useRef();
-    const meal = useRef();
-    const isIncentive = useRef();
-    const incentive = useRef();
-    const incentiveCond = useRef();
-    const isBonus = useRef();
-    const bonus = useRef();
-    const bonusCond = useRef();
     const [departmentList, setDepartmentList] = useState([])
 
+    const handleInputChange = (fieldName, value) => {
+        setData(prevValues => ({
+            ...prevValues,
+            [fieldName]: value,
+        }));
+    };
+
+    const [data, setData] = useState({
+        name: null,
+        description: null,
+        workingFrom: null,
+        workingUntil: null,
+        basicSalary: null,
+        relatedDepartment: null,
+        casualLeaves: null,
+        workingDay: null,
+        medicalLeaves: null,
+        vacationLeaves: null,
+        maternityLeaveMale: null,
+        maternityLeaveFemale: null,
+        isTravelAllowance: null,
+        travelAllowance: null,
+        isMealAllowance: null,
+        mealAllowance: null,
+        isIncentive: null,
+        incentiveCondition: null,
+        incentive: null,
+        isBonus: null,
+        bonusCondition: null,
+        bonus: null
+    });
+
     const handleRegister = async () => {
-        let data = {
-            name: name.current.value,
-            description: description.current.value,
-            workingFrom: workingFrom.current.value,
-            workingUntil: workingUntil.current.value,
-            basicSalary: basicSalary.current.value,
-            relatedDepartment: relatedDepartment.current.value,
-            casualLeaves: casualLeaves.current.value,
-            workingDays: workingDays.current.value,
-            medicalLeaves: medicalLeave.current.value,
-            vacationLeaves: vacationLeave.current.value,
-            maternityLeaveMale: mleaveMale.current.value,
-            maternityLeaveFemale: mleaveFemale.current.value,
-            isTravelAllowance: isTravel.current.value,
-            travelAllowance: travel.current.value,
-            isMealAllowance: isMeal.current.value,
-            mealAllowance: meal.current.value,
-            isIncentive: isIncentive.current.value,
-            incentiveCondition: incentiveCond.current.value,
-            incentive: incentive.current.value,
-            isBonus: isBonus.current.value,
-            bonusCondition: bonusCond.current.value,
-            bonus: bonus.current.value
-        }
+
+        console.log(data)
+        alert(JSON.stringify(data))
         await apiInstance.post('position', data)
-            .then(res => {
+            .then(() => {
                 Swal.fire({
-                    icon:'success',
-                    title:'Successfully Registered'
+                    icon: 'success',
+                    title: 'Successfully Registered'
                 })
             })
             .catch(err => {
@@ -84,7 +72,7 @@ export default function PositionInputForm() {
                     label="Name"
                     placeholder="Name"
                     variant={variant}
-                    ref={name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
                     labelPlacement="outside"
                 />
                 <Input
@@ -92,7 +80,7 @@ export default function PositionInputForm() {
                     label="Description"
                     placeholder="Description"
                     variant={variant}
-                    ref={description}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
                     labelPlacement="outside"
                 />
             </div>
@@ -103,14 +91,14 @@ export default function PositionInputForm() {
                     label="Working From"
                     placeholder="9:00AM"
                     variant={variant}
-                    ref={workingFrom}
+                    onChange={(e) => handleInputChange('workingFrom', e.target.value)}
                     labelPlacement="outside"
                 />
                 <Input
                     type="text"
                     label="Working Until"
                     placeholder="5:00PM"
-                    ref={workingUntil}
+                    onChange={(e) => handleInputChange('workingUntil', e.target.value)}
                     variant={variant}
                     labelPlacement="outside"
                 />
@@ -121,18 +109,18 @@ export default function PositionInputForm() {
                     type="Number"
                     label="Basic Salary"
                     placeholder="$.."
-                    ref={basicSalary}
+                    onChange={(e) => handleInputChange('basicSalary', e.target.value)}
                     variant={variant}
                     labelPlacement="outside"
                 />
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <label className="text-sm font-semibold">Department</label>
                     <select
-                        ref={relatedDepartment}
+                        onChange={(e) => handleInputChange('relatedDepartment', e.target.value)}
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
                         <option hidden>Choose Department</option>
                         {departmentList.map(item => (
-                            <option value={item._id}>{item.name}</option>
+                            <option key={item._id} value={item._id}>{item.name}</option>
                         ))}
                         {/* <option value="Male">Department 1</option>
                 <option value="Female">Department 2</option> */}
@@ -147,13 +135,13 @@ export default function PositionInputForm() {
                     label="Casual Leaves"
                     placeholder="$.."
                     variant={variant}
-                    ref={casualLeaves}
+                    onChange={(e) => handleInputChange('casualLeaves', e.target.value)}
                     labelPlacement="outside"
                 />
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <label className="text-sm font-semibold">Working Days</label>
                     <select
-                        ref={workingDays}
+                        onChange={(e) => handleInputChange('workingDay', e.target.value)}
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
                         <option hidden>Choose Working Days</option>
 
@@ -170,11 +158,11 @@ export default function PositionInputForm() {
 
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                 <Input
+                    onChange={(e) => handleInputChange('medicalLeaves', e.target.value)}
                     type="Number"
                     label="Medical Leave"
                     placeholder="Days"
                     variant={variant}
-                    ref={medicalLeave}
                     labelPlacement="outside"
                 />
                 <Input
@@ -182,7 +170,7 @@ export default function PositionInputForm() {
                     label="Vacation Leave"
                     placeholder="Days"
                     variant={variant}
-                    ref={vacationLeave}
+                    onChange={(e) => handleInputChange('vacationLeaves', e.target.value)}
                     labelPlacement="outside"
                 />
             </div>
@@ -193,7 +181,7 @@ export default function PositionInputForm() {
                     label="Maternity Leave: Male"
                     placeholder="Days"
                     variant={variant}
-                    ref={mleaveMale}
+                    onChange={(e) => handleInputChange('maternityLeaveMale', e.target.value)}
                     labelPlacement="outside"
                 />
                 <Input
@@ -201,7 +189,7 @@ export default function PositionInputForm() {
                     label="Maternity Leave: Male: Female"
                     placeholder="Days"
                     variant={variant}
-                    ref={mleaveFemale}
+                    onChange={(e) => handleInputChange('maternityLeaveFemale', e.target.value)}
                     labelPlacement="outside"
                 />
             </div>
@@ -210,16 +198,16 @@ export default function PositionInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <div className="w-1/3">
                         <label className="text-sm font-semibold">Travel Allowance</label>
-                        <RadioGroup orientation="horizontal" className="mt-2" ref={isTravel}>
-                            <Radio value="true">Yes</Radio>
-                            <Radio value="false">No</Radio>
+                        <RadioGroup orientation="horizontal" className="mt-2">
+                            <Radio value={true} onChange={(e) => handleInputChange('isTravelAllowance', e.target.value)}>Yes</Radio>
+                            <Radio value={false} onChange={(e) => handleInputChange('isTravelAllowance', e.target.value)}>No</Radio>
                         </RadioGroup>
                     </div>
                     <Input
                         type="Number"
                         label="Travel Allowance"
                         placeholder="Travel Allowance"
-                        ref={travel}
+                        onChange={(e) => handleInputChange('travelAllowance', e.target.value)}
                         variant={variant}
                         labelPlacement="outside"
                     />
@@ -227,14 +215,14 @@ export default function PositionInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <div className="w-1/3">
                         <label className="text-sm font-semibold">Meal Allowance</label>
-                        <RadioGroup orientation="horizontal" className="mt-2" ref={isMeal}>
-                            <Radio value="true">Yes</Radio>
-                            <Radio value="false">No</Radio>
+                        <RadioGroup orientation="horizontal" className="mt-2" >
+                            <Radio value={true} onChange={(e) => handleInputChange('isMealAllowance', e.target.value)}>Yes</Radio>
+                            <Radio value={false} onChange={(e) => handleInputChange('isMealAllowance', e.target.value)}>No</Radio>
                         </RadioGroup>
                     </div>
                     <Input
                         type="Number"
-                        ref={meal}
+                        onChange={(e) => handleInputChange('mealAllowance', e.target.value)}
                         label="Meal Allowance"
                         placeholder="Meal Allowance"
                         variant={variant}
@@ -248,15 +236,15 @@ export default function PositionInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <div className="w-1/3">
                         <label className="text-sm font-semibold">Incentive</label>
-                        <RadioGroup orientation="horizontal" className="mt-2" ref={isIncentive}>
-                            <Radio value="true">Yes</Radio>
-                            <Radio value="false">No</Radio>
+                        <RadioGroup orientation="horizontal" className="mt-2" >
+                            <Radio value={true} onChange={(e) => handleInputChange('isIncentive', e.target.value)}>Yes</Radio>
+                            <Radio value={false} onChange={(e) => handleInputChange('isIncentive', e.target.value)}>No</Radio>
                         </RadioGroup>
                     </div>
                     <Input
                         type="text"
                         label="Incentive Condition"
-                        ref={incentiveCond}
+                        onChange={(e) => handleInputChange('incentiveCondition', e.target.value)}
                         placeholder="Incentive Condition"
                         variant={variant}
                         labelPlacement="outside"
@@ -264,7 +252,7 @@ export default function PositionInputForm() {
                 </div>
                 <Input
                     type="Number"
-                    ref={incentive}
+                    onChange={(e) => handleInputChange('incentive', e.target.value)}
                     label="Incentive Value"
                     placeholder="$.."
                     variant={variant}
@@ -277,14 +265,14 @@ export default function PositionInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <div className="w-1/3">
                         <label className="text-sm font-semibold">Bonus</label>
-                        <RadioGroup orientation="horizontal" className="mt-2" ref={isBonus}>
-                            <Radio value="true">Yes</Radio>
-                            <Radio value="false">No</Radio>
+                        <RadioGroup orientation="horizontal" className="mt-2">
+                            <Radio value={true} onChange={(e) => handleInputChange('isBonus', e.target.value)}>Yes</Radio>
+                            <Radio value={false} onChange={(e) => handleInputChange('isBonus', e.target.value)}>No</Radio>
                         </RadioGroup>
                     </div>
                     <Input
                         type="text"
-                        ref={bonusCond}
+                        onChange={(e) => handleInputChange('bonusCondition', e.target.value)}
                         label="Bonus Condition"
                         placeholder="Bonus Condition"
                         variant={variant}
@@ -293,7 +281,7 @@ export default function PositionInputForm() {
                 </div>
                 <Input
                     type="Number"
-                    ref={bonus}
+                    onChange={(e) => handleInputChange('bonus', e.target.value)}
                     label="Bonus Value"
                     placeholder="$.."
                     variant={variant}

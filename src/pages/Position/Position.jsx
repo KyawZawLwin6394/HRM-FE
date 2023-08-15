@@ -1,20 +1,48 @@
 import Sidebar from "../../components/Sidebar";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Spinner, Button } from "@nextui-org/react";
+import { Tooltip, Card, CardHeader, CardBody, CardFooter, Divider, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Spinner, Button } from "@nextui-org/react";
 import { Link } from 'react-router-dom';
 import { useState } from "react";
 import apiInstance from "../../util/api";
 import React from "react";
 import { useAsyncList } from "@react-stately/data";
-// import { EditIcon } from "../../components/Table/editicon";
-// import { DeleteIcon } from "../../components/Table/deleteicon";
-// import { EyeIcon } from "../../components/Table/eyeicon";
-// import { columns, users } from "../../components/Table/data";
+import { EditIcon } from "../../components/Table/editicon";
+import { DeleteIcon } from "../../components/Table/deleteicon";
+import { EyeIcon } from "../../components/Table/eyeicon";
 
 export default function Position() {
 
     const [page, setPage] = React.useState(10);
     const [isLoading, setIsLoading] = React.useState(true);
     const [loadable, setLoadable] = useState(true);
+
+    const renderCell = React.useCallback((user, columnKey) => {
+        const cellValue = user[columnKey];
+        switch (columnKey) {
+            case "actions":
+                return (
+                    <div className="relative flex items-center gap-2">
+                        <Tooltip content="Details">
+                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                <EyeIcon />
+                            </span>
+                        </Tooltip>
+                        <Tooltip content="Edit user">
+                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                <EditIcon />
+                            </span>
+                        </Tooltip>
+                        <Tooltip color="danger" content="Delete user">
+                            <span data-key={user._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleDelete(e)}>
+                                <DeleteIcon />
+                            </span>
+                        </Tooltip>
+                    </div>
+                );
+            default:
+                return cellValue;
+        }
+    }, []);
+
     let list = useAsyncList({
         async load({ cursor }) {
             // If no cursor is available, then we're loading the first page.
@@ -27,17 +55,26 @@ export default function Position() {
             response.data.data.length === 0 ? setLoadable(false) : setLoadable(true)
             return {
                 items: response.data.data,
-                cursor: `positions?limit=10&skip=${page}`,
+                cursor: cursor || `positions?limit=10&skip=${page}`,
             };
         },
     });
 
-
+    const handleDelete = async (event) => {
+        const id = event.currentTarget.getAttribute('data-key')
+        event.preventDefault();
+        console.log(list.items)
+        list.items = list.items.filter(item => item._id !== id);
+        // await apiInstance.delete(`position/${id}`).then(() => {
+        //     list.remove(id)
+        //     setIsLoading(prev => !prev);
+        // }).catch(error => console.log(error))
+    }
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
             <div className="py-3 flex-grow">
-
+                {console.log(list.items)}
                 <div className="body  py-1">
                     <Card className="rounded-sm shadow-md py-3 min-h-[890px]">
                         <CardHeader className="justify-between">
@@ -71,6 +108,7 @@ export default function Position() {
                                 }}
                             >
                                 <TableHeader>
+                                    <TableColumn key="no">No</TableColumn>
                                     <TableColumn key="name">Name</TableColumn>
                                     <TableColumn key="description">Description</TableColumn>
                                     <TableColumn key="workingDay">Working Days</TableColumn>
@@ -80,6 +118,7 @@ export default function Position() {
                                     <TableColumn key="medicalLeaves">Medical Leave</TableColumn>
                                     <TableColumn key="vacationLeaves">Vacation Leave</TableColumn>
                                     <TableColumn key="basicSalary">Salary</TableColumn>
+                                    <TableColumn key="actions">Actions</TableColumn>
                                 </TableHeader>
                                 <TableBody
                                     emptyContent={"No Positions to display."}
@@ -89,7 +128,7 @@ export default function Position() {
                                 >
                                     {(item) => (
                                         <TableRow key={item._id}>
-                                            {(columnKey,) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+                                            {(columnKey,) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
                                         </TableRow>
                                     )}
                                 </TableBody>

@@ -1,6 +1,5 @@
 import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
-import React from "react";
 import PositionInputForm from "../../components/Position/PositionInput";
 
 export default function PositionRegsiter() {    
