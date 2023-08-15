@@ -2,22 +2,57 @@ import { Input } from "@nextui-org/react";
 import { RadioGroup, Radio } from "@nextui-org/react";
 import {Modal, Button, useDisclosure} from "@nextui-org/react"
 import OtherDoc from './otherDocInput'
+import {useRef} from 'react'
+import {useNavigate} from 'react-router-dom'
+import apiInstance from '../../util/api.js'
 export default function EmployeeInput() {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const variant = ["faded"];
+    const navigate = useNavigate()
+  const emailRef = useRef()
+  const passRef = useRef()
+  const nrcRef=useRef()
+  
+
+  //array list
+  // const [userList,setUserList]=useState([])
+  const create = () => {
+
+    const data = {
+      email: emailRef.current.value,
+      password: passRef.current.value,
+      NRC:nrcRef.current.value
+    }
+    alert(JSON.stringify(data))
+    apiInstance
+      .post('user', data)
+      .then(
+
+        () => {
+          alert('success')
+   
+          navigate('/emp')
+        })
+      .catch(
+        () => { alert('error') }
+      )
+
+  };
   return (
-    <div className="w-full flex flex-col gap-4">
+    <form className="w-full flex flex-col gap-4" onSubmit={create}>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
           type="text"
           label="Name"
           placeholder="Name"
+          ref={emailRef}
           variant={variant}
           labelPlacement="outside"
         />
         <Input
           type="number"
           label="Phone No"
+          ref={passRef}
           placeholder="Phone Number"
           variant={variant}
           labelPlacement="outside"
@@ -37,6 +72,7 @@ export default function EmployeeInput() {
           variant={variant}
           label="NRC"
           placeholder="NRC.."
+          ref={nrcRef}
           labelPlacement="outside"
         />
 
@@ -309,10 +345,10 @@ export default function EmployeeInput() {
       <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
 
         <Button size='sm' color='primary' variant='shadow'
-          className='rounded-xl px-4 py-0 text-left'>Register</Button>
+          className='rounded-xl px-4 py-0 text-left' type='submit'>Register</Button>
         <Button size='sm' color='primary' variant='shadow'
           className='rounded-xl px-4 py-0 text-left'>Cancel</Button>
       </div>
-    </div>
+    </form>
   );
 }

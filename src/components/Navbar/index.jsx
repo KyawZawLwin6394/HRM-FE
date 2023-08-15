@@ -27,7 +27,7 @@ navigate('/')
         <Navbar className="justify-between">
           {/* <h3>Hello</h3> */}
 
-          <div className="flex flex-row ">
+          <div className="flex flex-row place-content-between">
             <Image
               alt="nextui logo"
               height={40}
