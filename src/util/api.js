@@ -6,7 +6,7 @@ const apiInstance = axios.create({
     baseURL: url,
     headers: {
         Authorization: `Bearer ${storeToken}`,
-        'Content-Type': 'application/json'
+       
     }
 });
 

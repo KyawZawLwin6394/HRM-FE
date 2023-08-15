@@ -22,7 +22,7 @@ export default function EmployeeInput() {
   const phoneRef=useRef()
   const passportRef=useRef()
   const EuBackRef=useRef()
-  const EuCerRef=useRef()
+  // const [euCer,setEuCer]=useState(null)
   const workExpRef=useRef()
   const [cv,setCV]=useState(null)
   // const otheRef=useRef()
@@ -34,6 +34,7 @@ export default function EmployeeInput() {
   const fatherRef=useRef()
   const empDateRef=useRef()
   const genderRef=useRef()
+  
 
 const handlefile=(e)=>{
   if(e.target.files){
@@ -41,10 +42,17 @@ const handlefile=(e)=>{
     console.log(e.target.files,'file')
   }
 }
+// const handleCer=(e)=>{
+//   if(e.target.files){
+//     setEuCer(e.target.files[0])
+   
+
+//   }
+// }
   //array list
   // const [userList,setUserList]=useState([])
   const create = () => {
-console.log(cv,'cv')
+// console.log(cv,'cv')
     const data = {
       givenName:nameRef.current.value,
       email: emailRef.current.value,
@@ -56,10 +64,10 @@ console.log(cv,'cv')
       phone:phoneRef.current.value,
       passportNo:passportRef.current.value,
       educationBackground:EuBackRef.current.value,
-      educationCertificate:EuCerRef.current.value,
+      // educationCertificate:euCer,
       workExperience:workExpRef.current.value,
       cv:cv,
-      recommendationLetter:recLetterRef.current.value,
+      // recommendationLetter:recLetterRef.current.value,
       firstInterviewDate:firstInRef.current.value,
       firstInterviewResult:firstResRef.current.value,
       secondInterviewDate:secInRef.current.value,
@@ -145,6 +153,7 @@ function(){
           <label className="text-sm font-semibold">Gender</label>
           <select
           ref={genderRef}
+          
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Gender</option>
@@ -156,7 +165,7 @@ function(){
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
-          isRequired
+       isRequired
           type="email"
           variant={variant}
           ref={emailRef}
@@ -165,6 +174,7 @@ function(){
           labelPlacement="outside"
         />
         <Input
+        isRequired
           type="text"
           label="Password"
           ref={passRef}
@@ -210,7 +220,7 @@ function(){
           type="file"
           label="Education Certificate"
           variant={variant}
-          ref={EuCerRef}
+          // onChange={handleCer}
           placeholder=" "
           labelPlacement="outside"
         />
