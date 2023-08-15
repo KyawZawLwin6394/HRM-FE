@@ -2,11 +2,19 @@ import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import Table from '../../components/Table/table'
 import { Link } from 'react-router-dom';
+
 import { useEffect } from "react";
 import apiInstance from "../../util/api";
 
-
 export default function Employee() {
+  useEffect(() => {
+    const getEmployeeLists = async () => {
+      await apiInstance.get("users").then((response) => {
+        console.log(response.data.data, "here");
+      });
+    };
+    getEmployeeLists();
+  }, []);
 
     useEffect(() => {
         const getEmployeeLists = async () => {
@@ -41,6 +49,10 @@ export default function Employee() {
                     </Card>
                 </div>
             </div>
+
+
         </div>
-    )
+      </div>
+    </div>
+  );
 }

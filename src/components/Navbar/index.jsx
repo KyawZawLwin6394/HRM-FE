@@ -27,7 +27,7 @@ export default function NavBar() {
         <Navbar className="flex flex-grow justify-between" isBlurred={false}>
           {/* <h3>Hello</h3> */}
 
-          <div className="flex flex-row ">
+          <div className="flex flex-row place-content-between">
             <Image
               alt="nextui logo"
               height={40}
