@@ -7,37 +7,38 @@ import React, { useRef } from "react";
 import { useNavigate } from 'react-router-dom'
 import apiInstance from '../../util/api.js'
 import { MailFilledIcon } from './mailicon';
-
+import Swal from 'sweetalert2';
 const fields = loginFields;
 let fieldsState = {};
-fields.forEach((field) => (fieldsState[field.id] = ""));
+fields.forEach((field) => (fieldsState[field.id] = ""))
 
 export default function Login() {
   const navigate = useNavigate()
   const emailRef = useRef()
   const passRef = useRef()
   const handleSubmit = (e) => {
-    console.log('Clicked')
     e.preventDefault();
     const data = {
       email: emailRef.current.value,
       password: passRef.current.value
     }
-    // alert(JSON.stringify(data))
     apiInstance
       .post('auth/login', data)
       .then(
-
         (res) => {
-          alert('success')
-          console.log(res.data.token)
           localStorage.setItem('token', res.data.token)
           navigate('/home')
         })
       .catch(
         () => { alert('error') }
       )
-
+    Swal.fire({
+      icon: 'success',
+      title: 'Login Successful',
+      text: 'Welcome back!',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#3085d6',
+    });
   };
 
   //Handle Login API Integration here

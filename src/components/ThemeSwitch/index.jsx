@@ -5,20 +5,24 @@ import { useTheme } from "next-themes";
 
 export default function ThemeSwitch() {
     const { theme, setTheme } = useTheme()
+    const getTheme = localStorage.getItem('theme')
+
     return (
         <Switch
             defaultSelected
             size="lg"
             color="default"
-            thumbIcon={({ isSelected, className }) =>
-                isSelected ? (
+            thumbIcon={({ className }) =>
+                getTheme === 'light' ? (
                     <SunIcon className={className} />
                 ) : (
                     <MoonIcon className={className} />
                 )
             }
-            checked={theme === "light"}
-            onChange={() => setTheme(theme === "dark" ? "light" : "dark")}
+            checked={theme === getTheme}
+            onChange={() => {
+                setTheme(theme === "dark" ? "light" : "dark")
+            }}
         >
         </Switch>
     );
