@@ -13,7 +13,7 @@ export default function Position() {
                     <Card className="rounded-sm shadow-md py-3 min-h-[890px]">
                         <CardHeader className="justify-between">
                             <div></div>
-                            <div className='font-semibold'>Position List</div>
+                            <div className='font-semibold text-large font-nunito'>Position List</div>
                             <Button size='sm' radius="sm" className="text-white shadow-sm" color='primary'>
                                 <Link to='/position/register'>
                                     Add
@@ -21,7 +21,6 @@ export default function Position() {
                             </Button>
 
                         </CardHeader>
-                        <Divider></Divider>
                         <CardBody>
                             <PositionTable />
                         </CardBody>

@@ -7,8 +7,31 @@ export default {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        custom: ['Roboto Mono', 'monospace'],
+        nunito:['Nunito Sans','sans-serif']
+      },
+    }
   },
   darkMode: 'class',
-  plugins: [nextui()]
+  plugins: [nextui(
+    {
+      themes: {
+        light: {
+          layout: {},
+          colors: {
+
+          }
+        },
+        dark: {
+          layout: {},
+          colors: {
+            background: '#18181b',
+            foreground: '#ffffff',
+          }
+        },
+      }
+    }
+  )]
 }

@@ -1,20 +1,31 @@
-import { Tooltip, Table, TableHeader, Modal, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Tooltip, Table, TableHeader, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
 import { EyeIcon } from "../Table/eyeicon";
+import React from "react";
 
 export default function DepartmentTable() {
     const [departmentList, setDepartmentList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [delID, setDelID] = useState(null);
+    const [page, setPage] = React.useState(1);
+    const [pages, setPages] = React.useState(1);
+    const rowsPerPage = 15;
+    const items = React.useMemo(() => {
+
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        return departmentList.slice(start, end);
+    }, [page, departmentList]);
 
     useEffect(() => {
         const getDepartments = async () => {
             await apiInstance.get(`departments`, { params: { limit: 80 } })
                 .then(res => {
                     setDepartmentList(res.data.data)
+                    setPages(res.data._metadata.page_count)
                 })
         }
         getDepartments()
@@ -49,6 +60,19 @@ export default function DepartmentTable() {
                     base: "max-h-[719px] ",
                     table: "min-h-[100px]",
                 }}
+                bottomContent={
+                    <div className="flex w-full justify-center">
+                        <Pagination
+                            isCompact
+                            showControls
+                            showShadow
+                            color="primary"
+                            page={page}
+                            total={pages}
+                            onChange={(page) => setPage(page)}
+                        />
+                    </div>
+                }
             >
 
                 <TableHeader>
@@ -65,8 +89,7 @@ export default function DepartmentTable() {
                 <TableBody
                     emptyContent={"No Departments to display."}
                 >
-                    {console.log(departmentList)}
-                    {departmentList.map((item, index) => (
+                    {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item.name}</TableCell>

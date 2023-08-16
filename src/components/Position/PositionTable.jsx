@@ -1,20 +1,31 @@
-import { Tooltip, Table, TableHeader, Modal, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Tooltip, Table, TableHeader, Modal, ModalContent, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
 import { EyeIcon } from "../Table/eyeicon";
+import React from "react";
 
 export default function PositionTable() {
     const [positionList, setPositionList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [delID, setDelID] = useState(null);
 
+    const [page, setPage] = React.useState(1);
+    const [pages, setPages] = React.useState(1);
+    const rowsPerPage = 15;
+    const items = React.useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        return positionList.slice(start, end);
+    }, [page, positionList]);
+
     useEffect(() => {
         const getPositions = async () => {
-            await apiInstance.get(`positions`, { params: { limit: 80 } })
+            await apiInstance.get(`positions`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
                 .then(res => {
                     setPositionList(res.data.data)
+                    setPages(res.data._metadata.page_count)
                 })
         }
         getPositions()
@@ -49,6 +60,19 @@ export default function PositionTable() {
                     base: "max-h-[719px] ",
                     table: "min-h-[100px]",
                 }}
+                bottomContent={
+                    <div className="flex w-full justify-center">
+                        <Pagination
+                            isCompact
+                            showControls
+                            showShadow
+                            color="primary"
+                            page={page}
+                            total={pages}
+                            onChange={(page) => setPage(page)}
+                        />
+                    </div>
+                }
             >
                 <TableHeader>
                     <TableColumn key="no">No</TableColumn>
@@ -66,7 +90,7 @@ export default function PositionTable() {
                 <TableBody
                     emptyContent={"No Positions to display."}
                 >
-                    {positionList.map((item, index) => (
+                    {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item.name}</TableCell>
@@ -115,7 +139,7 @@ export default function PositionTable() {
                                 <Button color="default" variant="light" onClick={handleClose}>
                                     No, Cancel
                                 </Button>
-                                <Button color="danger" onPress={() => handleDelete()}>
+                                <Button color="danger" onPress={handleDelete}>
                                     Yes, I am sure
                                 </Button>
                             </ModalFooter>

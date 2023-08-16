@@ -14,8 +14,8 @@ export default function Department() {
                             <div>
 
                             </div>
-                            <div className="font-semibold text-medium">
-                                Department
+                            <div className="font-semibold text-medium font-nunito">
+                                Department List
                             </div>
                             <Button color="primary">
                                 <Link to='/department/register'>
@@ -24,7 +24,6 @@ export default function Department() {
 
                             </Button>
                         </CardHeader>
-                        <Divider></Divider>
                         <CardBody >
                             <DepartmentTable />
                         </CardBody>

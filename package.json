@@ -28,7 +28,8 @@
     "react-router": "^6.15.0",
     "react-router-dom": "^6.15.0",
     "react-stately": "^3.25.0",
-    "sweetalert2": "^11.7.22"
+    "sweetalert2": "^11.7.22",
+    "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

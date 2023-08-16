@@ -42,8 +42,6 @@ export default function PositionInputForm() {
 
     const handleRegister = async () => {
 
-        console.log(data)
-        alert(JSON.stringify(data))
         await apiInstance.post('position', data)
             .then(() => {
                 Swal.fire({
