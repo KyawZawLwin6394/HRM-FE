@@ -16,6 +16,7 @@ export default function RouteFile() {
         <div className="head bg-white rounded-lg shadow-md min-w-[1080px]">  <Nav /></div>
         <Routes>
           <Route path='/' element={<Login />}></Route>
+          
           <Route element={<AuthContainer />}>
             <Route path='/home' element={<Dashboard />} />
 
