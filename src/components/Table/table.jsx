@@ -3,7 +3,7 @@ import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, User, C
 import {EditIcon} from "./editicon";
 import {DeleteIcon} from "./deleteicon";
 import {EyeIcon} from "./eyeicon";
-import {columns, users} from "./data";
+
 
 const statusColorMap = {
   active: "success",
@@ -66,14 +66,14 @@ export default function App() {
 
   return (
   <Table aria-label="Example table with custom cells">
-      <TableHeader columns={columns}>
+      <TableHeader >
         {(column) => (
           <TableColumn key={column.uid} align={column.uid === "actions" ? "center" : "start"}>
             {column.name}
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody items={users}>
+      <TableBody >
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}

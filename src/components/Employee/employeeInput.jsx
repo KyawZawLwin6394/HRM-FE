@@ -21,11 +21,11 @@ export default function EmployeeInput() {
   const phoneRef=useRef()
   const passportRef=useRef()
   const EuBackRef=useRef()
-  // const [euCer,setEuCer]=useState(null)
+  const [euCer,setEuCer]=useState(null)
   const workExpRef=useRef()
   const [cv,setCV]=useState(null)
   // const otheRef=useRef()
-  const recLetterRef=useRef()
+const [recLetter,setRecLetter]=useState(null)
   const firstInRef=useRef()
   const firstResRef=useRef()
   const secInRef=useRef()
@@ -42,6 +42,20 @@ export default function EmployeeInput() {
     }
   }
   
+
+  const handleCer = (e) => {
+    if (e.target.files) {
+      setEuCer(e.target.files[0])
+      console.log(e.target.files, 'file')
+    }
+  }
+
+    const handleRecLetter = (e) => {
+    if (e.target.files) {
+      setRecLetter(e.target.files[0])
+      console.log(e.target.files, 'file')
+    }
+  }
   const create = () => {
 // console.log(cv,'cv')
     const data = {
@@ -55,10 +69,10 @@ export default function EmployeeInput() {
       phone:phoneRef.current.value,
       passportNo:passportRef.current.value,
       educationBackground:EuBackRef.current.value,
-      // educationCertificate:euCer,
+      edu:euCer,
       workExperience:workExpRef.current.value,
       cv:cv,
-      // recommendationLetter:recLetterRef.current.value,
+      recLet:recLetter,
       firstInterviewDate:firstInRef.current.value,
       firstInterviewResult:firstResRef.current.value,
       secondInterviewDate:secInRef.current.value,
@@ -212,7 +226,7 @@ export default function EmployeeInput() {
           type="file"
           label="Education Certificate"
           variant={variant}
-          // onChange={handleCer}
+          onChange={handleCer}
           placeholder=" "
           labelPlacement="outside"
         />
@@ -399,7 +413,7 @@ export default function EmployeeInput() {
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
           type="file"
-          ref={recLetterRef}
+         onChange={handleRecLetter}
           label="Recommendation Letter"
           placeholder=" "
           labelPlacement="outside"

@@ -6,7 +6,7 @@ import {
   CardFooter,
   Divider,
 } from "@nextui-org/react";
-import Table from "../../components/Table/table";
+import Table from "../../components/Employee/employeeList";
 import { Link } from "react-router-dom";
 
 import { useEffect } from "react";
