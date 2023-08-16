@@ -4,7 +4,6 @@ import {
   CardBody,
   CardFooter,
   Divider,
-
   User
 } from '@nextui-org/react'
 import BadgeIcon from '@mui/icons-material/Badge'

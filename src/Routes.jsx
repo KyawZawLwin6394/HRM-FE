@@ -7,6 +7,8 @@ import EmployeeAdd from './pages/Employee/employeeAdd'
 import Position from './pages/Position/Position.jsx'
 import AuthContainer from './util/AuthContainer.jsx'
 import PositionRegsiter from './pages/Position/Add'
+import Department from './pages/Department/Department'
+import DepartmentRegister from './pages/Department/DepartmentRegister'
 
 
 export default function RouteFile() {
@@ -16,9 +18,13 @@ export default function RouteFile() {
         <div className="head bg-white rounded-lg shadow-md min-w-[1080px]">  <Nav /></div>
         <Routes>
           <Route path='/' element={<Login />}></Route>
-          
+
           <Route element={<AuthContainer />}>
             <Route path='/home' element={<Dashboard />} />
+
+            {/* Department */}
+            <Route path='/department' element={<Department />}></Route>
+            <Route path='/department/register' element={<DepartmentRegister />}></Route>
 
             {/* Employee */}
             <Route path='/emp' element={<Employee />} />
