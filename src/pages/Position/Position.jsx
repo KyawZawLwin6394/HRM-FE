@@ -8,9 +8,9 @@ export default function Position() {
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
-            <div className="py-3 flex-grow">
-                <div className="body  py-1">
-                    <Card className="rounded-sm shadow-md py-3 min-h-[890px]">
+            <div className="flex-grow">
+                <div className="body">
+                    <Card className="rounded-sm shadow-md min-h-[890px]" >
                         <CardHeader className="justify-between">
                             <div></div>
                             <div className='font-semibold text-large font-nunito'>Position List</div>

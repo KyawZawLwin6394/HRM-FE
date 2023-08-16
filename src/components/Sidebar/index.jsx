@@ -20,7 +20,7 @@ export default function Sidebar() {
   }
   return (
     <>
-      <div className='sidebar w-full grid grid-cols-1 grid-flow-col py-4 px-2'>
+      <div className='sidebar w-full grid grid-cols-1 grid-flow-col px-1'>
         <div className='nav-bar flex-grow'>
           <Card className='w-[250px] max-h rounded-sm'>
             <Divider />

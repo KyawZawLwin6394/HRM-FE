@@ -15,7 +15,9 @@ export default function RouteFile() {
   return (
     <>
       <BrowserRouter>
-        <div className="head bg-white rounded-lg shadow-md min-w-[1080px]">  <Nav /></div>
+       <div className='flex-grow'>
+       <Nav></Nav>
+       </div>
         <Routes>
           <Route path='/' element={<Login />}></Route>
 

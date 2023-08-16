@@ -37,9 +37,9 @@ export default function Employee() {
         <div className="sidebar">
           <Sidebar />
         </div>
-        <div className="py-3 flex-grow">
-          <div className="py-1">
-            <Card className="rounded-sm shadow-md min-h-[890px]">
+        <div className=" flex-grow">
+          <div className="">
+            <Card className="rounded-sm shadow-md py-3 min-h-[890px]">
               <CardHeader className="justify-between">
                 <div></div>
                 <div className="font-semibold">Employee List</div>

@@ -7,6 +7,7 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
+  NavbarBrand,
 } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { SearchIcon } from "./search";
@@ -24,21 +25,23 @@ export default function NavBar() {
   return (
     <>
       {location.pathname !== "/" && (
-        <Navbar className="flex flex-grow justify-between" isBlurred={false}>
+        <Navbar maxWidth="full" isBordered isBlurred={false}>
           {/* <h3>Hello</h3> */}
 
-          <div className="flex flex-row place-content-between">
-            <Image
-              alt="nextui logo"
-              height={40}
-              radius="sm"
-              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
-              width={40}
-            />
-            <div className="flex ml-4">
-              <p className="text-md m-auto">HR Management</p>
+          <NavbarBrand>
+            <div className="flex flex-row place-content-between">
+              <Image
+                alt="nextui logo"
+                height={40}
+                radius="sm"
+                src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                width={40}
+              />
+              <div className="flex ml-4">
+                <p className="text-md m-auto">HR Management</p>
+              </div>
             </div>
-          </div>
+          </NavbarBrand>
 
           <NavbarContent as="div" className="items-center mt-2 flex-grow" justify="end">
             <Input
