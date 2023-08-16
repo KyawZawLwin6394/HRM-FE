@@ -2,7 +2,7 @@ import { Input } from "@nextui-org/react";
 import { RadioGroup, Radio } from "@nextui-org/react";
 import { Modal, Button, useDisclosure } from "@nextui-org/react"
 import OtherDoc from './otherDocInput'
-import { useRef, useState } from 'react'
+import { useRef, useState,useEffect } from 'react'
 import apiInstance from '../../util/api.js'
 import Swal from 'sweetalert2';
 
@@ -15,7 +15,7 @@ export default function EmployeeInput() {
   const nrcRef = useRef()
   const nameRef = useRef()
   const addressRef = useRef()
-  // const ageRef=useRef()
+
   const DOBRef=useRef()
   const ECRef=useRef()
   const phoneRef=useRef()
@@ -24,8 +24,10 @@ export default function EmployeeInput() {
   const [euCer,setEuCer]=useState(null)
   const workExpRef=useRef()
   const [cv,setCV]=useState(null)
-  // const otheRef=useRef()
+  const [basicSalary,setBasicSalary]=useState('')
 const [recLetter,setRecLetter]=useState(null)
+const [profile,setProfile]=useState(null)
+const [position,setPosition]=useState('')
   const firstInRef=useRef()
   const firstResRef=useRef()
   const secInRef=useRef()
@@ -33,8 +35,19 @@ const [recLetter,setRecLetter]=useState(null)
   const fatherRef=useRef()
   const empDateRef=useRef()
   const genderRef=useRef()
+  const [positionList,setPositionList]=useState([])
   
-
+useEffect(()=>{
+const getEmployee = async () => {
+            await apiInstance.get(`positions`, { params: { limit: 80 } })
+                .then(res => {
+                    setPositionList(res.data.data)
+                     console.log(res.data.data,'emp')
+                })
+               
+        }
+        getEmployee()
+},[])
   const handlefile = (e) => {
     if (e.target.files) {
       setCV(e.target.files[0])
@@ -56,6 +69,21 @@ const [recLetter,setRecLetter]=useState(null)
       console.log(e.target.files, 'file')
     }
   }
+
+     const handleProfile = (e) => {
+    if (e.target.files) {
+      setProfile(e.target.files[0])
+      console.log(e.target.files, 'file')
+    }
+  }
+
+  const handlePosition=(val)=>{
+   
+    console.loog(positionList.filter(el=>el._id === val)[0].basicSalary,'bas sal')
+     setBasicSalary(positionList.filter(el=>el._id === val)[0].basicSalary)
+     setPosition(val)
+     
+  }
   const create = () => {
 // console.log(cv,'cv')
     const data = {
@@ -72,6 +100,8 @@ const [recLetter,setRecLetter]=useState(null)
       edu:euCer,
       workExperience:workExpRef.current.value,
       cv:cv,
+      pf:profile,
+      relatedPosition:position,
       recLet:recLetter,
       firstInterviewDate:firstInRef.current.value,
       firstInterviewResult:firstResRef.current.value,
@@ -80,7 +110,6 @@ const [recLetter,setRecLetter]=useState(null)
       fatherName:fatherRef.current.value,
       gender:genderRef.current.value,
       employedDate:empDateRef.current.value,
-
 
 
     }
@@ -287,17 +316,18 @@ const [recLetter,setRecLetter]=useState(null)
 
           </select>
         </div>
-        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-          <label className="text-sm font-semibold">Position</label>
+           <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <label className="text-sm font-semibold">Direct Manager</label>
           <select
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Position</option>
+            <option hidden>Choose Direct Manager</option>
             <option value="US">Ma Ma</option>
             <option value="CA">Ha Hla</option>
 
           </select>
         </div>
+      
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
@@ -328,14 +358,19 @@ const [recLetter,setRecLetter]=useState(null)
           placeholder=" "
           labelPlacement="outside"
         />
-        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-          <label className="text-sm font-semibold">Direct Manager</label>
+          <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <label className="text-sm font-semibold">Position</label>
           <select
             id="countries"
+           
+            onChange={(e)=>handlePosition(e.target.value)}
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Direct Manager</option>
-            <option value="US">Ma Ma</option>
-            <option value="CA">Ha Hla</option>
+            <option hidden>Choose Position</option>
+            {positionList.map((option)=>(
+      <option key={option} value={option._id}>{option.name}</option>
+            ))}
+      
+      
 
           </select>
         </div>
@@ -353,6 +388,7 @@ const [recLetter,setRecLetter]=useState(null)
         <Input
           type="number"
           label="Basic Salary"
+          value={basicSalary}
           placeholder=" "
           labelPlacement="outside"
           variant={variant}
@@ -419,7 +455,18 @@ const [recLetter,setRecLetter]=useState(null)
           labelPlacement="outside"
           variant={variant}
         />
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
+           <Input
+          type="file"
+         onChange={handleProfile}
+          label="Profile"
+          placeholder=" "
+          labelPlacement="outside"
+          variant={variant}
+        />
+      
+      </div>
+
+  <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
           <label className="text-sm font-semibold">Other Document</label> &nbsp;
           <Button isIconOnly size='sm' color='primary' variant='shadow'
             className='rounded-xl px-4 py-0 text-left' onPress={onOpen}>+</Button>
@@ -427,9 +474,6 @@ const [recLetter,setRecLetter]=useState(null)
             <OtherDoc />
           </Modal>
         </div>
-      </div>
-
-
       <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
 
         <Button size='sm' color='primary' variant='shadow'
