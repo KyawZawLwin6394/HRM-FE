@@ -46,25 +46,17 @@ export default function EmployeeInput() {
   const empDateRef = useRef();
   const genderRef = useRef();
   // const [img, setImg] = useState("");
-  // const descRef=useRef()
+  const descRef=useRef()
   const [otherDoc, setOtherDoc] = useState([]);
 
   const [positionList, setPositionList] = useState([]);
 
-  const handleChange = (file) => {
-        const obj = {
-        file
-      }
-      setOtherDoc(arr => [...arr, obj])
-console.log(arr => [...arr, obj],'img list')
+  const handleChange = (e) => {
 
-    // setImg(newData.map((i) => i.name));
-    // console.log(
-    //   newData.map((i) => i.name),
-    //   "name"
-    // );
-    // console.log("http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/employee/other/OTH-" +
-    //          newData.map((i) => i.name)[0],'img partt')
+    setOtherDoc(e.target.files)
+// console.log([...otherDoc, ...e],'img list')
+
+
   };
   useEffect(() => {
     const getEmployee = async () => {
@@ -80,7 +72,7 @@ console.log(arr => [...arr, obj],'img list')
   const handlefile = (e) => {
     if (e.target.files) {
       setCV(e.target.files[0]);
-      console.log(e.target.files, "file");
+      console.log(e.target.files, "file cv");
     }
   };
 
@@ -106,15 +98,16 @@ console.log(arr => [...arr, obj],'img list')
   };
 
   const handlePosition = (val) => {
-    console.loog(
+    console.log(
       positionList.filter((el) => el._id === val)[0].basicSalary,
       "bas sal"
     );
     setBasicSalary(positionList.filter((el) => el._id === val)[0].basicSalary);
     setPosition(val);
+    console.log(val,'val')
   };
   const create = () => {
-    // console.log(cv,'cv')
+    console.log(otherDoc,'doc')
     const data = {
       givenName: nameRef.current.value,
       email: emailRef.current.value,
@@ -140,6 +133,7 @@ console.log(arr => [...arr, obj],'img list')
       fatherName: fatherRef.current.value,
       gender: genderRef.current.value,
       employedDate: empDateRef.current.value,
+      description:descRef.currentvalue
     };
     alert(JSON.stringify(data));
     apiInstance
