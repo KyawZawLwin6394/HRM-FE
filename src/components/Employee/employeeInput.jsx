@@ -1,140 +1,165 @@
 import { Input } from "@nextui-org/react";
 import { RadioGroup, Radio } from "@nextui-org/react";
-import { Modal, Button, useDisclosure } from "@nextui-org/react"
-import OtherDoc from './otherDocInput'
-import { useRef, useState,useEffect } from 'react'
-import apiInstance from '../../util/api.js'
-import Swal from 'sweetalert2';
+import {
+  Modal,
+  Button,
+  useDisclosure,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@nextui-org/react";
+import { useRef, useState, useEffect } from "react";
+import apiInstance from "../../util/api.js";
+import Swal from "sweetalert2";
+import { FileUploader } from "react-drag-drop-files";
+
+const fileTypes = ["JPG", "PNG", "GIF"];
 
 export default function EmployeeInput() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const variant = ["faded"];
 
-  const emailRef = useRef()
-  const passRef = useRef()
-  const nrcRef = useRef()
-  const nameRef = useRef()
-  const addressRef = useRef()
+  const emailRef = useRef();
+  const passRef = useRef();
+  const nrcRef = useRef();
+  const nameRef = useRef();
+  const addressRef = useRef();
 
-  const DOBRef=useRef()
-  const ECRef=useRef()
-  const phoneRef=useRef()
-  const passportRef=useRef()
-  const EuBackRef=useRef()
-  const [euCer,setEuCer]=useState(null)
-  const workExpRef=useRef()
-  const [cv,setCV]=useState(null)
-  const [basicSalary,setBasicSalary]=useState('')
-const [recLetter,setRecLetter]=useState(null)
-const [profile,setProfile]=useState(null)
-const [position,setPosition]=useState('')
-  const firstInRef=useRef()
-  const firstResRef=useRef()
-  const secInRef=useRef()
-  const secResRef=useRef()
-  const fatherRef=useRef()
-  const empDateRef=useRef()
-  const genderRef=useRef()
-  const [positionList,setPositionList]=useState([])
-  
-useEffect(()=>{
-const getEmployee = async () => {
-            await apiInstance.get(`positions`, { params: { limit: 80 } })
-                .then(res => {
-                    setPositionList(res.data.data)
-                     console.log(res.data.data,'emp')
-                })
-               
-        }
-        getEmployee()
-},[])
+  const DOBRef = useRef();
+  const ECRef = useRef();
+  const phoneRef = useRef();
+  const passportRef = useRef();
+  const EuBackRef = useRef();
+  const [euCer, setEuCer] = useState(null);
+  const workExpRef = useRef();
+  const [cv, setCV] = useState(null);
+  const [basicSalary, setBasicSalary] = useState("");
+  const [recLetter, setRecLetter] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [position, setPosition] = useState("");
+  const firstInRef = useRef();
+  const firstResRef = useRef();
+  const secInRef = useRef();
+  const secResRef = useRef();
+  const fatherRef = useRef();
+  const empDateRef = useRef();
+  const genderRef = useRef();
+  // const [img, setImg] = useState("");
+  // const descRef=useRef()
+  const [otherDoc, setOtherDoc] = useState([]);
+
+  const [positionList, setPositionList] = useState([]);
+
+  const handleChange = (file) => {
+        const obj = {
+        file
+      }
+      setOtherDoc(arr => [...arr, obj])
+console.log(arr => [...arr, obj],'img list')
+
+    // setImg(newData.map((i) => i.name));
+    // console.log(
+    //   newData.map((i) => i.name),
+    //   "name"
+    // );
+    // console.log("http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/employee/other/OTH-" +
+    //          newData.map((i) => i.name)[0],'img partt')
+  };
+  useEffect(() => {
+    const getEmployee = async () => {
+      await apiInstance
+        .get(`positions`, { params: { limit: 80 } })
+        .then((res) => {
+          setPositionList(res.data.data);
+          console.log(res.data.data, "emp");
+        });
+    };
+    getEmployee();
+  }, []);
   const handlefile = (e) => {
     if (e.target.files) {
-      setCV(e.target.files[0])
-      console.log(e.target.files, 'file')
+      setCV(e.target.files[0]);
+      console.log(e.target.files, "file");
     }
-  }
-  
+  };
 
   const handleCer = (e) => {
     if (e.target.files) {
-      setEuCer(e.target.files[0])
-      console.log(e.target.files, 'file')
+      setEuCer(e.target.files[0]);
+      console.log(e.target.files, "file");
     }
-  }
+  };
 
-    const handleRecLetter = (e) => {
+  const handleRecLetter = (e) => {
     if (e.target.files) {
-      setRecLetter(e.target.files[0])
-      console.log(e.target.files, 'file')
+      setRecLetter(e.target.files[0]);
+      console.log(e.target.files, "file");
     }
-  }
+  };
 
-     const handleProfile = (e) => {
+  const handleProfile = (e) => {
     if (e.target.files) {
-      setProfile(e.target.files[0])
-      console.log(e.target.files, 'file')
+      setProfile(e.target.files[0]);
+      console.log(e.target.files, "file");
     }
-  }
+  };
 
-  const handlePosition=(val)=>{
-   
-    console.loog(positionList.filter(el=>el._id === val)[0].basicSalary,'bas sal')
-     setBasicSalary(positionList.filter(el=>el._id === val)[0].basicSalary)
-     setPosition(val)
-     
-  }
+  const handlePosition = (val) => {
+    console.loog(
+      positionList.filter((el) => el._id === val)[0].basicSalary,
+      "bas sal"
+    );
+    setBasicSalary(positionList.filter((el) => el._id === val)[0].basicSalary);
+    setPosition(val);
+  };
   const create = () => {
-// console.log(cv,'cv')
+    // console.log(cv,'cv')
     const data = {
       givenName: nameRef.current.value,
       email: emailRef.current.value,
       password: passRef.current.value,
-      NRC:nrcRef.current.value,
-      address:addressRef.current.value,
-      DOB:DOBRef.current.value,
-      emergencyContact:ECRef.current.value,
-      phone:phoneRef.current.value,
-      passportNo:passportRef.current.value,
-      educationBackground:EuBackRef.current.value,
-      edu:euCer,
-      workExperience:workExpRef.current.value,
-      cv:cv,
-      pf:profile,
-      relatedPosition:position,
-      recLet:recLetter,
-      firstInterviewDate:firstInRef.current.value,
-      firstInterviewResult:firstResRef.current.value,
-      secondInterviewDate:secInRef.current.value,
-      secondInterviewResult:secResRef.current.value,
-      fatherName:fatherRef.current.value,
-      gender:genderRef.current.value,
-      employedDate:empDateRef.current.value,
-
-
-    }
-    alert(JSON.stringify(data))
+      NRC: nrcRef.current.value,
+      address: addressRef.current.value,
+      DOB: DOBRef.current.value,
+      emergencyContact: ECRef.current.value,
+      phone: phoneRef.current.value,
+      passportNo: passportRef.current.value,
+      educationBackground: EuBackRef.current.value,
+      edu: euCer,
+      workExperience: workExpRef.current.value,
+      cv: cv,
+      pf: profile,
+      relatedPosition: position,
+      other: otherDoc,
+      recLet: recLetter,
+      firstInterviewDate: firstInRef.current.value,
+      firstInterviewResult: firstResRef.current.value,
+      secondInterviewDate: secInRef.current.value,
+      secondInterviewResult: secResRef.current.value,
+      fatherName: fatherRef.current.value,
+      gender: genderRef.current.value,
+      employedDate: empDateRef.current.value,
+    };
+    alert(JSON.stringify(data));
     apiInstance
-      .post('user', data, {
+      .post("user", data, {
         headers: {
           "Content-Type": "multipart/form-data",
-        }
+        },
       })
-      .then(
-        function () {
-          Swal.fire({
-            icon: 'success',
-            title: 'Login Successful',
-            text: 'Welcome back!',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#3085d6',
-          });
-
-        })
-      .catch(
-        (error) => { alert(error) }
-      )
-
+      .then(function () {
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: "Welcome back!",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#3085d6",
+        });
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
   return (
     <div className="w-full flex flex-col gap-4">
@@ -174,7 +199,6 @@ const getEmployee = async () => {
           ref={nrcRef}
           labelPlacement="outside"
         />
-
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
@@ -188,19 +212,18 @@ const getEmployee = async () => {
         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <label className="text-sm font-semibold">Gender</label>
           <select
-          ref={genderRef}
+            ref={genderRef}
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
-
           </select>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
-       isRequired
+          isRequired
           type="email"
           variant={variant}
           ref={emailRef}
@@ -209,7 +232,7 @@ const getEmployee = async () => {
           labelPlacement="outside"
         />
         <Input
-        isRequired
+          isRequired
           type="text"
           label="Password"
           ref={passRef}
@@ -217,7 +240,6 @@ const getEmployee = async () => {
           placeholder="Password.."
           labelPlacement="outside"
         />
-
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -240,7 +262,6 @@ const getEmployee = async () => {
             labelPlacement="outside"
           />
         </div>
-
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
@@ -300,8 +321,6 @@ const getEmployee = async () => {
             labelPlacement="outside"
           />
         </div>
-
-
       </div>
 
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -313,10 +332,9 @@ const getEmployee = async () => {
             <option hidden>Choose Department</option>
             <option value="US">Ma Ma</option>
             <option value="CA">Hla Hla</option>
-
           </select>
         </div>
-           <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <label className="text-sm font-semibold">Direct Manager</label>
           <select
             id="countries"
@@ -324,14 +342,11 @@ const getEmployee = async () => {
             <option hidden>Choose Direct Manager</option>
             <option value="US">Ma Ma</option>
             <option value="CA">Ha Hla</option>
-
           </select>
         </div>
-      
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
-
           type="text"
           variant={variant}
           label="Father Name"
@@ -350,7 +365,6 @@ const getEmployee = async () => {
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
-
           type="tel"
           variant={variant}
           label="Emergecy Contact"
@@ -358,20 +372,18 @@ const getEmployee = async () => {
           placeholder=" "
           labelPlacement="outside"
         />
-          <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <label className="text-sm font-semibold">Position</label>
           <select
             id="countries"
-           
-            onChange={(e)=>handlePosition(e.target.value)}
+            onChange={(e) => handlePosition(e.target.value)}
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Position</option>
-            {positionList.map((option)=>(
-      <option key={option} value={option._id}>{option.name}</option>
+            {positionList.map((option) => (
+              <option key={option} value={option._id}>
+                {option.name}
+              </option>
             ))}
-      
-      
-
           </select>
         </div>
       </div>
@@ -434,7 +446,6 @@ const getEmployee = async () => {
           <RadioGroup orientation="horizontal">
             <Radio value="1">Yes</Radio>
             <Radio value="2">No</Radio>
-
           </RadioGroup>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
@@ -442,44 +453,108 @@ const getEmployee = async () => {
           <RadioGroup orientation="horizontal">
             <Radio value="1">Yes</Radio>
             <Radio value="2">No</Radio>
-
           </RadioGroup>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
           type="file"
-         onChange={handleRecLetter}
+          onChange={handleRecLetter}
           label="Recommendation Letter"
           placeholder=" "
           labelPlacement="outside"
           variant={variant}
         />
-           <Input
+        <Input
           type="file"
-         onChange={handleProfile}
+          onChange={handleProfile}
           label="Profile"
           placeholder=" "
           labelPlacement="outside"
           variant={variant}
         />
-      
       </div>
 
-  <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
-          <label className="text-sm font-semibold">Other Document</label> &nbsp;
-          <Button isIconOnly size='sm' color='primary' variant='shadow'
-            className='rounded-xl px-4 py-0 text-left' onPress={onOpen}>+</Button>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-            <OtherDoc />
-          </Modal>
-        </div>
-      <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+      <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
+        <label className="text-sm font-semibold">Other Document</label> &nbsp;
+        <Button
+          isIconOnly
+          size="sm"
+          color="primary"
+          variant="shadow"
+          className="rounded-xl px-4 py-0 text-left"
+          onPress={onOpen}>
+          +
+        </Button>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Other Document
+                </ModalHeader>
+                <ModalBody>
+                  <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                    <FileUploader
+                      multiple={true}
+                      handleChange={handleChange}
+                      name="file"
+                      types={fileTypes}
+                    />
+                    {/* <p>
+                  {otherDoc
+                    ? `File name: ${otherDoc[0].name}`
+                    : ""}
+                </p> */}
 
-        <Button size='sm' color='primary' variant='shadow'
-          className='rounded-xl px-4 py-0 text-left' onClick={create}>Register</Button>
-        <Button size='sm' color='primary' variant='shadow'
-          className='rounded-xl px-4 py-0 text-left'>Cancel</Button>
+                    <Input
+                      type="text"
+                      label="Description"
+                      placeholder=""
+                      variant="faded"
+                      className="mt-5"
+                    />
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onClick={onClose}>
+                    Close
+                  </Button>
+                  <Button color="primary" onPress={onClose}>
+                    Save
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
+        {/* <p>{img[0]}</p>
+          <img
+            src={
+              "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/employee/other/OTH-" +
+              img[0]
+            }
+            
+          /> */}
+        </div>
+      </div>
+      <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+        <Button
+          size="sm"
+          color="primary"
+          variant="shadow"
+          className="rounded-xl px-4 py-0 text-left"
+          onClick={create}>
+          Register
+        </Button>
+        <Button
+          size="sm"
+          color="primary"
+          variant="shadow"
+          className="rounded-xl px-4 py-0 text-left">
+          Cancel
+        </Button>
       </div>
     </div>
   );
