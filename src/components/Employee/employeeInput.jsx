@@ -46,16 +46,17 @@ export default function EmployeeInput() {
   const empDateRef = useRef();
   const genderRef = useRef();
   // const [img, setImg] = useState("");
-  const descRef=useRef()
+  const descRef = useRef()
   const [otherDoc, setOtherDoc] = useState([]);
 
   const [positionList, setPositionList] = useState([]);
 
   const handleChange = (e) => {
-
-    setOtherDoc(e.target.files)
-// console.log([...otherDoc, ...e],'img list')
-
+    let array = []
+    for (const item of e) {
+      array.push(item)
+    }
+    setOtherDoc(array)
 
   };
   useEffect(() => {
@@ -104,40 +105,46 @@ export default function EmployeeInput() {
     );
     setBasicSalary(positionList.filter((el) => el._id === val)[0].basicSalary);
     setPosition(val);
-    console.log(val,'val')
+    console.log(val, 'val')
   };
   const create = () => {
-    console.log(otherDoc,'doc')
-    const data = {
-      givenName: nameRef.current.value,
-      email: emailRef.current.value,
-      password: passRef.current.value,
-      NRC: nrcRef.current.value,
-      address: addressRef.current.value,
-      DOB: DOBRef.current.value,
-      emergencyContact: ECRef.current.value,
-      phone: phoneRef.current.value,
-      passportNo: passportRef.current.value,
-      educationBackground: EuBackRef.current.value,
-      edu: euCer,
-      workExperience: workExpRef.current.value,
-      cv: cv,
-      pf: profile,
-      relatedPosition: position,
-      other: otherDoc,
-      recLet: recLetter,
-      firstInterviewDate: firstInRef.current.value,
-      firstInterviewResult: firstResRef.current.value,
-      secondInterviewDate: secInRef.current.value,
-      secondInterviewResult: secResRef.current.value,
-      fatherName: fatherRef.current.value,
-      gender: genderRef.current.value,
-      employedDate: empDateRef.current.value,
-      description:descRef.currentvalue
-    };
-    alert(JSON.stringify(data));
+console.log(otherDoc, 'doc');
+
+const formData = new FormData();
+
+formData.append('givenName', nameRef.current.value);
+formData.append('email', emailRef.current.value);
+formData.append('password', passRef.current.value);
+formData.append('NRC', nrcRef.current.value);
+formData.append('address', addressRef.current.value);
+formData.append('DOB', DOBRef.current.value);
+formData.append('emergencyContact', ECRef.current.value);
+formData.append('phone', phoneRef.current.value);
+formData.append('passportNo', passportRef.current.value);
+formData.append('educationBackground', EuBackRef.current.value);
+formData.append('edu', euCer);
+formData.append('workExperience', workExpRef.current.value);
+formData.append('cv', cv);
+formData.append('pf', profile);
+formData.append('relatedPosition', position);
+formData.append('recLet', recLetter);
+formData.append('firstInterviewDate', firstInRef.current.value);
+formData.append('firstInterviewResult', firstResRef.current.value);
+formData.append('secondInterviewDate', secInRef.current.value);
+formData.append('secondInterviewResult', secResRef.current.value);
+formData.append('fatherName', fatherRef.current.value);
+formData.append('gender', genderRef.current.value);
+formData.append('employedDate', empDateRef.current.value);
+// formData.append('description',descRef.current.value);
+
+otherDoc.forEach(item => {
+  formData.append('other', item); // Assuming 'item' is a File object
+});
+
+console.log(formData, 'formData');
+
     apiInstance
-      .post("user", data, {
+      .post("user", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -523,7 +530,7 @@ export default function EmployeeInput() {
           </ModalContent>
         </Modal>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
-        {/* <p>{img[0]}</p>
+          {/* <p>{img[0]}</p>
           <img
             src={
               "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/employee/other/OTH-" +

@@ -1,6 +1,5 @@
 import Sidebar from "../../components/Sidebar";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Button } from "@nextui-org/react";
-import { Link } from 'react-router-dom';
+import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import PositionTable from "../../components/Position/PositionTable";
 
 export default function Position() {
@@ -11,18 +10,10 @@ export default function Position() {
             <div className="flex-grow">
                 <div className="body">
                     <Card className="rounded-sm shadow-md py-3 min-h-[890px]" >
-                        <CardHeader className="flex justify-between">
-                            <div>
-
-                            </div>
-                            <div className="font-semibold font-nunito">
+                        <CardHeader className="flex justify-center">
+                            <label className="font-semibold font-nunito">
                                 Position List
-                            </div>
-                            <Button color="primary">
-                                <Link to='/position/register'>
-                                    Add
-                                </Link>
-                            </Button>
+                            </label>
                         </CardHeader>
                         <CardBody>
                             <PositionTable />

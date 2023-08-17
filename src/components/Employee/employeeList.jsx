@@ -15,7 +15,6 @@ import {
   TableCell,
   User,
 } from "@nextui-org/react";
-
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
@@ -65,6 +64,7 @@ export default function EmployeeTable() {
           base: "max-h-[719px] ",
           table: "min-h-[100px]",
         }}>
+
         <TableHeader>
           <TableColumn key="no">No</TableColumn>
           <TableColumn key="name">Name</TableColumn>
