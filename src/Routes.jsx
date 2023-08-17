@@ -10,6 +10,7 @@ import PositionRegsiter from './pages/Position/Add'
 import Department from './pages/Department/Department'
 import DepartmentRegister from './pages/Department/DepartmentRegister'
 import PositionUpdate from './pages/Position/PositionUpdate';
+import DepartmentUpdate from './pages/Department/DepartmentUpdate'
 
 
 export default function RouteFile() {
@@ -28,6 +29,7 @@ export default function RouteFile() {
             {/* Department */}
             <Route path='/department' element={<Department />}></Route>
             <Route path='/department/register' element={<DepartmentRegister />}></Route>
+            <Route path='/department/update/:id' element={<DepartmentUpdate />}></Route>
 
             {/* Employee */}
             <Route path='/emp' element={<Employee />} />

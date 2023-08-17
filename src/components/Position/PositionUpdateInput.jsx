@@ -7,8 +7,10 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 export default function PositionUpdateInputForm() {
+    const variant = 'faded';
     const id = useLocation().pathname.split('/')[3]
     const [positionList, setPositionList] = useState(null)
+    const [departmentList, setDepartmentList] = useState([])
     useEffect(() => {
         const getPositionByID = async () => {
             console.log(id)
@@ -18,10 +20,14 @@ export default function PositionUpdateInputForm() {
                     setPositionList(res.data.data[0])
                 })
         }
+        const getDepartmentList = async () => {
+            await apiInstance.get('departments')
+                .then(res => setDepartmentList(res.data.data))
+        }
+        getDepartmentList()
         getPositionByID()
     }, [])
-    const variant = 'faded';
-    const [departmentList, setDepartmentList] = useState([])
+
 
     const handleInputChange = (fieldName, value) => {
         setPositionList(prevValues => ({
@@ -50,14 +56,6 @@ export default function PositionUpdateInputForm() {
                 })
             })
     }
-
-    useEffect(() => {
-        const getDepartmentList = async () => {
-            await apiInstance.get('departments')
-                .then(res => setDepartmentList(res.data.data))
-        }
-        getDepartmentList()
-    }, [])
 
     return (
         <div className="gap-4">
@@ -305,7 +303,7 @@ export default function PositionUpdateInputForm() {
             </div>
 
             <div className="flex justify-center gap-10 py-4">
-                <Button color="default" >
+                <Button color="danger" >
                     <Link to='/position'>
                         Cancel
                     </Link>

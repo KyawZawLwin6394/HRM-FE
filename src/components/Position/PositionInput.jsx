@@ -292,7 +292,7 @@ export default function PositionInputForm() {
             </div>
 
             <div className="flex justify-center gap-10 py-4">
-                <Button color="default" >
+                <Button color="danger" >
                     <Link to='/position'>
                         Cancel
                     </Link>

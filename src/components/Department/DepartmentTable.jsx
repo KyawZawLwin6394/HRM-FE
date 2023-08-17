@@ -1,10 +1,11 @@
-import { Tooltip, Table, TableHeader,Kbd, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Tooltip, Table, TableHeader, Kbd, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
 // import { EyeIcon } from "../Table/eyeicon";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function DepartmentTable() {
     const [departmentList, setDepartmentList] = useState([])
@@ -113,9 +114,11 @@ export default function DepartmentTable() {
                             <TableCell>
                                 <div className="relative flex items-center gap-2">
                                     <Tooltip content="Edit Department">
-                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                            <EditIcon />
-                                        </span>
+                                        <Link to={`/department/update/${item._id}`}>
+                                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                                <EditIcon />
+                                            </span>
+                                        </Link>
                                     </Tooltip>
                                     <Tooltip color="danger" content="Delete Department">
                                         <span data-key={item._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleOpen(e)}>

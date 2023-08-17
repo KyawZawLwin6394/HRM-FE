@@ -17,7 +17,7 @@ export default function PositionTable() {
 
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -31,10 +31,12 @@ export default function PositionTable() {
     };
 
     const onRowsChange = (event) => {
-        setRowsPerPage(event.target.value)
-        setPages(Math.ceil(positionList.length / event.target.value));
+        const newRowsPerPage = parseInt(event.target.value);
+        setRowsPerPage(newRowsPerPage);
+        setPages(Math.ceil(positionList.length / newRowsPerPage));
         setPage(1); // Reset the current page to 1 when rows per page changes
-    }
+    };
+
 
     useEffect(() => {
         const getPositions = async () => {
@@ -125,13 +127,14 @@ export default function PositionTable() {
           </Dropdown> */}
             </div>
             <div className="flex justify-between items-center mb-3">
-                <span className="text-default-400 text-small">Total {items.length} users</span>
+                <span className="text-default-400 text-small">Total {positionList.length} users</span>
                 <label className="flex items-center text-default-400 text-small">
                     Rows per page:
                     <select
                         className="bg-transparent outline-none text-default-400 text-small"
                         onChange={(e) => onRowsChange(e)}
                     >
+
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
