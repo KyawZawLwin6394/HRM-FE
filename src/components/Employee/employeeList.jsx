@@ -20,6 +20,8 @@ import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
 import { EyeIcon } from "../Table/eyeicon";
+import { Link } from 'react-router-dom';
+
 
 export default function EmployeeTable() {
   const [empList, setEmpList] = useState([]);
@@ -119,9 +121,12 @@ export default function EmployeeTable() {
                     </span>
                   </Tooltip>
                   <Tooltip content="Edit user">
-                    <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                      <EditIcon />
+                  
+ <span  className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                     <Link to={'/emp-update/'+item._id}> <EditIcon />    </Link>
                     </span>
+              
+                   
                   </Tooltip>
                   <Tooltip color="danger" content="Delete user">
                     <span

@@ -4,6 +4,7 @@ import Nav from './components/Navbar/index'
 import Dashboard from './pages/Dashboard/index.jsx'
 import Employee from './pages/Employee/employeeList'
 import EmployeeAdd from './pages/Employee/employeeAdd'
+import EmployeeUpdate from './pages/Employee/employeeDetail'
 import Position from './pages/Position/Position.jsx'
 import AuthContainer from './util/AuthContainer.jsx'
 import PositionRegsiter from './pages/Position/Add'
@@ -32,6 +33,7 @@ export default function RouteFile() {
             {/* Employee */}
             <Route path='/emp' element={<Employee />} />
             <Route path='/emp-add' element={<EmployeeAdd />} />
+            <Route path='/emp-update/:id' element={<EmployeeUpdate />} />
 
             {/* Position */}
             <Route path='/position' element={<Position />} />
