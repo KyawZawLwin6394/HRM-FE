@@ -10,16 +10,19 @@ export default function Position() {
             <div className="sidebar"><Sidebar /></div>
             <div className="flex-grow">
                 <div className="body">
-                    <Card className="rounded-sm shadow-md min-h-[890px]" >
-                        <CardHeader className="justify-between">
-                            <div></div>
-                            <div className='font-semibold text-large font-nunito'>Position List</div>
-                            <Button size='sm' radius="sm" className="text-white shadow-sm" color='primary'>
+                    <Card className="rounded-sm shadow-md py-3 min-h-[890px]" >
+                        <CardHeader className="flex justify-between">
+                            <div>
+
+                            </div>
+                            <div className="font-semibold font-nunito">
+                                Position List
+                            </div>
+                            <Button color="primary">
                                 <Link to='/position/register'>
                                     Add
                                 </Link>
                             </Button>
-
                         </CardHeader>
                         <CardBody>
                             <PositionTable />

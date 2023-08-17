@@ -30,7 +30,6 @@ export default function employeeAdd() {
               <div className="font-semibold">Employee List</div>
               <div></div>
             </CardHeader>
-            <Divider></Divider>
             <CardBody>
               <Input />
             </CardBody>
