@@ -1,10 +1,10 @@
-import { Tooltip, Table, TableHeader, Modal, ModalContent, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Tooltip, Table, TableHeader, Modal, ModalContent, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
-import { EyeIcon } from "../Table/eyeicon";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function PositionTable() {
     const [positionList, setPositionList] = useState([])
@@ -20,6 +20,12 @@ export default function PositionTable() {
         return positionList.slice(start, end);
     }, [page, positionList]);
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && isOpen) {
+            handleDelete()
+        }
+    };
+
     useEffect(() => {
         const getPositions = async () => {
             await apiInstance.get(`positions`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
@@ -29,7 +35,12 @@ export default function PositionTable() {
                 })
         }
         getPositions()
-    }, [])
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen])
 
     const handleOpen = (event) => {
         onOpen();
@@ -104,15 +115,14 @@ export default function PositionTable() {
                             <TableCell>{item.basicSalary}</TableCell>
                             <TableCell>
                                 <div className="relative flex items-center gap-2">
-                                    <Tooltip content="Details">
-                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                            <EyeIcon />
-                                        </span>
-                                    </Tooltip>
-                                    <Tooltip content="Edit user">
-                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                            <EditIcon />
-                                        </span>
+
+                                    <Tooltip content="Edit Position">
+                                        <Link to={`/position/update/${item._id}`}>
+                                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                                <EditIcon />
+                                            </span>
+                                        </Link>
+
                                     </Tooltip>
                                     <Tooltip color="danger" content="Delete user">
                                         <span data-key={item._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleOpen(e)}>
@@ -139,8 +149,10 @@ export default function PositionTable() {
                                 <Button color="default" variant="light" onClick={handleClose}>
                                     No, Cancel
                                 </Button>
-                                <Button color="danger" onPress={handleDelete}>
+                                <Button color="danger" onPress={() => handleDelete()} onKeyDown={handleKeyDown}>
                                     Yes, I am sure
+                                    <Kbd className="bg-danger-500" keys={['enter']}>
+                                    </Kbd>
                                 </Button>
                             </ModalFooter>
                         </>

@@ -9,6 +9,7 @@ import AuthContainer from './util/AuthContainer.jsx'
 import PositionRegsiter from './pages/Position/Add'
 import Department from './pages/Department/Department'
 import DepartmentRegister from './pages/Department/DepartmentRegister'
+import PositionUpdate from './pages/Position/PositionUpdate';
 
 
 export default function RouteFile() {
@@ -35,6 +36,7 @@ export default function RouteFile() {
             {/* Position */}
             <Route path='/position' element={<Position />} />
             <Route path='/position/register' element={<PositionRegsiter />} />
+            <Route path='/position/update/:id' element={<PositionUpdate />} />
           </Route>
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
 
