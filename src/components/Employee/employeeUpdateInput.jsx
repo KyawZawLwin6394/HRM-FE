@@ -13,10 +13,13 @@ import { useRef, useState, useEffect } from "react";
 import apiInstance from "../../util/api.js";
 import Swal from "sweetalert2";
 import { FileUploader } from "react-drag-drop-files";
+import { useLocation } from 'react-router-dom';
+
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 export default function EmployeeInput() {
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const variant = ["faded"];
 
@@ -48,8 +51,11 @@ export default function EmployeeInput() {
   // const [img, setImg] = useState("");
   const [description,setDescription]=useState('')
   const [otherDoc, setOtherDoc] = useState([]);
-
+const location=useLocation()
+  const EmpID=location.pathname?.split('/')[1]
+  console.log(EmpID,'id')
   const [positionList, setPositionList] = useState([]);
+//   const [empList,setEmpList]=useState([])
 
   const handleChange = (e) => {
     let array = []
@@ -60,15 +66,26 @@ export default function EmployeeInput() {
 
   };
   useEffect(() => {
-    const getEmployee = async () => {
+    const getPosition = async () => {
       await apiInstance
         .get(`positions`, { params: { limit: 80 } })
         .then((res) => {
           setPositionList(res.data.data);
-          console.log(res.data.data, "emp");
+          console.log(res.data.data, "po");
+        });
+    };
+
+        const getEmployee = async () => {
+      await apiInstance
+        .get('user/'+EmpID, { params: { limit: 80 } })
+        .then((res) => {
+        //   setEmpList(res.data.data);
+
+          console.log(res.data.data.givenName, "heee");
         });
     };
     getEmployee();
+    getPosition();
   }, []);
   const handlefile = (e) => {
     if (e.target.files) {

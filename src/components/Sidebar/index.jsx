@@ -8,6 +8,8 @@ import {
 } from '@nextui-org/react'
 import BadgeIcon from '@mui/icons-material/Badge'
 import { Link } from 'react-router-dom'
+import { FaUsers } from "react-icons/fa";
+
 
 export default function Sidebar() {
 
@@ -37,10 +39,10 @@ export default function Sidebar() {
                 {/* Employee */}
                 <AccordionItem key='1' aria-label='Employee' title='Master'>
                   <Link to='/emp'>
-                    <div className='hover:bg-default-100 px-4 py-2'>
-                      <BadgeIcon />
-                      &nbsp;&nbsp;
-                      <span className='m-auto'>Employee</span>
+                    <div className='flex hover:bg-default-100 px-4 py-2'>
+                      <FaUsers className='w-6 h-6 mt-1' />
+              
+                      <span className='m-2 font-medium'>Employee</span>
                     </div>
                   </Link>
 

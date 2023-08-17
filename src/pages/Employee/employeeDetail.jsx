@@ -27,7 +27,7 @@ export default function employeeAdd() {
                 className="rounded-none px-4 py-0 text-left">
                 <Link to="/emp" className='text-cyan-600'><img src={Back} width='20px' height='20px'/></Link>
               </Button>
-              <div className="font-semibold">Employee List</div>
+              <div className="font-semibold">Employee Update & Detail</div>
               <div></div>
             </CardHeader>
             <CardBody>

@@ -1,10 +1,14 @@
-import { Tooltip, Table, TableHeader, Modal, ModalContent, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import {
+    Tooltip, Table, TableHeader, Modal, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell
+} from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
-import { EyeIcon } from "../Table/eyeicon";
 import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronDownIcon } from "../../../public/ChevronDownIcon";
+import { PlusIcon } from "../../../public/PlusIcon";
 
 export default function PositionTable() {
     const [positionList, setPositionList] = useState([])
@@ -13,12 +17,26 @@ export default function PositionTable() {
 
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
-    const rowsPerPage = 15;
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         return positionList.slice(start, end);
     }, [page, positionList]);
+
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && isOpen) {
+            handleDelete()
+        }
+    };
+
+    const onRowsChange = (event) => {
+        const newRowsPerPage = parseInt(event.target.value);
+        setRowsPerPage(newRowsPerPage);
+        setPages(Math.ceil(positionList.length / newRowsPerPage));
+        setPage(1); // Reset the current page to 1 when rows per page changes
+    };
+
 
     useEffect(() => {
         const getPositions = async () => {
@@ -29,7 +47,12 @@ export default function PositionTable() {
                 })
         }
         getPositions()
-    }, [])
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isOpen, rowsPerPage])
 
     const handleOpen = (event) => {
         onOpen();
@@ -53,6 +76,71 @@ export default function PositionTable() {
 
     return (
         <>
+            <div className="flex gap-3 mb-3 flex-row-reverse">
+                <Button color="primary" endContent={<PlusIcon />}>
+                    <Link to='/position/register'>Add New</Link>
+                </Button>
+                <Dropdown>
+                    <DropdownTrigger className="hidden sm:flex">
+                        <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                            Working Days
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                        disallowEmptySelection
+                        aria-label="Table Columns"
+                        closeOnSelect={false}
+                        selectionMode="single"
+
+                    >
+                        <DropdownItem key='M-F' value='M-F' className="capitalize">
+                            Monday To Friday
+                        </DropdownItem>
+                        <DropdownItem key='M-S' value='M-S' className="capitalize">
+                            Monday To Saturday
+                        </DropdownItem>
+                        <DropdownItem key='All Day' value='All Day' className="capitalize">
+                            Every Day
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                {/* <Dropdown>
+            <DropdownTrigger className="hidden sm:flex">
+              <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                Columns
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              disallowEmptySelection
+              aria-label="Table Columns"
+              closeOnSelect={false}
+              selectedKeys={visibleColumns}
+              selectionMode="multiple"
+              onSelectionChange={setVisibleColumns}
+            >
+              {columns.map((column) => (
+                <DropdownItem key={column.uid} className="capitalize">
+                  {capitalize(column.name)}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown> */}
+            </div>
+            <div className="flex justify-between items-center mb-3">
+                <span className="text-default-400 text-small">Total {positionList.length} users</span>
+                <label className="flex items-center text-default-400 text-small">
+                    Rows per page:
+                    <select
+                        className="bg-transparent outline-none text-default-400 text-small"
+                        onChange={(e) => onRowsChange(e)}
+                    >
+
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </label>
+            </div>
             <Table
                 isHeaderSticky
                 aria-label="Example table with client side sorting"
@@ -104,15 +192,14 @@ export default function PositionTable() {
                             <TableCell>{item.basicSalary}</TableCell>
                             <TableCell>
                                 <div className="relative flex items-center gap-2">
-                                    <Tooltip content="Details">
-                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                            <EyeIcon />
-                                        </span>
-                                    </Tooltip>
-                                    <Tooltip content="Edit user">
-                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                            <EditIcon />
-                                        </span>
+
+                                    <Tooltip content="Edit Position">
+                                        <Link to={`/position/update/${item._id}`}>
+                                            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                                <EditIcon />
+                                            </span>
+                                        </Link>
+
                                     </Tooltip>
                                     <Tooltip color="danger" content="Delete user">
                                         <span data-key={item._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleOpen(e)}>
@@ -139,8 +226,10 @@ export default function PositionTable() {
                                 <Button color="default" variant="light" onClick={handleClose}>
                                     No, Cancel
                                 </Button>
-                                <Button color="danger" onPress={handleDelete}>
+                                <Button color="danger" onPress={() => handleDelete()} onKeyDown={handleKeyDown}>
                                     Yes, I am sure
+                                    <Kbd className="bg-danger-500" keys={['enter']}>
+                                    </Kbd>
                                 </Button>
                             </ModalFooter>
                         </>

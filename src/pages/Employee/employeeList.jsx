@@ -49,7 +49,6 @@ export default function Employee() {
                   <span className="text-sm">Add</span>
                 </Link>
               </CardHeader>
-              <Divider></Divider>
               <CardBody className="">
                 <Table />
               </CardBody>
