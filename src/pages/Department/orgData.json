@@ -1,0 +1,47 @@
+{
+    "label": "Company",
+    "children": [
+      {
+        "label": "Marketing",
+        "children": [
+          {
+            "label": "Digital Marketing"
+          },
+          {
+            "label": "Content Creation"
+          }
+        ]
+      },
+      {
+        "label": "Sales",
+        "children": [
+          {
+            "label": "Inside Sales"
+          },
+          {
+            "label": "Field Sales"
+          }
+        ]
+      },
+      {
+        "label": "Engineering",
+        "children": [
+          {
+            "label": "Software Development",
+            "children": [
+              {
+                "label": "Frontend Development"
+              },
+              {
+                "label": "Backend Development"
+              }
+            ]
+          },
+          {
+            "label": "Quality Assurance"
+          }
+        ]
+      }
+    ]
+  }
+  

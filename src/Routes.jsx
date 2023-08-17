@@ -9,15 +9,16 @@ import AuthContainer from './util/AuthContainer.jsx'
 import PositionRegsiter from './pages/Position/Add'
 import Department from './pages/Department/Department'
 import DepartmentRegister from './pages/Department/DepartmentRegister'
+import DepartmentChart from './pages/Department/DepartmentChart'
 
 
 export default function RouteFile() {
   return (
     <>
       <BrowserRouter>
-       <div className='flex-grow'>
-       <Nav></Nav>
-       </div>
+        <div className='flex-grow'>
+          <Nav></Nav>
+        </div>
         <Routes>
           <Route path='/' element={<Login />}></Route>
 
@@ -27,6 +28,7 @@ export default function RouteFile() {
             {/* Department */}
             <Route path='/department' element={<Department />}></Route>
             <Route path='/department/register' element={<DepartmentRegister />}></Route>
+            <Route path='/department/chart' element={<DepartmentChart />}></Route>
 
             {/* Employee */}
             <Route path='/emp' element={<Employee />} />
