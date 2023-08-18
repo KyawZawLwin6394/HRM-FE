@@ -15,6 +15,7 @@ import {
   TableCell,
   User,
 } from "@nextui-org/react";
+import {Spinner} from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
@@ -27,6 +28,7 @@ export default function EmployeeTable() {
   const [empList, setEmpList] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [delID, setDelID] = useState(null);
+
 
   useEffect(() => {
     const getEmployee = async () => {
@@ -51,9 +53,11 @@ export default function EmployeeTable() {
 
   const handleDelete = async () => {
     console.log(setDelID);
-    await apiInstance.delete("position/" + delID).then(() => {
+    await apiInstance.delete("user/" + delID).then(() => {
       setEmpList(empList.filter((item) => item._id !== delID));
+
       onClose();
+  
     });
   };
 
@@ -156,14 +160,18 @@ export default function EmployeeTable() {
                 <Button color="default" variant="light" onClick={handleClose}>
                   No, Cancel
                 </Button>
-                <Button color="danger" onPress={() => handleDelete()}>
+                <Button color="danger" onPress={() => handleDelete(delID)}>
                   Yes, I am sure
                 </Button>
+                <Spinner />
               </ModalFooter>
             </>
           )}
         </ModalContent>
+           
       </Modal>
+     
+    
     </>
   );
 }

@@ -562,7 +562,7 @@ export default function EmployeeInput() {
                 style={{ width:'200px',height:'150px' }}
         // className='object-contain max-w-full max-h-full'
              
-                fallbackSrc="https://via.placeholder.com/300x200"
+               
                 alt={item.fileName}
               />
               &nbsp;
