@@ -44,13 +44,15 @@ export default function EmployeeInput() {
   const fatherRef = useRef();
   const empDateRef = useRef();
   const genderRef = useRef();
-
-  // const [img, setImg] = useState("");
+  const married=useRef()
+  const [directManager,setDirectManager]=useState('')
+    const [directManagerID,setDirectManagerID]=useState('')
   const [description, setDescription] = useState("");
   const [otherDoc, setOtherDoc] = useState([]);
   const [positionID, setPositionID] = useState([]);
   const [positionList, setPositionList] = useState([]);
     const [departmentList, setDepartmentList] = useState([]);
+    const [showMarried,setShowMarried]=useState(false)
 
   const handleChange = (e) => {
     let array = [];
@@ -66,8 +68,7 @@ export default function EmployeeInput() {
         .get(`positions`, { params: { limit: 80 } })
         .then((res) => {
           setPositionList(res.data.data);
-
-          // console.log(res.data.data, "emp");
+          
         });
     };
     const getDeparttment = async () => {
@@ -75,13 +76,18 @@ export default function EmployeeInput() {
         .get(`departments`, { params: { limit: 80 } })
         .then((res) => {
           setDepartmentList(res.data.data);
-
           console.log(res.data.data, "dep");
         });
     };
     getDeparttment()
-    getEmployee();
+    getEmployee()
   }, []);
+
+  const handleDirectManager=(id)=>{
+  setDirectManager(departmentList.filter(el=>el._id == id)[0].directManager.givenName)
+  setDirectManagerID(departmentList.filter(el=>el._id == id)[0].directManager._id)
+
+  }
   const handlefile = (e) => {
     if (e.target.files) {
       setCV(e.target.files[0]);
@@ -146,7 +152,10 @@ export default function EmployeeInput() {
     formData.append("fatherName", fatherRef.current.value);
     formData.append("gender", genderRef.current.value);
     formData.append("employedDate", empDateRef.current.value);
+     formData.append("isMarried", married.current.value);
     formData.append("description", description);
+     formData.append("directManager", directManagerID);
+     formData.append("relatedDepartment", directManagerID);
 
     otherDoc.forEach((item) => {
       formData.append("other", item); // Assuming 'item' is a File object
@@ -174,8 +183,8 @@ export default function EmployeeInput() {
       });
   };
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+    <div className="gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="text"
           label="Name"
@@ -193,7 +202,7 @@ export default function EmployeeInput() {
           labelPlacement="outside"
         />
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="date"
           label="Age/DOB"
@@ -212,7 +221,7 @@ export default function EmployeeInput() {
           labelPlacement="outside"
         />
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="text"
           label="Passport No"
@@ -233,7 +242,7 @@ export default function EmployeeInput() {
           </select>
         </div>
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           isRequired
           type="email"
@@ -253,7 +262,7 @@ export default function EmployeeInput() {
           labelPlacement="outside"
         />
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <Input
             type="text"
@@ -264,7 +273,7 @@ export default function EmployeeInput() {
             variant={variant}
           />
         </div>
-        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
           <Input
             type="file"
             label="CV"
@@ -275,7 +284,7 @@ export default function EmployeeInput() {
           />
         </div>
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="text"
           variant={variant}
@@ -293,7 +302,7 @@ export default function EmployeeInput() {
           labelPlacement="outside"
         />
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="date"
           ref={firstInRef}
@@ -312,7 +321,7 @@ export default function EmployeeInput() {
         />
       </div>
 
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4">
           <Input
             type="date"
@@ -323,7 +332,7 @@ export default function EmployeeInput() {
             variant={variant}
           />
         </div>
-        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
           <Input
             type="text"
             ref={secResRef}
@@ -335,11 +344,12 @@ export default function EmployeeInput() {
         </div>
       </div>
 
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <label className="text-sm font-semibold">Department</label>
           <select
             id="countries"
+            onChange={(e)=>handleDirectManager(e.target.value)}
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Department</option>
       
@@ -353,9 +363,8 @@ export default function EmployeeInput() {
           <select
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Direct Manager</option>
-            <option value="US">Ma Ma</option>
-            <option value="CA">Ha Hla</option>
+            
+            <option hidden value={directManagerID}>{directManager}</option>
           </select>
         </div>
       </div>
@@ -491,19 +500,22 @@ export default function EmployeeInput() {
               <RadioGroup
                 orientation="horizontal"
                 className="mt-3"
-                value={positionID ? positionID.isMealAllowance : ""}>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
+                ref={married}>
+                <Radio value={true} onClick={()=>setShowMarried(!showMarried)}>Yes</Radio>
+                <Radio value={false} >No</Radio>
               </RadioGroup>
             </div>
-            <Input
+            {showMarried && (
+ <Input
               className="mt-7"
-              type="number"
+              type="file"
               value={positionID ? positionID.mealAllowance : "Not Set"}
               placeholder="Married Date"
               variant={variant}
               labelPlacement="outside"
             />
+            )}
+           
           </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">

@@ -20,7 +20,7 @@ export default function employeeAdd() {
       </div>
       <div className=" flex-grow">
         <div className="body ">
-          <Card className="rounded-md shadow-md ">
+          <Card className="ml-20 rounded-md">
             <CardHeader className="justify-between">
               <Button
                 variant="light"
