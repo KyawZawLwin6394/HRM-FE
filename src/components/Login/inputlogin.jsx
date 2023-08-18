@@ -27,6 +27,7 @@ export default function Login() {
       .then(
         (res) => {
           localStorage.setItem('token', res.data.token)
+          localStorage.setItem('id', res.data.id)
           navigate('/home')
         })
       .catch(

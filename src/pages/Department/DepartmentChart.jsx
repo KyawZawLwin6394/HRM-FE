@@ -3,6 +3,7 @@ import Sidebar from "../../components/Sidebar";
 import { Tree, TreeNode } from 'react-organizational-chart';
 import { useEffect, useState } from "react";
 import apiInstance from '../../util/api';
+import { BsFillBuildingFill } from 'react-icons/bs';
 
 export default function DepartmentChart() {
 
@@ -38,9 +39,13 @@ export default function DepartmentChart() {
                                     <div className="text-tiny">{node.directManager}</div>
                                 </div>
                             }>
-                                <p className="text-center mx-auto text-sm font-semibold flex">
-                                    {node.label}
-                                </p>
+                                <div className="flex flex-row">
+                                    <BsFillBuildingFill className="w-[20px] h-10" />
+                                    <p className="text-center mx-auto my-auto text-sm font-semibold flex">
+                                        {node.label}
+                                    </p>
+                                </div>
+
                             </Tooltip>
                         </CardBody>
                     </Card>
@@ -64,7 +69,7 @@ export default function DepartmentChart() {
                             </div>
                         </CardHeader>
                         <Divider></Divider>
-                        <CardBody className="overflow-scroll scrollbar-hide">
+                        <CardBody className="overflow-scroll scrollbar-hide flex flex-growl">
                             {orgHierarchy && (
                                 <Tree
                                     lineWidth={'2px'}

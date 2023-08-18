@@ -41,8 +41,16 @@ export default function Sidebar() {
                   <Link to='/emp'>
                     <div className='flex hover:bg-default-100 px-4 py-2'>
                       <FaUsers className='w-6 h-6 mt-1' />
-              
+
                       <span className='m-2 font-medium'>Employee</span>
+                    </div>
+                  </Link>
+
+                  <Link to='/attendance'>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
+                      <span className='m-auto'>Attendance</span>
                     </div>
                   </Link>
 
@@ -105,11 +113,11 @@ export default function Sidebar() {
 
                 {/* Attendance */}
                 <AccordionItem key='4' aria-label='Attendance' title='Attendance' >
-                  <Link>
+                  <Link to='/attendance'>
                     <div className='hover:bg-default-100 px-4 py-2'>
                       <BadgeIcon />
                       &nbsp;&nbsp;
-                      <span className='m-auto'>Attendance List</span>
+                      <span className='m-auto'>Attendance</span>
                     </div>
                   </Link>
                   <Divider></Divider>

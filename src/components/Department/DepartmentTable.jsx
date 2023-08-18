@@ -141,7 +141,7 @@ export default function DepartmentTable() {
                 </div>
             </div>
             <div className="flex justify-between items-center mb-3">
-                <span className="text-default-400 text-small">Total {departmentList.length} Attendances</span>
+                <span className="text-default-400 text-small">Total {departmentList.length} Departments</span>
                 <label className="flex items-center text-default-400 text-small">
                     Rows per page:
                     <select
