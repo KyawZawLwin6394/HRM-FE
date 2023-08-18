@@ -9,24 +9,24 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
 import { useRef, useState, useEffect } from "react";
 import apiInstance from "../../util/api.js";
 import Swal from "sweetalert2";
 import { FileUploader } from "react-drag-drop-files";
-import { useLocation } from 'react-router-dom';
-
+import { useLocation } from "react-router-dom";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 export default function EmployeeInput() {
-
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const variant = ["faded"];
 
   const emailRef = useRef();
   const passRef = useRef();
   const nrcRef = useRef();
-  const nameRef = useRef();
+  const [name, setName] = useState("");
+  const [other, setOther] = useState([]);
   const addressRef = useRef();
 
   const DOBRef = useRef();
@@ -49,21 +49,20 @@ export default function EmployeeInput() {
   const empDateRef = useRef();
   const genderRef = useRef();
   // const [img, setImg] = useState("");
-  const [description,setDescription]=useState('')
+  const [description, setDescription] = useState("");
   const [otherDoc, setOtherDoc] = useState([]);
-const location=useLocation()
-  const EmpID=location.pathname?.split('/')[1]
-  console.log(EmpID,'id')
+  const location = useLocation();
+  const EmpID = location.pathname.split("/")[2];
+  console.log(EmpID, "id");
   const [positionList, setPositionList] = useState([]);
-//   const [empList,setEmpList]=useState([])
+  //   const [empList,setEmpList]=useState([])
 
   const handleChange = (e) => {
-    let array = []
+    let array = [];
     for (const item of e) {
-      array.push(item)
+      array.push(item);
     }
-    setOtherDoc(array)
-
+    setOtherDoc(array);
   };
   useEffect(() => {
     const getPosition = async () => {
@@ -75,13 +74,17 @@ const location=useLocation()
         });
     };
 
-        const getEmployee = async () => {
+    const getEmployee = async () => {
       await apiInstance
-        .get('user/'+EmpID, { params: { limit: 80 } })
+        .get("user/" + EmpID, { params: { limit: 80 } })
         .then((res) => {
-        //   setEmpList(res.data.data);
+          //   setEmpList(res.data.data);
 
-          console.log(res.data.data.givenName, "heee");
+          console.log(res.data.data, "heee");
+          setName(res.data.data.givenName);
+          if (res.data.data.other) {
+            setOther(res.data.data.other);
+          }
         });
     };
     getEmployee();
@@ -122,43 +125,43 @@ const location=useLocation()
     );
     setBasicSalary(positionList.filter((el) => el._id === val)[0].basicSalary);
     setPosition(val);
-    console.log(val, 'val')
+    console.log(val, "val");
   };
   const create = () => {
-console.log(otherDoc, 'doc');
+    console.log(otherDoc, "doc");
 
-const formData = new FormData();
+    const formData = new FormData();
 
-formData.append('givenName', nameRef.current.value);
-formData.append('email', emailRef.current.value);
-formData.append('password', passRef.current.value);
-formData.append('NRC', nrcRef.current.value);
-formData.append('address', addressRef.current.value);
-formData.append('DOB', DOBRef.current.value);
-formData.append('emergencyContact', ECRef.current.value);
-formData.append('phone', phoneRef.current.value);
-formData.append('passportNo', passportRef.current.value);
-formData.append('educationBackground', EuBackRef.current.value);
-formData.append('edu', euCer);
-formData.append('workExperience', workExpRef.current.value);
-formData.append('cv', cv);
-formData.append('pf', profile);
-formData.append('relatedPosition', position);
-formData.append('recLet', recLetter);
-formData.append('firstInterviewDate', firstInRef.current.value);
-formData.append('firstInterviewResult', firstResRef.current.value);
-formData.append('secondInterviewDate', secInRef.current.value);
-formData.append('secondInterviewResult', secResRef.current.value);
-formData.append('fatherName', fatherRef.current.value);
-formData.append('gender', genderRef.current.value);
-formData.append('employedDate', empDateRef.current.value);
-formData.append('description',description);
+    formData.append("givenName", name);
+    formData.append("email", emailRef.current.value);
+    formData.append("password", passRef.current.value);
+    formData.append("NRC", nrcRef.current.value);
+    formData.append("address", addressRef.current.value);
+    formData.append("DOB", DOBRef.current.value);
+    formData.append("emergencyContact", ECRef.current.value);
+    formData.append("phone", phoneRef.current.value);
+    formData.append("passportNo", passportRef.current.value);
+    formData.append("educationBackground", EuBackRef.current.value);
+    formData.append("edu", euCer);
+    formData.append("workExperience", workExpRef.current.value);
+    formData.append("cv", cv);
+    formData.append("pf", profile);
+    formData.append("relatedPosition", position);
+    formData.append("recLet", recLetter);
+    formData.append("firstInterviewDate", firstInRef.current.value);
+    formData.append("firstInterviewResult", firstResRef.current.value);
+    formData.append("secondInterviewDate", secInRef.current.value);
+    formData.append("secondInterviewResult", secResRef.current.value);
+    formData.append("fatherName", fatherRef.current.value);
+    formData.append("gender", genderRef.current.value);
+    formData.append("employedDate", empDateRef.current.value);
+    formData.append("description", description);
 
-otherDoc.forEach(item => {
-  formData.append('other', item); // Assuming 'item' is a File object
-});
+    otherDoc.forEach((item) => {
+      formData.append("other", item); // Assuming 'item' is a File object
+    });
 
-console.log(formData, 'formData');
+    console.log(formData, "formData");
 
     apiInstance
       .post("user", formData, {
@@ -185,8 +188,9 @@ console.log(formData, 'formData');
         <Input
           type="text"
           label="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Name"
-          ref={nameRef}
           variant={variant}
           labelPlacement="outside"
         />
@@ -529,7 +533,7 @@ console.log(formData, 'formData');
                       type="text"
                       label="Description"
                       placeholder=""
-                    onChange={e=>setDescription(e.target.value)}
+                      onChange={(e) => setDescription(e.target.value)}
                       variant="faded"
                       className="mt-5"
                     />
@@ -547,16 +551,24 @@ console.log(formData, 'formData');
             )}
           </ModalContent>
         </Modal>
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
-          {/* <p>{img[0]}</p>
-          <img
-            src={
-              "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/employee/other/OTH-" +
-              img[0]
-            }
-            
-          /> */}
-        </div>
+        <div className="flex mt-5">
+          {other.map((item) => (
+            <>
+              <Image
+                src={
+                  "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/" +
+                  item.imgUrl
+                }
+                style={{ width:'200px',height:'150px' }}
+        // className='object-contain max-w-full max-h-full'
+             
+                fallbackSrc="https://via.placeholder.com/300x200"
+                alt={item.fileName}
+              />
+              &nbsp;
+            </>
+          ))}
+        </div> 
       </div>
       <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
         <Button
