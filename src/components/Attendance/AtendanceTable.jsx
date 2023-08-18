@@ -1,5 +1,5 @@
 import {
-    Tooltip, Table, TableHeader, Modal, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell
+    Popover, PopoverTrigger, PopoverContent, Tooltip, Table, TableHeader, Modal, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
@@ -10,12 +10,14 @@ import { Link } from "react-router-dom";
 import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import { SearchIcon } from "../Navbar/search";
+import { FileUploader } from "react-drag-drop-files";
 
 export default function AttendanceTable() {
     const [attendanceList, setAttendanceList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [delID, setDelID] = useState(null);
-
+    const [popOverOpen, setPopOverOpen] = useState(false);
+    const [otherDoc, setOtherDoc] = useState([]);
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -25,6 +27,15 @@ export default function AttendanceTable() {
         const end = start + rowsPerPage;
         return attendanceList.slice(start, end);
     }, [page, attendanceList]);
+
+
+    const handleChange = (e) => {
+        let array = [];
+        for (const item of e) {
+            array.push(item);
+        }
+        setOtherDoc(array);
+    };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && isOpen) {
@@ -39,6 +50,12 @@ export default function AttendanceTable() {
         setPage(1); // Reset the current page to 1 when rows per page changes
     };
 
+    const handleExcelImport = async () => {
+        setPopOverOpen(false)
+        const formData = new FormData;
+        formData.append("other", otherDoc)
+        console.log(formData)
+    }
 
     useEffect(() => {
         const getPositions = async () => {
@@ -136,30 +153,30 @@ export default function AttendanceTable() {
                         Search
                     </Button>
                 </div>
-                <Button color="primary" endContent={<PlusIcon />}>
-                    Import
-                </Button>
-                {/* <Dropdown>
-            <DropdownTrigger className="hidden sm:flex">
-              <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                Columns
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              disallowEmptySelection
-              aria-label="Table Columns"
-              closeOnSelect={false}
-              selectedKeys={visibleColumns}
-              selectionMode="multiple"
-              onSelectionChange={setVisibleColumns}
-            >
-              {columns.map((column) => (
-                <DropdownItem key={column.uid} className="capitalize">
-                  {capitalize(column.name)}
-                </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </Dropdown> */}
+                <Popover isOpen={popOverOpen} placement="bottom" offset={20} showArrow>
+                    <PopoverTrigger>
+                        <Button color="primary" onClick={() => setPopOverOpen(true)} endContent={<PlusIcon />}>Import</Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mx-auto my-auto">
+                            <FileUploader
+                                multiple={true}
+                                handleChange={handleChange}
+                                name="file"
+                                types={["JPG", "PNG", "GIF"]}
+                                className='py-3'
+                            />
+                            <div className="py-4 flex flex-row justify-between">
+                                <Button color="danger" variant="light" onClick={() => setPopOverOpen(false)}>
+                                    Close
+                                </Button>
+                                <Button color="primary" onPress={onClose} onClick={() => handleExcelImport()}>
+                                    Upload
+                                </Button>
+                            </div>
+                        </div>
+                    </PopoverContent>
+                </Popover>
             </div>
             <div className="flex justify-between items-center mb-3">
                 <span className="text-default-400 text-small">Total {attendanceList.length} Attendances</span>
