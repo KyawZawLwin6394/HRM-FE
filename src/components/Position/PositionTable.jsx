@@ -7,8 +7,8 @@ import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
 import React from "react";
 import { Link } from "react-router-dom";
-import { ChevronDownIcon } from "../../../public/ChevronDownIcon";
-import { PlusIcon } from "../../../public/PlusIcon";
+import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
+import { PlusIcon } from "../../assets/Icons/PlusIcon";
 
 export default function PositionTable() {
     const [positionList, setPositionList] = useState([])
@@ -127,7 +127,7 @@ export default function PositionTable() {
           </Dropdown> */}
             </div>
             <div className="flex justify-between items-center mb-3">
-                <span className="text-default-400 text-small">Total {positionList.length} users</span>
+                <span className="text-default-400 text-small">Total {positionList.length} Positions</span>
                 <label className="flex items-center text-default-400 text-small">
                     Rows per page:
                     <select

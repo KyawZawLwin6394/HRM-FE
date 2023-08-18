@@ -13,7 +13,7 @@ import DepartmentRegister from './pages/Department/DepartmentRegister';
 import DepartmentChart from './pages/Department/DepartmentChart';
 import PositionUpdate from './pages/Position/PositionUpdate';
 import DepartmentUpdate from './pages/Department/DepartmentUpdate';
-
+import Attendance from './pages/Attendance/Attendance';
 
 export default function RouteFile() {
   return (
@@ -43,6 +43,10 @@ export default function RouteFile() {
             <Route path='/position' element={<Position />} />
             <Route path='/position/register' element={<PositionRegsiter />} />
             <Route path='/position/update/:id' element={<PositionUpdate />} />
+
+
+            {/* Attendance */}
+            <Route path='/attendance' element={<Attendance />}></Route>
           </Route>
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
 

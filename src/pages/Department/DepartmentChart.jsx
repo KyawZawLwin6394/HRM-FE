@@ -1,7 +1,6 @@
-import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Tooltip } from "@nextui-org/react";
 import Sidebar from "../../components/Sidebar";
 import { Tree, TreeNode } from 'react-organizational-chart';
-import orgData from './orgData.json';
 import { useEffect, useState } from "react";
 import apiInstance from '../../util/api';
 
@@ -12,11 +11,11 @@ export default function DepartmentChart() {
     useEffect(() => {
         const getOrgData = async () => {
             await apiInstance.get('departments/org-chart').then((res) => {
-                //setOrgHierarchy(res.data)
+                setOrgHierarchy(res.data)
             })
         }
         getOrgData()
-         setOrgHierarchy(orgData);
+        //setOrgHierarchy(orgData);
     }, []);
 
     const renderTreeNodes = (node) => {
@@ -28,12 +27,21 @@ export default function DepartmentChart() {
 
         return (
             <TreeNode label={
-                <div className="mx-auto max-w-[200px] items-center border rounded-xl border-white">
+                <div className="mx-auto max-w-[200px] items-center border rounded-xl border-white backdrop-blur-md ">
                     <Card isBlurred shadow="md" className="max-h-[100px]">
                         <CardBody className="overflow-hidden m-0">
-                            <p className="text-center mx-auto text-sm font-semibold flex">
-                                {node.label}
-                            </p>
+                            <Tooltip placement="bottom" offset={30} content={
+                                <div className="px-1 py-2">
+                                    <div className="text-small font-bold">Assistant Manager</div>
+                                    <div className="text-tiny">{node.assistantManager}</div>
+                                    <div className="text-small font-bold">Direct Manager</div>
+                                    <div className="text-tiny">{node.directManager}</div>
+                                </div>
+                            }>
+                                <p className="text-center mx-auto text-sm font-semibold flex">
+                                    {node.label}
+                                </p>
+                            </Tooltip>
                         </CardBody>
                     </Card>
                 </div>
@@ -66,9 +74,18 @@ export default function DepartmentChart() {
                                         <div className="mx-auto max-w-[200px] items-center border rounded-xl border-white backdrop-blur-md ">
                                             <Card isBlurred shadow="md" className="max-h-[100px]">
                                                 <CardBody className="overflow-hidden m-0">
-                                                    <p className="text-center mx-auto text-sm font-semibold flex">
-                                                        {orgHierarchy.label}
-                                                    </p>
+                                                    <Tooltip offset={30} placement="bottom" content={
+                                                        <div className="px-1 py-2">
+                                                            <div className="text-small font-bold">Assistant Manager</div>
+                                                            <div className="text-tiny">{orgHierarchy.assistantManager}</div>
+                                                            <div className="text-small font-bold">Direct Manager</div>
+                                                            <div className="text-tiny">{orgHierarchy.directManager}</div>
+                                                        </div>
+                                                    }>
+                                                        <p className="text-center mx-auto text-sm font-semibold flex">
+                                                            {orgHierarchy.label}
+                                                        </p>
+                                                    </Tooltip>
                                                 </CardBody>
                                             </Card>
                                         </div>

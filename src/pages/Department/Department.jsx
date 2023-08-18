@@ -1,7 +1,6 @@
-import { Card, CardHeader, CardBody, CardFooter, Divider, Button } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import Sidebar from "../../components/Sidebar";
 import DepartmentTable from "../../components/Department/DepartmentTable";
-import { Link } from "react-router-dom";
 
 export default function Department() {
     return (
@@ -10,18 +9,10 @@ export default function Department() {
             <div className=" flex-grow">
                 <div className="">
                     <Card className="rounded-md shadow-md py-3 min-h-[890px]">
-                        <CardHeader className="flex justify-between">
-                            <div>
-
-                            </div>
+                        <CardHeader className="flex justify-center">
                             <div className="font-semibold font-nunito">
                                 Department List
                             </div>
-                            <Button color="primary">
-                                <Link to='/department/register'>
-                                    Add
-                                </Link>
-                            </Button>
                         </CardHeader>
                         <CardBody >
                             <DepartmentTable />

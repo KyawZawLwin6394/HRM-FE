@@ -1,29 +1,30 @@
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Tooltip, Table, TableHeader, Kbd, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import {
+    Tooltip, Table, TableHeader, Modal, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell
+} from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
-import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import React from "react";
-import { SearchIcon } from "../Navbar/search";
-import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { Link } from "react-router-dom";
-import { FaUncharted } from 'react-icons/fa'
+import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
+import { PlusIcon } from "../../assets/Icons/PlusIcon";
+import { SearchIcon } from "../Navbar/search";
 
-
-export default function DepartmentTable() {
-    const [departmentList, setDepartmentList] = useState([])
+export default function AttendanceTable() {
+    const [attendanceList, setAttendanceList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [delID, setDelID] = useState(null);
+
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [departmentList, setDepartmentList] = React.useState([]);
     const items = React.useMemo(() => {
-
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        return departmentList.slice(start, end);
-    }, [page, departmentList]);
+        return attendanceList.slice(start, end);
+    }, [page, attendanceList]);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && isOpen) {
@@ -34,19 +35,27 @@ export default function DepartmentTable() {
     const onRowsChange = (event) => {
         const newRowsPerPage = parseInt(event.target.value);
         setRowsPerPage(newRowsPerPage);
-        setPages(Math.ceil(departmentList.length / newRowsPerPage));
+        setPages(Math.ceil(attendanceList.length / newRowsPerPage));
         setPage(1); // Reset the current page to 1 when rows per page changes
     };
 
+
     useEffect(() => {
-        const getDepartments = async () => {
-            await apiInstance.get(`departments`, { params: { limit: 80 } })
+        const getPositions = async () => {
+            await apiInstance.get(`attendances`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
                 .then(res => {
-                    setDepartmentList(res.data.data)
+                    setAttendanceList(res.data.data)
                     setPages(res.data._metadata.page_count)
                 })
         }
-        getDepartments()
+        const getDepartmentList = async () => {
+            await apiInstance.get('departments')
+                .then(res => {
+                    setDepartmentList(res.data.data)
+                })
+        }
+        getDepartmentList()
+        getPositions()
         document.addEventListener('keydown', handleKeyDown);
 
         return () => {
@@ -67,9 +76,9 @@ export default function DepartmentTable() {
 
     const handleDelete = async () => {
         console.log(setDelID)
-        await apiInstance.delete('department/' + delID)
+        await apiInstance.delete('attendance/' + delID)
             .then(() => {
-                setDepartmentList(departmentList.filter(item => item._id !== delID))
+                setAttendanceList(attendanceList.filter(item => item._id !== delID))
                 onClose()
             })
     }
@@ -127,21 +136,33 @@ export default function DepartmentTable() {
                         Search
                     </Button>
                 </div>
-                <div className="flex gap-3">
-                    <Button endContent={<FaUncharted />}>
-                        <Link to='/department/chart'>
-                            Diagram
-                        </Link>
-                    </Button>
-                    <Button color="primary" endContent={<PlusIcon />}>
-                        <Link to='/department/register'>
-                            Add
-                        </Link>
-                    </Button>
-                </div>
+                <Button color="primary" endContent={<PlusIcon />}>
+                    Import
+                </Button>
+                {/* <Dropdown>
+            <DropdownTrigger className="hidden sm:flex">
+              <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                Columns
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              disallowEmptySelection
+              aria-label="Table Columns"
+              closeOnSelect={false}
+              selectedKeys={visibleColumns}
+              selectionMode="multiple"
+              onSelectionChange={setVisibleColumns}
+            >
+              {columns.map((column) => (
+                <DropdownItem key={column.uid} className="capitalize">
+                  {capitalize(column.name)}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown> */}
             </div>
             <div className="flex justify-between items-center mb-3">
-                <span className="text-default-400 text-small">Total {departmentList.length} Attendances</span>
+                <span className="text-default-400 text-small">Total {attendanceList.length} Attendances</span>
                 <label className="flex items-center text-default-400 text-small">
                     Rows per page:
                     <select
@@ -176,41 +197,40 @@ export default function DepartmentTable() {
                     </div>
                 }
             >
-
                 <TableHeader>
-                    <TableColumn>No</TableColumn>
-                    <TableColumn>Name</TableColumn>
-                    <TableColumn>Description</TableColumn>
-                    <TableColumn>Function</TableColumn>
-                    <TableColumn>Level</TableColumn>
-                    <TableColumn>Reporting To</TableColumn>
-                    <TableColumn>Department Manager</TableColumn>
-                    <TableColumn>Assistant Manager</TableColumn>
-                    <TableColumn>Actions</TableColumn>
+                    <TableColumn key="no">No</TableColumn>
+                    <TableColumn key="date">Date</TableColumn>
+                    <TableColumn key="time">Time</TableColumn>
+                    <TableColumn key="relatedUser">Name</TableColumn>
+                    <TableColumn key="relatedDepartment">Department</TableColumn>
+                    <TableColumn key="type">Type</TableColumn>
+                    <TableColumn key="source">Source</TableColumn>
+                    <TableColumn key="action">Action</TableColumn>
                 </TableHeader>
                 <TableBody
-                    emptyContent={"No Departments to display."}
+                    emptyContent={"No Positions to display."}
                 >
                     {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.description}</TableCell>
-                            <TableCell>{item.function}</TableCell>
-                            <TableCell>{item.level}</TableCell>
-                            <TableCell>{item.reportingTo ? item.reportingTo.name : 'Not Set'}</TableCell>
-                            <TableCell>{item.directManager ? item.directManager.givenName : 'Not Set'}</TableCell>
-                            <TableCell>{item.assistantManager ? item.assistantManager.givenName : 'Not Set'}</TableCell>
+                            <TableCell>{item.date ? item.data.split('T')[0] : 'Not Set'}</TableCell>
+                            <TableCell>{item.time}</TableCell>
+                            <TableCell>{item.relatedUser && item.relatedUser.givenName ? item.relatedUser.givenName : 'Not Set'}</TableCell>
+                            <TableCell>{item.relatedDepartment && item.relatedDepartment.name ? item.relatedDepartment.name : 'Not Set'}</TableCell>
+                            <TableCell>{item.type}</TableCell>
+                            <TableCell>{item.source}</TableCell>
                             <TableCell>
                                 <div className="relative flex items-center gap-2">
-                                    <Tooltip content="Edit Department">
-                                        <Link to={`/department/update/${item._id}`}>
+
+                                    <Tooltip content="Edit Position">
+                                        <Link to={`/attendance/update/${item._id}`}>
                                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                                                 <EditIcon />
                                             </span>
                                         </Link>
+
                                     </Tooltip>
-                                    <Tooltip color="danger" content="Delete Department">
+                                    <Tooltip color="danger" content="Delete user">
                                         <span data-key={item._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleOpen(e)}>
                                             <DeleteIcon />
                                         </span>
@@ -225,7 +245,7 @@ export default function DepartmentTable() {
                 <ModalContent>
                     {(handleClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Delete Department</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Delete Position</ModalHeader>
                             <ModalBody>
                                 <p>
                                     Are you sure you want to delete this position?
@@ -237,7 +257,8 @@ export default function DepartmentTable() {
                                 </Button>
                                 <Button color="danger" onPress={() => handleDelete()} onKeyDown={handleKeyDown}>
                                     Yes, I am sure
-                                    <Kbd className="bg-danger-500" keys={['enter']}></Kbd>
+                                    <Kbd className="bg-danger-500" keys={['enter']}>
+                                    </Kbd>
                                 </Button>
                             </ModalFooter>
                         </>
