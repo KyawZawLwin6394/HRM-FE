@@ -143,6 +143,7 @@ otherDoc.forEach(item => {
 
 console.log(formData, 'formData');
 
+alert(formData)
     apiInstance
       .post("user", formData, {
         headers: {

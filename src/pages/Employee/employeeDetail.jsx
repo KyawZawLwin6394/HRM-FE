@@ -11,7 +11,7 @@ import Back from '../../assets/img/ba.svg'
 import { Button } from "@nextui-org/react";
 // import {Button} from "@nextui-org/react";
 import { Link } from "react-router-dom";
-import Input from "../../components/Employee/employeeInput";
+import Input from "../../components/Employee/employeeUpdateInput";
 export default function employeeAdd() {
   return (
     <div className="flex">
