@@ -87,9 +87,13 @@ export default function DepartmentChart() {
                                                             <div className="text-tiny">{orgHierarchy.directManager}</div>
                                                         </div>
                                                     }>
-                                                        <p className="text-center mx-auto text-sm font-semibold flex">
-                                                            {orgHierarchy.label}
-                                                        </p>
+                                                        <div className="flex flex-row">
+                                                            <BsFillBuildingFill className="w-[20px] h-10" />
+                                                            <p className="text-center mx-auto my-auto text-sm font-semibold flex">
+                                                                {orgHierarchy.label}
+                                                            </p>
+                                                        </div>
+
                                                     </Tooltip>
                                                 </CardBody>
                                             </Card>
@@ -110,3 +114,4 @@ export default function DepartmentChart() {
         </div>
     )
 }
+
