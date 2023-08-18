@@ -34,7 +34,6 @@ export default function EmployeeInput() {
   const [euCer, setEuCer] = useState(null);
   const workExpRef = useRef();
   const [cv, setCV] = useState(null);
-  const [basicSalary, setBasicSalary] = useState("");
   const [recLetter, setRecLetter] = useState(null);
   const [profile, setProfile] = useState(null);
   const [position, setPosition] = useState("");
@@ -45,29 +44,42 @@ export default function EmployeeInput() {
   const fatherRef = useRef();
   const empDateRef = useRef();
   const genderRef = useRef();
-  // const [img, setImg] = useState("");
-  const [description,setDescription]=useState('')
-  const [otherDoc, setOtherDoc] = useState([]);
 
+  // const [img, setImg] = useState("");
+  const [description, setDescription] = useState("");
+  const [otherDoc, setOtherDoc] = useState([]);
+  const [positionID, setPositionID] = useState([]);
   const [positionList, setPositionList] = useState([]);
+    const [departmentList, setDepartmentList] = useState([]);
 
   const handleChange = (e) => {
-    let array = []
+    let array = [];
     for (const item of e) {
-      array.push(item)
+      array.push(item);
     }
-    setOtherDoc(array)
-
+    setOtherDoc(array);
   };
+
   useEffect(() => {
     const getEmployee = async () => {
       await apiInstance
         .get(`positions`, { params: { limit: 80 } })
         .then((res) => {
           setPositionList(res.data.data);
-          console.log(res.data.data, "emp");
+
+          // console.log(res.data.data, "emp");
         });
     };
+    const getDeparttment = async () => {
+      await apiInstance
+        .get(`departments`, { params: { limit: 80 } })
+        .then((res) => {
+          setDepartmentList(res.data.data);
+
+          console.log(res.data.data, "dep");
+        });
+    };
+    getDeparttment()
     getEmployee();
   }, []);
   const handlefile = (e) => {
@@ -99,51 +111,49 @@ export default function EmployeeInput() {
   };
 
   const handlePosition = (val) => {
-    console.log(
-      positionList.filter((el) => el._id === val)[0].basicSalary,
-      "bas sal"
-    );
-    setBasicSalary(positionList.filter((el) => el._id === val)[0].basicSalary);
+    console.log(positionList.filter((el) => el._id === val)[0], "bas sal");
+
+    setPositionID(positionList.filter((el) => el._id === val)[0]);
+
     setPosition(val);
-    console.log(val, 'val')
   };
   const create = () => {
-console.log(otherDoc, 'doc');
+    console.log(otherDoc, "doc");
 
-const formData = new FormData();
+    const formData = new FormData();
 
-formData.append('givenName', nameRef.current.value);
-formData.append('email', emailRef.current.value);
-formData.append('password', passRef.current.value);
-formData.append('NRC', nrcRef.current.value);
-formData.append('address', addressRef.current.value);
-formData.append('DOB', DOBRef.current.value);
-formData.append('emergencyContact', ECRef.current.value);
-formData.append('phone', phoneRef.current.value);
-formData.append('passportNo', passportRef.current.value);
-formData.append('educationBackground', EuBackRef.current.value);
-formData.append('edu', euCer);
-formData.append('workExperience', workExpRef.current.value);
-formData.append('cv', cv);
-formData.append('pf', profile);
-formData.append('relatedPosition', position);
-formData.append('recLet', recLetter);
-formData.append('firstInterviewDate', firstInRef.current.value);
-formData.append('firstInterviewResult', firstResRef.current.value);
-formData.append('secondInterviewDate', secInRef.current.value);
-formData.append('secondInterviewResult', secResRef.current.value);
-formData.append('fatherName', fatherRef.current.value);
-formData.append('gender', genderRef.current.value);
-formData.append('employedDate', empDateRef.current.value);
-formData.append('description',description);
+    formData.append("givenName", nameRef.current.value);
+    formData.append("email", emailRef.current.value);
+    formData.append("password", passRef.current.value);
+    formData.append("NRC", nrcRef.current.value);
+    formData.append("address", addressRef.current.value);
+    formData.append("DOB", DOBRef.current.value);
+    formData.append("emergencyContact", ECRef.current.value);
+    formData.append("phone", phoneRef.current.value);
+    formData.append("passportNo", passportRef.current.value);
+    formData.append("educationBackground", EuBackRef.current.value);
+    formData.append("edu", euCer);
+    formData.append("workExperience", workExpRef.current.value);
+    formData.append("cv", cv);
+    formData.append("pf", profile);
+    formData.append("relatedPosition", position);
+    formData.append("basicSalary", positionID.basicSalary);
+    formData.append("recLet", recLetter);
+    formData.append("firstInterviewDate", firstInRef.current.value);
+    formData.append("firstInterviewResult", firstResRef.current.value);
+    formData.append("secondInterviewDate", secInRef.current.value);
+    formData.append("secondInterviewResult", secResRef.current.value);
+    formData.append("fatherName", fatherRef.current.value);
+    formData.append("gender", genderRef.current.value);
+    formData.append("employedDate", empDateRef.current.value);
+    formData.append("description", description);
 
-otherDoc.forEach(item => {
-  formData.append('other', item); // Assuming 'item' is a File object
-});
+    otherDoc.forEach((item) => {
+      formData.append("other", item); // Assuming 'item' is a File object
+    });
 
-console.log(formData, 'formData');
+    console.log(formData, "formData");
 
-alert(formData)
     apiInstance
       .post("user", formData, {
         headers: {
@@ -332,8 +342,10 @@ alert(formData)
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Department</option>
-            <option value="US">Ma Ma</option>
-            <option value="CA">Hla Hla</option>
+      
+            {departmentList.map((option)=>(
+      <option key={option} value={option._id}>{option.name}</option>
+            ))}
           </select>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -402,7 +414,7 @@ alert(formData)
         <Input
           type="number"
           label="Basic Salary"
-          value={basicSalary}
+          value={positionID?.basicSalary}
           placeholder=" "
           labelPlacement="outside"
           variant={variant}
@@ -411,51 +423,156 @@ alert(formData)
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
           <label className="text-sm font-semibold">Leave Entitled</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="ca">Casul</Radio>
-            <Radio value="me">Medical</Radio>
-            <Radio value="va">Vacation</Radio>
-            <Radio value="ma">Maternity</Radio>
-          </RadioGroup>
+          <div className="flex flex-row w-90 text-sm mt-2">
+            <div>
+              <label>Casual</label>
+              <Input disabled value={positionID.casualLeaves} />
+            </div>
+            &nbsp;
+            <div>
+              <label>Medical</label>
+              <Input disabled value={positionID.medicalLeaves} />
+            </div>
+            <div>
+              <label>Vacation</label>
+              <Input disabled value={positionID.vacationLeaves} />
+            </div>
+            &nbsp;
+            <div>
+              <label>
+                <abbr
+                  title="Maternity Male"
+                  style={{ textDecoration: "none", border: "none" }}>
+                  Male
+                </abbr>
+              </label>
+              <Input disabled value={positionID.maternityLeaveMale} />
+            </div>
+            <div>
+              <label>
+                <abbr
+                  title="Maternity Female"
+                  style={{ textDecoration: "none", border: "none" }}>
+                  Female
+                </abbr>
+              </label>
+              <Input disabled value={positionID.maternityLeaveFemale} />
+            </div>
+          </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Meal Allowance</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="buenos-aires">Yes</Radio>
-            <Radio value="sydney">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Meal Allowance</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-8"
+                value={positionID ? positionID.isMealAllowance : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-11"
+              type="number"
+              value={positionID ? positionID.mealAllowance : "Not Set"}
+              placeholder="Meal Allowance"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Married</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="buenos-aires">Yes</Radio>
-            <Radio value="sydney">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Married</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                value={positionID ? positionID.isMealAllowance : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-7"
+              type="number"
+              value={positionID ? positionID.mealAllowance : "Not Set"}
+              placeholder="Married Date"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Travel Allowance</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="buenos-aires">Yes</Radio>
-            <Radio value="sydney">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Travel Allowance</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                value={positionID ? positionID.isTravelAllowance : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-7"
+              type="number"
+              value={positionID ? positionID.travelAllowance : "Not Set"}
+              placeholder="Travel Allowance"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Yearly Bonus</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="1">Yes</Radio>
-            <Radio value="2">No</Radio>
-          </RadioGroup>
+         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Yearly Bonus</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                value={positionID ? positionID.isBonus : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-7"
+              type="number"
+              value={positionID ? positionID.bonus : "Not Set"}
+              placeholder="Bonus"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Incentive</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="1">Yes</Radio>
-            <Radio value="2">No</Radio>
-          </RadioGroup>
+           <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Incentive</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                value={positionID ? positionID.isIncentive : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-7"
+              type="number"
+              value={positionID ? positionID.incentive : "Not Set"}
+              placeholder="Incentive"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -513,7 +630,7 @@ alert(formData)
                       type="text"
                       label="Description"
                       placeholder=""
-                    onChange={e=>setDescription(e.target.value)}
+                      onChange={(e) => setDescription(e.target.value)}
                       variant="faded"
                       className="mt-5"
                     />

@@ -284,7 +284,7 @@ export default function PositionUpdateInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <div className="w-1/3">
                         <label className="text-sm font-semibold">Meal Allowance</label>
-                        <RadioGroup orientation="horizontal" className="mt-2" value={positionList ? positionList.isTravelAllowance : ''} onValueChange={(e) => handleInputChange('isMealAllowance', e)} >
+                        <RadioGroup orientation="horizontal" className="mt-2" value={positionList ? positionList.isMealAllowance : ''} onValueChange={(e) => handleInputChange('isMealAllowance', e)} >
                             <Radio value={true} >Yes</Radio>
                             <Radio value={false} >No</Radio>
                         </RadioGroup>
