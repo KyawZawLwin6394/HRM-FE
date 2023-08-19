@@ -8,10 +8,11 @@ import { DeleteIcon } from "../Table/deleteicon";
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
-import { PlusIcon } from "../../assets/Icons/PlusIcon";
+// import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import { SearchIcon } from "../Navbar/search";
 import { FileUploader } from "react-drag-drop-files";
-
+import { TfiImport } from 'react-icons/tfi';
+import { BsCloudArrowUpFill } from 'react-icons/bs'
 export default function AttendanceTable() {
     const [attendanceList, setAttendanceList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -155,10 +156,11 @@ export default function AttendanceTable() {
                 </div>
                 <Popover isOpen={popOverOpen} placement="bottom" offset={20} showArrow>
                     <PopoverTrigger>
-                        <Button color="primary" onClick={() => setPopOverOpen(true)} endContent={<PlusIcon />}>Import</Button>
+                        <Button color="primary" onClick={() => setPopOverOpen(true)} endContent={<TfiImport />}>Import</Button>
                     </PopoverTrigger>
                     <PopoverContent>
                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mx-auto my-auto">
+                            <div className="mt-7"></div>
                             <FileUploader
                                 multiple={true}
                                 handleChange={handleChange}
@@ -170,7 +172,7 @@ export default function AttendanceTable() {
                                 <Button color="danger" variant="light" onClick={() => setPopOverOpen(false)}>
                                     Close
                                 </Button>
-                                <Button color="primary" onPress={onClose} onClick={() => handleExcelImport()}>
+                                <Button color="primary" endContent={<BsCloudArrowUpFill />} onPress={onClose} onClick={() => handleExcelImport()}>
                                     Upload
                                 </Button>
                             </div>
