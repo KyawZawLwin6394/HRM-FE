@@ -22,32 +22,16 @@ export default function EmployeeInput() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const variant = ["faded"];
 
-  const emailRef = useRef();
-  const passRef = useRef();
-  const nrcRef = useRef();
-  const [name, setName] = useState("");
   const [other, setOther] = useState([]);
   const addressRef = useRef();
 
-  const DOBRef = useRef();
-  const ECRef = useRef();
-  const phoneRef = useRef();
-  const passportRef = useRef();
-  const EuBackRef = useRef();
   const [euCer, setEuCer] = useState(null);
-  const workExpRef = useRef();
-  const [cv, setCV] = useState(null);
-  const [basicSalary, setBasicSalary] = useState("");
+  // const [cv, setCV] = useState(null);
+
   const [recLetter, setRecLetter] = useState(null);
   const [profile, setProfile] = useState(null);
   const [position, setPosition] = useState("");
-  const firstInRef = useRef();
-  const firstResRef = useRef();
-  const secInRef = useRef();
-  const secResRef = useRef();
-  const fatherRef = useRef();
-  const empDateRef = useRef();
-  const genderRef = useRef();
+
   // const [img, setImg] = useState("");
   const [description, setDescription] = useState("");
   const [otherDoc, setOtherDoc] = useState([]);
@@ -55,7 +39,13 @@ export default function EmployeeInput() {
   const EmpID = location.pathname.split("/")[2];
   console.log(EmpID, "id");
   const [positionList, setPositionList] = useState([]);
-  //   const [empList,setEmpList]=useState([])
+  const [directManager, setDirectManager] = useState("");
+  const [directManagerID, setDirectManagerID] = useState("");
+  const [marriedFile, setMarriedFile] = useState(null);
+  const [positionID, setPositionID] = useState([]);
+  const [departmentList, setDepartmentList] = useState([]);
+  const [showMarried, setShowMarried] = useState(false);
+    const [employee,setEmployee]=useState([])
 
   const handleChange = (e) => {
     let array = [];
@@ -81,21 +71,53 @@ export default function EmployeeInput() {
           //   setEmpList(res.data.data);
 
           console.log(res.data.data, "heee");
-          setName(res.data.data.givenName);
+    setEmployee(res.data.data)
           if (res.data.data.other) {
             setOther(res.data.data.other);
           }
         });
     };
+    const getDeparttment = async () => {
+      await apiInstance
+        .get(`departments`, { params: { limit: 80 } })
+        .then((res) => {
+          setDepartmentList(res.data.data);
+          console.log(res.data.data, "dep");
+        });
+    };
+    getDeparttment();
     getEmployee();
     getPosition();
   }, []);
-  const handlefile = (e) => {
+
+  const handleMarriedFile = (e) => {
     if (e.target.files) {
-      setCV(e.target.files[0]);
-      console.log(e.target.files, "file cv");
+      setMarriedFile(e.target.files[0]);
     }
   };
+
+  const handlePosition = (val) => {
+    console.log(positionList.filter((el) => el._id === val)[0], "bas sal");
+
+    setPositionID(positionList.filter((el) => el._id === val)[0]);
+
+    setPosition(val);
+  };
+  const handleDirectManager = (id) => {
+    setDirectManager(
+      departmentList.filter((el) => el._id == id)[0].directManager.givenName
+    );
+    setDirectManagerID(
+      departmentList.filter((el) => el._id == id)[0].directManager._id
+    );
+  };
+
+  // const handlefile = (e) => {
+  //   if (e.target.files) {
+  //     setCV(e.target.files[0]);
+  //     console.log(e.target.files, "file cv");
+  //   }
+  // };
 
   const handleCer = (e) => {
     if (e.target.files) {
@@ -118,78 +140,44 @@ export default function EmployeeInput() {
     }
   };
 
-  const handlePosition = (val) => {
-    console.log(
-      positionList.filter((el) => el._id === val)[0].basicSalary,
-      "bas sal"
-    );
-    setBasicSalary(positionList.filter((el) => el._id === val)[0].basicSalary);
-    setPosition(val);
-    console.log(val, "val");
-  };
-  const create = () => {
-    console.log(otherDoc, "doc");
 
-    const formData = new FormData();
+    const handleInputChange = (fieldName, value) => {
+        setEmployee(prevValues => ({
+            ...prevValues,
+            [fieldName]: value,
+        }));
+    };
 
-    formData.append("givenName", name);
-    formData.append("email", emailRef.current.value);
-    formData.append("password", passRef.current.value);
-    formData.append("NRC", nrcRef.current.value);
-    formData.append("address", addressRef.current.value);
-    formData.append("DOB", DOBRef.current.value);
-    formData.append("emergencyContact", ECRef.current.value);
-    formData.append("phone", phoneRef.current.value);
-    formData.append("passportNo", passportRef.current.value);
-    formData.append("educationBackground", EuBackRef.current.value);
-    formData.append("edu", euCer);
-    formData.append("workExperience", workExpRef.current.value);
-    formData.append("cv", cv);
-    formData.append("pf", profile);
-    formData.append("relatedPosition", position);
-    formData.append("recLet", recLetter);
-    formData.append("firstInterviewDate", firstInRef.current.value);
-    formData.append("firstInterviewResult", firstResRef.current.value);
-    formData.append("secondInterviewDate", secInRef.current.value);
-    formData.append("secondInterviewResult", secResRef.current.value);
-    formData.append("fatherName", fatherRef.current.value);
-    formData.append("gender", genderRef.current.value);
-    formData.append("employedDate", empDateRef.current.value);
-    formData.append("description", description);
-
-    otherDoc.forEach((item) => {
-      formData.append("other", item); // Assuming 'item' is a File object
-    });
-
-    console.log(formData, "formData");
-
-    apiInstance
-      .post("user", formData, {
+const handleUpdate = async () => {
+        let data = employee
+        data.id = EmpID
+        data.pf=profile
+        data.recLet=recLetter
+        data.edu=euCer
+        data.other=other
+        await apiInstance.put('user', data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
-      .then(function () {
-        Swal.fire({
-          icon: "success",
-          title: "Login Successful",
-          text: "Welcome back!",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#3085d6",
-        });
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successfully Edited'
+                })
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
   return (
     <div className="w-full flex flex-col gap-4">
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
           type="text"
           label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={employee.givenName}
+          onChange={(e) => handleInputChange('givenName', e.target.value)}
           placeholder="Name"
           variant={variant}
           labelPlacement="outside"
@@ -197,7 +185,8 @@ export default function EmployeeInput() {
         <Input
           type="number"
           label="Phone No"
-          ref={phoneRef}
+          onChange={(e) => handleInputChange('phone', e.target.value)}
+          value={employee.phone}
           placeholder="Phone Number"
           variant={variant}
           labelPlacement="outside"
@@ -207,7 +196,8 @@ export default function EmployeeInput() {
         <Input
           type="date"
           label="Age/DOB"
-          ref={DOBRef}
+          value={employee.DOB?.split('T')[0]}
+              onChange={(e) => handleInputChange('DOB', e.target.value)}
           placeholder="you@example.com"
           labelPlacement="outside"
           variant={variant}
@@ -218,7 +208,8 @@ export default function EmployeeInput() {
           variant={variant}
           label="NRC"
           placeholder="NRC.."
-          ref={nrcRef}
+          value={employee.NRC}
+              onChange={(e) => handleInputChange('NRC', e.target.value)}
           labelPlacement="outside"
         />
       </div>
@@ -228,16 +219,18 @@ export default function EmployeeInput() {
           label="Passport No"
           placeholder="Passport Number.."
           labelPlacement="outside"
-          ref={passportRef}
+          value={employee.passportNo}
+              onChange={(e) => handleInputChange('passportNo', e.target.value)}
           variant={variant}
         />
         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <label className="text-sm font-semibold">Gender</label>
           <select
-            ref={genderRef}
+          
+                onChange={(e) => handleInputChange('gender', e.target.value)}
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Gender</option>
+            <option hidden value={employee.gender}>{employee.gender}</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -248,7 +241,8 @@ export default function EmployeeInput() {
           isRequired
           type="email"
           variant={variant}
-          ref={emailRef}
+          value={employee.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
           label="Personal Email"
           placeholder=" "
           labelPlacement="outside"
@@ -257,7 +251,8 @@ export default function EmployeeInput() {
           isRequired
           type="text"
           label="Password"
-          ref={passRef}
+      
+              onChange={(e) => handleInputChange('password', e.target.value)}
           variant={variant}
           placeholder="Password.."
           labelPlacement="outside"
@@ -269,6 +264,8 @@ export default function EmployeeInput() {
             type="text"
             label="Address"
             placeholder="Address.."
+            value={employee.address}
+                onChange={(e) => handleInputChange('address', e.target.value)}
             labelPlacement="outside"
             ref={addressRef}
             variant={variant}
@@ -279,7 +276,7 @@ export default function EmployeeInput() {
             type="file"
             label="CV"
             variant={variant}
-            onChange={handlefile}
+             onChange={(e) => handleInputChange('cv', e.target.files[0])}
             placeholder=" "
             labelPlacement="outside"
           />
@@ -289,7 +286,8 @@ export default function EmployeeInput() {
         <Input
           type="text"
           variant={variant}
-          ref={EuBackRef}
+          value={employee.educationBackground}
+              onChange={(e) => handleInputChange('educationBackground', e.target.value)}
           label="Education Background"
           placeholder=" "
           labelPlacement="outside"
@@ -306,7 +304,8 @@ export default function EmployeeInput() {
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
           type="date"
-          ref={firstInRef}
+          value={employee.firstInterviewDate?.split('T')[0]}
+          onChange={(e) => handleInputChange('firstInterviewDate', e.target.value)}
           label="First Interview Date"
           placeholder="you@example.com"
           labelPlacement="outside"
@@ -315,7 +314,8 @@ export default function EmployeeInput() {
         <Input
           type="text"
           label="First Interview Result"
-          ref={firstResRef}
+            onChange={(e) => handleInputChange('firstInterviewResult', e.target.value)}
+          value={employee.firstInterviewResult}
           placeholder="..."
           labelPlacement="outside"
           variant={variant}
@@ -327,7 +327,8 @@ export default function EmployeeInput() {
           <Input
             type="date"
             label="Second Interview Date"
-            ref={secInRef}
+           value={employee.secondInterviewDate?.split('T')[0]}
+          onChange={(e) => handleInputChange('secondInterviewDate', e.target.value)}
             placeholder=" "
             labelPlacement="outside"
             variant={variant}
@@ -336,7 +337,8 @@ export default function EmployeeInput() {
         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <Input
             type="text"
-            ref={secResRef}
+                    onChange={(e) => handleInputChange('secondInterviewResult', e.target.value)}
+          value={employee.secondInterviewResult}
             label="Second Interview Result"
             variant={variant}
             placeholder="..."
@@ -350,10 +352,15 @@ export default function EmployeeInput() {
           <label className="text-sm font-semibold">Department</label>
           <select
             id="countries"
+            onChange={(e) => handleDirectManager(e.target.value)}
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Department</option>
-            <option value="US">Ma Ma</option>
-            <option value="CA">Hla Hla</option>
+
+            {departmentList.map((option) => (
+              <option key={option} value={option._id}>
+                {option.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -361,9 +368,9 @@ export default function EmployeeInput() {
           <select
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Direct Manager</option>
-            <option value="US">Ma Ma</option>
-            <option value="CA">Ha Hla</option>
+         
+
+            <option hidden value={directManagerID}>{directManager}</option>
           </select>
         </div>
       </div>
@@ -372,15 +379,18 @@ export default function EmployeeInput() {
           type="text"
           variant={variant}
           label="Father Name"
+                      onChange={(e) => handleInputChange('fatherName', e.target.value)}
+          value={employee.fatherName}
           placeholder=" "
-          ref={fatherRef}
+       
           labelPlacement="outside"
         />
         <Input
           type="date"
           label="Employed Date"
           placeholder=" "
-          ref={empDateRef}
+                      onChange={(e) => handleInputChange('employedDate', e.target.value)}
+          value={employee.employedDate?.split('T')[0]}
           labelPlacement="outside"
           variant={variant}
         />
@@ -390,7 +400,8 @@ export default function EmployeeInput() {
           type="tel"
           variant={variant}
           label="Emergecy Contact"
-          ref={ECRef}
+                      onChange={(e) => handleInputChange('emergencyContact', e.target.value)}
+          value={employee.emergencyContact}
           placeholder=" "
           labelPlacement="outside"
         />
@@ -412,7 +423,8 @@ export default function EmployeeInput() {
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
           type="text"
-          ref={workExpRef}
+          onChange={(e) => handleInputChange('workExperience', e.target.value)}
+          value={employee.workExperience}
           label="Work Experience"
           placeholder=" "
           labelPlacement="outside"
@@ -422,7 +434,7 @@ export default function EmployeeInput() {
         <Input
           type="number"
           label="Basic Salary"
-          value={basicSalary}
+          value={positionID.basicSalary}
           placeholder=" "
           labelPlacement="outside"
           variant={variant}
@@ -431,51 +443,164 @@ export default function EmployeeInput() {
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
           <label className="text-sm font-semibold">Leave Entitled</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="ca">Casul</Radio>
-            <Radio value="me">Medical</Radio>
-            <Radio value="va">Vacation</Radio>
-            <Radio value="ma">Maternity</Radio>
-          </RadioGroup>
+          <div className="flex flex-row w-90 text-sm mt-2">
+            <div>
+              <label>Casual</label>
+              <Input disabled value={positionID.casualLeaves} />
+            </div>
+            &nbsp;
+            <div>
+              <label>Medical</label>
+              <Input disabled value={positionID.medicalLeaves} />
+            </div>
+            <div>
+              <label>Vacation</label>
+              <Input disabled value={positionID.vacationLeaves} />
+            </div>
+            &nbsp;
+            <div>
+              <label>
+                <abbr
+                  title="Maternity Male"
+                  style={{ textDecoration: "none", border: "none" }}>
+                  Male
+                </abbr>
+              </label>
+              <Input disabled value={positionID.maternityLeaveMale} />
+            </div>
+            <div>
+              <label>
+                <abbr
+                  title="Maternity Female"
+                  style={{ textDecoration: "none", border: "none" }}>
+                  Female
+                </abbr>
+              </label>
+              <Input disabled value={positionID.maternityLeaveFemale} />
+            </div>
+          </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Meal Allowance</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="buenos-aires">Yes</Radio>
-            <Radio value="sydney">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Meal Allowance</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-8"
+                value={positionID ? positionID.isMealAllowance : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-11"
+              type="number"
+              value={positionID ? positionID.mealAllowance : "Not Set"}
+              placeholder="Meal Allowance"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Married</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="buenos-aires">Yes</Radio>
-            <Radio value="sydney">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Married</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                 onChange={(e) => handleInputChange('isMarried', e.target.value)}
+          value={employee.isMarried}>
+                <Radio
+                  value={true}
+                  onClick={() => setShowMarried(!showMarried)}>
+                  Yes
+                </Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            {showMarried && (
+              <Input
+                className="mt-7"
+                type="file"
+                onChange={handleMarriedFile}
+                value={positionID ? positionID.mealAllowance : "Not Set"}
+                placeholder="Married Date"
+                variant={variant}
+                labelPlacement="outside"
+              />
+            )}
+          </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Travel Allowance</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="buenos-aires">Yes</Radio>
-            <Radio value="sydney">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Travel Allowance</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                value={positionID ? positionID.isTravelAllowance : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-7"
+              type="number"
+              value={positionID ? positionID.travelAllowance : "Not Set"}
+              placeholder="Travel Allowance"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Yearly Bonus</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="1">Yes</Radio>
-            <Radio value="2">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Yearly Bonus</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                value={positionID ? positionID.isBonus : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-7"
+              type="number"
+              value={positionID ? positionID.bonus : "Not Set"}
+              placeholder="Bonus"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Incentive</label>
-          <RadioGroup orientation="horizontal">
-            <Radio value="1">Yes</Radio>
-            <Radio value="2">No</Radio>
-          </RadioGroup>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <div className="w-1/3">
+              <label className="text-sm font-semibold">Incentive</label>
+              <RadioGroup
+                orientation="horizontal"
+                className="mt-3"
+                value={positionID ? positionID.isIncentive : ""}>
+                <Radio value={true}>Yes</Radio>
+                <Radio value={false}>No</Radio>
+              </RadioGroup>
+            </div>
+            <Input
+              className="mt-7"
+              type="number"
+              value={positionID ? positionID.incentive : "Not Set"}
+              placeholder="Incentive"
+              variant={variant}
+              labelPlacement="outside"
+            />
+          </div>
         </div>
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -559,16 +684,15 @@ export default function EmployeeInput() {
                   "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/" +
                   item.imgUrl
                 }
-                style={{ width:'200px',height:'150px' }}
-        // className='object-contain max-w-full max-h-full'
-             
-               
+                style={{ width: "200px", height: "150px" }}
+                // className='object-contain max-w-full max-h-full'
+
                 alt={item.fileName}
               />
               &nbsp;
             </>
           ))}
-        </div> 
+        </div>
       </div>
       <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
         <Button
@@ -576,7 +700,7 @@ export default function EmployeeInput() {
           color="primary"
           variant="shadow"
           className="rounded-xl px-4 py-0 text-left"
-          onClick={create}>
+          onClick={() => handleUpdate()}>
           Register
         </Button>
         <Button
