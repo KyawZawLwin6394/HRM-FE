@@ -34,6 +34,7 @@ export default function EmployeeInput() {
   const [euCer, setEuCer] = useState(null);
   const workExpRef = useRef();
   const [cv, setCV] = useState(null);
+   const [marriedFile, setMarriedFile] = useState(null);
   const [recLetter, setRecLetter] = useState(null);
   const [profile, setProfile] = useState(null);
   const [position, setPosition] = useState("");
@@ -95,6 +96,14 @@ export default function EmployeeInput() {
     }
   };
 
+    const handleMarriedFile = (e) => {
+    if (e.target.files) {
+      setMarriedFile(e.target.files[0]);
+
+    }
+  };
+
+
   const handleCer = (e) => {
     if (e.target.files) {
       setEuCer(e.target.files[0]);
@@ -152,7 +161,8 @@ export default function EmployeeInput() {
     formData.append("fatherName", fatherRef.current.value);
     formData.append("gender", genderRef.current.value);
     formData.append("employedDate", empDateRef.current.value);
-     formData.append("isMarried", married.current.value);
+     formData.append("married", marriedFile);
+      formData.append("isMarried", married.current.value);
     formData.append("description", description);
      formData.append("directManager", directManagerID);
      formData.append("relatedDepartment", directManagerID);
@@ -509,6 +519,7 @@ export default function EmployeeInput() {
  <Input
               className="mt-7"
               type="file"
+              onChange={handleMarriedFile}
               value={positionID ? positionID.mealAllowance : "Not Set"}
               placeholder="Married Date"
               variant={variant}
