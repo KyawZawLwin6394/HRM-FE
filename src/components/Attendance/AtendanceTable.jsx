@@ -154,9 +154,11 @@ export default function AttendanceTable() {
                         Search
                     </Button>
                 </div>
+         
                 <Popover isOpen={popOverOpen} placement="bottom" offset={20} showArrow>
                     <PopoverTrigger>
                         <Button color="primary" onClick={() => setPopOverOpen(true)} endContent={<TfiImport />}>Import</Button>
+                       
                     </PopoverTrigger>
                     <PopoverContent>
                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mx-auto my-auto">
@@ -179,6 +181,12 @@ export default function AttendanceTable() {
                         </div>
                     </PopoverContent>
                 </Popover>
+                       
+            </div>
+            <div>
+                 <Link>
+                            <Button color="primary">Add</Button>
+                        </Link> 
             </div>
             <div className="flex justify-between items-center mb-3">
                 <span className="text-default-400 text-small">Total {attendanceList.length} Attendances</span>
