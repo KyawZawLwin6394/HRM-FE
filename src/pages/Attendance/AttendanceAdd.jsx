@@ -1,24 +1,22 @@
-// import { useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
+import AttendanceInput from "../../components/Attendance/AttendanceInput";
 
-// import Table from '../../components/Table/table'
-export default function Dashboard() {
+export default function Attendance() {
 
-    // window.location.reload()
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
-            <div className="py-4">
-
-                <div className="body  py-1">
-                    <Card className="rounded-md shadow-md py-3 min-w-[1080px]">
-                        <CardHeader className="font-semibold">
-                            Dashboard
+            <div className="flex-grow">
+                <div className="body">
+                    <Card className="rounded-sm shadow-md py-3 min-h-[890px]" >
+                        <CardHeader className="flex justify-center">
+                            <label className="font-nunito font-bold">
+                                Attendance Register
+                            </label>
                         </CardHeader>
-                        <Divider></Divider>
                         <CardBody>
-                            {/* <Table/> */}
+                           <AttendanceInput/>
                         </CardBody>
                         <Divider></Divider>
                         <CardFooter>
@@ -27,6 +25,6 @@ export default function Dashboard() {
                     </Card>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
