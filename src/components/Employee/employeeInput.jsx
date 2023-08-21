@@ -34,7 +34,7 @@ export default function EmployeeInput() {
   const [euCer, setEuCer] = useState(null);
   const workExpRef = useRef();
   const [cv, setCV] = useState(null);
-   const [marriedFile, setMarriedFile] = useState(null);
+  const [marriedFile, setMarriedFile] = useState([]);
   const [recLetter, setRecLetter] = useState(null);
   const [profile, setProfile] = useState(null);
   const [position, setPosition] = useState("");
@@ -45,15 +45,16 @@ export default function EmployeeInput() {
   const fatherRef = useRef();
   const empDateRef = useRef();
   const genderRef = useRef();
-  const married=useRef()
-  const [directManager,setDirectManager]=useState('')
-    const [directManagerID,setDirectManagerID]=useState('')
+  const [isMarried, setIsMarried] = useState(false);
+  const [directManager, setDirectManager] = useState('')
+  const [directManagerID, setDirectManagerID] = useState('')
   const [description, setDescription] = useState("");
   const [otherDoc, setOtherDoc] = useState([]);
   const [positionID, setPositionID] = useState([]);
   const [positionList, setPositionList] = useState([]);
-    const [departmentList, setDepartmentList] = useState([]);
-    const [showMarried,setShowMarried]=useState(false)
+  const [departmentList, setDepartmentList] = useState([]);
+  const [showMarried, setShowMarried] = useState(false)
+  const [relatedDepartment, setRelatedDepartment] = useState('');
 
   const handleChange = (e) => {
     let array = [];
@@ -69,7 +70,7 @@ export default function EmployeeInput() {
         .get(`positions`, { params: { limit: 80 } })
         .then((res) => {
           setPositionList(res.data.data);
-          
+
         });
     };
     const getDeparttment = async () => {
@@ -84,9 +85,12 @@ export default function EmployeeInput() {
     getEmployee()
   }, []);
 
-  const handleDirectManager=(id)=>{
-  setDirectManager(departmentList.filter(el=>el._id == id)[0].directManager.givenName)
-  setDirectManagerID(departmentList.filter(el=>el._id == id)[0].directManager._id)
+  const handleDirectManager = (id) => {
+    console.log(id, 'handled')
+    setRelatedDepartment(id)
+    setDirectManager(departmentList.filter(el => el._id == id)[0].directManager.givenName)
+    setDirectManagerID(departmentList.filter(el => el._id == id)[0].directManager._id)
+
 
   }
   const handlefile = (e) => {
@@ -96,7 +100,7 @@ export default function EmployeeInput() {
     }
   };
 
-    const handleMarriedFile = (e) => {
+  const handleMarriedFile = (e) => {
     if (e.target.files) {
       setMarriedFile(e.target.files[0]);
 
@@ -161,12 +165,12 @@ export default function EmployeeInput() {
     formData.append("fatherName", fatherRef.current.value);
     formData.append("gender", genderRef.current.value);
     formData.append("employedDate", empDateRef.current.value);
-     formData.append("married", marriedFile);
-      formData.append("isMarried", married.current.value);
+    if (marriedFile.length > 0) formData.append("married", marriedFile);
+    formData.append("isMarried", isMarried)
     formData.append("description", description);
-     formData.append("directManager", directManagerID);
-     formData.append("relatedDepartment", directManagerID);
-
+    formData.append("directManager", directManagerID);
+    formData.append("relatedDepartment", relatedDepartment);
+    console.log(otherDoc)
     otherDoc.forEach((item) => {
       formData.append("other", item); // Assuming 'item' is a File object
     });
@@ -197,6 +201,7 @@ export default function EmployeeInput() {
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="text"
+          isRequired
           label="Name"
           placeholder="Name"
           ref={nameRef}
@@ -264,7 +269,7 @@ export default function EmployeeInput() {
         />
         <Input
           isRequired
-          type="text"
+          type="password"
           label="Password"
           ref={passRef}
           variant={variant}
@@ -283,7 +288,7 @@ export default function EmployeeInput() {
             variant={variant}
           />
         </div>
-        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <Input
             type="file"
             label="CV"
@@ -359,12 +364,12 @@ export default function EmployeeInput() {
           <label className="text-sm font-semibold">Department</label>
           <select
             id="countries"
-            onChange={(e)=>handleDirectManager(e.target.value)}
+            onChange={(e) => handleDirectManager(e.target.value)}
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
             <option hidden>Choose Department</option>
-      
-            {departmentList.map((option)=>(
-      <option key={option} value={option._id}>{option.name}</option>
+
+            {departmentList.map((option) => (
+              <option key={option} value={option._id}>{option.name}</option>
             ))}
           </select>
         </div>
@@ -373,12 +378,12 @@ export default function EmployeeInput() {
           <select
             id="countries"
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            
+
             <option hidden value={directManagerID}>{directManager}</option>
           </select>
         </div>
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="text"
           variant={variant}
@@ -396,7 +401,7 @@ export default function EmployeeInput() {
           variant={variant}
         />
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="tel"
           variant={variant}
@@ -420,7 +425,7 @@ export default function EmployeeInput() {
           </select>
         </div>
       </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
         <Input
           type="text"
           ref={workExpRef}
@@ -442,21 +447,19 @@ export default function EmployeeInput() {
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
           <label className="text-sm font-semibold">Leave Entitled</label>
-          <div className="flex flex-row w-90 text-sm mt-2">
+          <div className="flex flex-row text-sm mt-1 gap-2">
             <div>
               <label>Casual</label>
-              <Input disabled value={positionID.casualLeaves} />
+              <Input isDisabled={true} value={positionID.casualLeaves} className="py-1" />
             </div>
-            &nbsp;
             <div>
               <label>Medical</label>
-              <Input disabled value={positionID.medicalLeaves} />
+              <Input isDisabled={true} value={positionID.medicalLeaves} className="py-1" />
             </div>
             <div>
               <label>Vacation</label>
-              <Input disabled value={positionID.vacationLeaves} />
+              <Input isDisabled={true} value={positionID.vacationLeaves} className="py-1" />
             </div>
-            &nbsp;
             <div>
               <label>
                 <abbr
@@ -465,7 +468,7 @@ export default function EmployeeInput() {
                   Male
                 </abbr>
               </label>
-              <Input disabled value={positionID.maternityLeaveMale} />
+              <Input isDisabled={true} value={positionID.maternityLeaveMale} className="py-1" />
             </div>
             <div>
               <label>
@@ -475,7 +478,7 @@ export default function EmployeeInput() {
                   Female
                 </abbr>
               </label>
-              <Input disabled value={positionID.maternityLeaveFemale} />
+              <Input isDisabled={true} value={positionID.maternityLeaveFemale} className="py-1" />
             </div>
           </div>
         </div>
@@ -510,23 +513,24 @@ export default function EmployeeInput() {
               <RadioGroup
                 orientation="horizontal"
                 className="mt-3"
-                ref={married}>
-                <Radio value={true} onClick={()=>setShowMarried(!showMarried)}>Yes</Radio>
+                onValueChange={(e) => setIsMarried(e)}
+              >
+                <Radio value={true} onClick={() => setShowMarried(!showMarried)}>Yes</Radio>
                 <Radio value={false} >No</Radio>
               </RadioGroup>
             </div>
             {showMarried && (
               <Input
-              className="mt-7"
-              type="file"
-              onChange={handleMarriedFile}
-              value={positionID ? positionID.mealAllowance : "Not Set"}
-              placeholder="Married Date"
-              variant={variant}
-              labelPlacement="outside"
-            />
+                className="mt-7"
+                type="file"
+                onChange={handleMarriedFile}
+                value={positionID ? positionID.mealAllowance : "Not Set"}
+                placeholder="Married Date"
+                variant={variant}
+                labelPlacement="outside"
+              />
             )}
-           
+
           </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
@@ -554,7 +558,7 @@ export default function EmployeeInput() {
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
             <div className="w-1/3">
               <label className="text-sm font-semibold">Yearly Bonus</label>
               <RadioGroup
@@ -576,7 +580,7 @@ export default function EmployeeInput() {
           </div>
         </div>
         <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-           <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
             <div className="w-1/3">
               <label className="text-sm font-semibold">Incentive</label>
               <RadioGroup

@@ -1,13 +1,15 @@
+import { useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 
 // import Table from '../../components/Table/table'
 export default function Dashboard() {
+    useEffect(() => { window.location.reload() }, [])
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
             <div className="py-4">
-                
+
                 <div className="body  py-1">
                     <Card className="rounded-md shadow-md py-3 min-w-[1080px]">
                         <CardHeader className="font-semibold">
@@ -15,7 +17,7 @@ export default function Dashboard() {
                         </CardHeader>
                         <Divider></Divider>
                         <CardBody>
-                           {/* <Table/> */}
+                            {/* <Table/> */}
                         </CardBody>
                         <Divider></Divider>
                         <CardFooter>
