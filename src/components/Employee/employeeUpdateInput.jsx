@@ -154,7 +154,6 @@ const handleUpdate = async () => {
         data.pf=profile
         data.recLet=recLetter
         data.edu=euCer
-
         await apiInstance.put('user', data, {
         headers: {
           "Content-Type": "multipart/form-data",
