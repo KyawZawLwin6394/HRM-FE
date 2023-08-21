@@ -154,7 +154,7 @@ const handleUpdate = async () => {
         data.pf=profile
         data.recLet=recLetter
         data.edu=euCer
-        data.other=other
+
         await apiInstance.put('user', data, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -645,7 +645,7 @@ const handleUpdate = async () => {
                   <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <FileUploader
                       multiple={true}
-                      onChange={(e) => handleInputChange('other', e.target.files)}
+                      onChange={(e) => handleInputChange('other',e.target.files)}
                       name="file"
                       types={fileTypes}
                     />

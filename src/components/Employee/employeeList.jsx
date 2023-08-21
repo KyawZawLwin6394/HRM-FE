@@ -52,8 +52,9 @@ export default function EmployeeTable() {
     };
   useEffect(() => {
     const getEmployee = async () => {
-      await apiInstance.get(`users`, { params: { limit: 80 } }).then((res) => {
+      await apiInstance.get(`users`, { params:  { limit: 80, rowsPerPage: rowsPerPage }  }).then((res) => {
         setEmpList(res.data.data);
+        setPages(res.data._metadata.page_count)
         console.log(res.data.data, "emp");
       });
     };
