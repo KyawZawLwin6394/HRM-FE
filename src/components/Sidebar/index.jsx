@@ -4,7 +4,7 @@ import {
   CardBody,
   CardFooter,
   Divider,
-  User
+
 } from '@nextui-org/react'
 import BadgeIcon from '@mui/icons-material/Badge'
 import { Link } from 'react-router-dom'
@@ -172,13 +172,13 @@ export default function Sidebar() {
             </CardBody>
             <Divider />
             <CardFooter>
-              <User
+              {/* <User
                 name='Alice'
                 description='Product Designer'
                 avatarProps={{
                   src: 'https://i.pravatar.cc/150?u=a04258114e29026702d'
                 }}
-              />
+              /> */}
             </CardFooter>
           </Card>
         </div>
