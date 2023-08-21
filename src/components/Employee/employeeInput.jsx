@@ -140,7 +140,7 @@ export default function EmployeeInput() {
     console.log(otherDoc, "doc");
 
     const formData = new FormData();
-
+    console.log(marriedFile,'marriedFile')
     formData.append("givenName", nameRef.current.value);
     formData.append("email", emailRef.current.value);
     formData.append("password", passRef.current.value);
@@ -165,7 +165,7 @@ export default function EmployeeInput() {
     formData.append("fatherName", fatherRef.current.value);
     formData.append("gender", genderRef.current.value);
     formData.append("employedDate", empDateRef.current.value);
-    if (marriedFile.length > 0) formData.append("married", marriedFile);
+    if (marriedFile) formData.append("married", marriedFile);
     formData.append("isMarried", isMarried)
     formData.append("description", description);
     formData.append("directManager", directManagerID);
