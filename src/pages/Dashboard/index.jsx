@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 
 // import Table from '../../components/Table/table'
 export default function Dashboard() {
-    useEffect(() => { window.location.reload() }, [])
+
+    // window.location.reload()
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>

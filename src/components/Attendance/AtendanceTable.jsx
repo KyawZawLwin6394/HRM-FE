@@ -103,9 +103,9 @@ export default function AttendanceTable() {
 
     return (
         <>
-            <div className="flex flex-row gap-3 justify-between">
+            <div className="flex flex-row gap-5 justify-between">
 
-                <div className="flex gap-3 mb-3 flex-row">
+                <div className="flex gap-4 mb-3 flex-row">
                     <Dropdown>
                         <DropdownTrigger className="hidden sm:flex">
                             <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
@@ -153,12 +153,12 @@ export default function AttendanceTable() {
                     <Button color="primary" endContent={<SearchIcon className='w-5 h-4' />}>
                         Search
                     </Button>
+                 
                 </div>
-         
-                <Popover isOpen={popOverOpen} placement="bottom" offset={20} showArrow>
+                <div className='flex gap-2 mb-3 flex-row'>
+ <Popover isOpen={popOverOpen} placement="bottom" offset={20} showArrow>
                     <PopoverTrigger>
                         <Button color="primary" onClick={() => setPopOverOpen(true)} endContent={<TfiImport />}>Import</Button>
-                       
                     </PopoverTrigger>
                     <PopoverContent>
                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mx-auto my-auto">
@@ -181,12 +181,13 @@ export default function AttendanceTable() {
                         </div>
                     </PopoverContent>
                 </Popover>
-                       
-            </div>
-            <div>
-                 <Link>
-                            <Button color="primary">Add</Button>
-                        </Link> 
+                   <Link to='/att-add'>
+                         <Button color="primary" >
+                        Add
+                    </Button>
+                    </Link>
+                </div>
+               
             </div>
             <div className="flex justify-between items-center mb-3">
                 <span className="text-default-400 text-small">Total {attendanceList.length} Attendances</span>
@@ -240,7 +241,7 @@ export default function AttendanceTable() {
                     {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
-                            <TableCell>{item.date ? item.data.split('T')[0] : 'Not Set'}</TableCell>
+                            <TableCell>{item.data?.split('T')[0]}</TableCell>
                             <TableCell>{item.time}</TableCell>
                             <TableCell>{item.relatedUser && item.relatedUser.givenName ? item.relatedUser.givenName : 'Not Set'}</TableCell>
                             <TableCell>{item.relatedDepartment && item.relatedDepartment.name ? item.relatedDepartment.name : 'Not Set'}</TableCell>

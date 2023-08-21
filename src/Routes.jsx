@@ -14,6 +14,7 @@ import DepartmentChart from './pages/Department/DepartmentChart';
 import PositionUpdate from './pages/Position/PositionUpdate';
 import DepartmentUpdate from './pages/Department/DepartmentUpdate';
 import Attendance from './pages/Attendance/Attendance';
+import AttendanceAdd from './pages/Attendance/AttendanceAdd'
 
 export default function RouteFile() {
   return (
@@ -47,6 +48,7 @@ export default function RouteFile() {
 
             {/* Attendance */}
             <Route path='/attendance' element={<Attendance />}></Route>
+            <Route path='/att-add' element={<AttendanceAdd />}></Route>
           </Route>
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
 
