@@ -13,10 +13,11 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  Pagination,
   User,
 } from "@nextui-org/react";
-import {Spinner} from "@nextui-org/react";
-import { useEffect, useState } from "react";
+
+import React,{ useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { EditIcon } from "../Table/editicon";
 import { DeleteIcon } from "../Table/deleteicon";
@@ -29,7 +30,26 @@ export default function EmployeeTable() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [delID, setDelID] = useState(null);
 
+    const [page, setPage] = React.useState(1);
+    const [pages, setPages] = React.useState(1);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const items = React.useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        return empList.slice(start, end);
+    }, [page, empList]);
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && isOpen) {
+            handleDelete()
+        }
+    };
 
+     const onRowsChange = (event) => {
+        const newRowsPerPage = parseInt(event.target.value);
+        setRowsPerPage(newRowsPerPage);
+        setPages(Math.ceil(empList.length / newRowsPerPage));
+        setPage(1); // Reset the current page to 1 when rows per page changes
+    };
   useEffect(() => {
     const getEmployee = async () => {
       await apiInstance.get(`users`, { params: { limit: 80 } }).then((res) => {
@@ -38,7 +58,12 @@ export default function EmployeeTable() {
       });
     };
     getEmployee();
-  }, []);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+  }, [isOpen, rowsPerPage]);
 
   const handleOpen = (event) => {
     onOpen();
@@ -63,28 +88,55 @@ export default function EmployeeTable() {
 
   return (
     <>
+     <div className="flex justify-between items-center mb-3">
+                <span className="text-default-400 text-small">Total {empList.length} Positions</span>
+                <label className="flex items-center text-default-400 text-small">
+                    Rows per page:
+                    <select
+                        className="bg-transparent outline-none text-default-400 text-small"
+                        onChange={(e) => onRowsChange(e)}
+                    >
+
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </label>
+            </div>
       <Table
         isHeaderSticky
         aria-label="Example table with client side sorting"
         classNames={{
           base: "max-h-[719px] ",
           table: "min-h-[100px]",
-        }}>
+        }}                bottomContent={
+                    <div className="flex w-full justify-center">
+                        <Pagination
+                            isCompact
+                            showControls
+                            showShadow
+                            color="primary"
+                            page={page}
+                            total={pages}
+                            onChange={(page) => setPage(page)}
+                        />
+                    </div>
+                }>
 
         <TableHeader>
           <TableColumn key="no">No</TableColumn>
           <TableColumn key="name">Name</TableColumn>
-          <TableColumn key="description">Position</TableColumn>
-          <TableColumn key="workingFrom"></TableColumn>
-          <TableColumn key="workingUntil">To</TableColumn>
-          <TableColumn key="casualLeaves">Casual Leave</TableColumn>
-          <TableColumn key="medicalLeaves">Medical Leave</TableColumn>
-          <TableColumn key="vacationLeaves">Vacation Leave</TableColumn>
-          <TableColumn key="basicSalary">Salary</TableColumn>
+          <TableColumn key="description">Gender</TableColumn>
+          <TableColumn key="workingFrom">Age/DOB</TableColumn>
+          <TableColumn key="workingUntil">NRC</TableColumn>
+          <TableColumn key="casualLeaves">Phone</TableColumn>
+          <TableColumn key="medicalLeaves">Department</TableColumn>
+          <TableColumn key="vacationLeaves">Position</TableColumn>
+          <TableColumn key="basicSalary">Attendance</TableColumn>
           <TableColumn key="actions">Actions</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No Positions to display."}>
-          {empList.map((item, index) => (
+          {items.map((item, index) => (
             <TableRow key={item._id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
@@ -102,20 +154,19 @@ export default function EmployeeTable() {
                 </User>
               </TableCell>
               <TableCell>
-                {" "}
-                <div className="flex flex-col">
-                  <p className="text-bold text-sm capitalize">Position</p>
-                  <p className="text-bold text-sm capitalize text-default-400">
-                    {item.position}
-                  </p>
-                </div>
+              {item.gender}
               </TableCell>
 
-              <TableCell>{item.workingFrom}</TableCell>
-              <TableCell>{item.workingUntil}</TableCell>
-              <TableCell>{item.casualLeaves}</TableCell>
-              <TableCell>{item.medicalLeaves}</TableCell>
-              <TableCell>{item.vacationLeaves}</TableCell>
+              <TableCell>{item.DOB?.split('T')[0]}</TableCell>
+              <TableCell>{item.NRC}</TableCell>
+              <TableCell>{item.phone}</TableCell>
+              <TableCell>{item.relatedDepartment?.name}</TableCell>
+              <TableCell> <div className="flex flex-col">
+                  <p className="text-bold text-sm capitalize">Position</p>
+                  <p className="text-bold text-sm capitalize text-default-400">
+                    {item.relatedPosition?.name}
+                  </p>
+                </div></TableCell>
               <TableCell>{item.basicSalary}</TableCell>
               <TableCell>
                 <div className="relative flex items-center gap-2">
@@ -160,10 +211,10 @@ export default function EmployeeTable() {
                 <Button color="default" variant="light" onClick={handleClose}>
                   No, Cancel
                 </Button>
-                <Button color="danger" onPress={() => handleDelete(delID)}>
+                <Button color="danger" onPress={() => handleDelete(delID)} onKeyDown={handleKeyDown}>
                   Yes, I am sure
                 </Button>
-                <Spinner />
+       
               </ModalFooter>
             </>
           )}

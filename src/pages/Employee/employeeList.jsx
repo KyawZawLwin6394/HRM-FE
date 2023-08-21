@@ -45,8 +45,8 @@ export default function Employee() {
                 <div className="font-semibold">Employee List</div>
                 <Link
                   to="/emp-add"
-                  className="bg-blue-600 px-5 py-1 rounded-md hover:bg-blue-400 hover:shadow-xl text-white">
-                  <span className="text-sm">Add</span>
+                  className="bg-blue-600 px-5 py-1 rounded-md hover:bg-blue-400 hover:shadow-xl text-white shadow-lg shadow-indigo-500/40">
+                  <span className="text-sm ">Add</span>
                 </Link>
               </CardHeader>
               <CardBody className="">

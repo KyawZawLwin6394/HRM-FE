@@ -16,6 +16,7 @@ import ThemeSwitch from "../ThemeSwitch/index";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
+import Hr from '../../assets/hr1.png'
 
 export default function NavBar() {
   const [imgUrl, setImgUrl] = useState('');
@@ -55,7 +56,7 @@ export default function NavBar() {
                   alt="nextui logo"
                   height={40}
                   radius="sm"
-                  src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+                  src={Hr}
                   width={40}
                 />
                 <div className="flex ml-4">

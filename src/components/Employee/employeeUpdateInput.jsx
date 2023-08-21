@@ -34,7 +34,7 @@ export default function EmployeeInput() {
 
   // const [img, setImg] = useState("");
   const [description, setDescription] = useState("");
-  const [otherDoc, setOtherDoc] = useState([]);
+  // const [otherDoc, setOtherDoc] = useState([]);
   const location = useLocation();
   const EmpID = location.pathname.split("/")[2];
   console.log(EmpID, "id");
@@ -47,13 +47,13 @@ export default function EmployeeInput() {
   const [showMarried, setShowMarried] = useState(false);
     const [employee,setEmployee]=useState([])
 
-  const handleChange = (e) => {
-    let array = [];
-    for (const item of e) {
-      array.push(item);
-    }
-    setOtherDoc(array);
-  };
+  // const handleChange = (e) => {
+  //   let array = [];
+  //   for (const item of e) {
+  //     array.push(item);
+  //   }
+  //   setOtherDoc(array);
+  // };
   useEffect(() => {
     const getPosition = async () => {
       await apiInstance
@@ -274,6 +274,7 @@ const handleUpdate = async () => {
         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <Input
             type="file"
+            accept=".pdf,.png,.jpeg,.jpg"
             label="CV"
             variant={variant}
              onChange={(e) => handleInputChange('cv', e.target.files[0])}
@@ -644,7 +645,7 @@ const handleUpdate = async () => {
                   <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <FileUploader
                       multiple={true}
-                      handleChange={handleChange}
+                      onChange={(e) => handleInputChange('other', e.target.files)}
                       name="file"
                       types={fileTypes}
                     />
