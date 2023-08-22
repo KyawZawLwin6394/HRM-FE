@@ -12,12 +12,25 @@ import { FaUncharted } from 'react-icons/fa'
 
 
 export default function DepartmentTable() {
+    const functions = ['Sale&Marketing', 'Operation', 'Project Management', 'HR', 'Admin', 'Finance', 'IT', 'Logistic', 'Procurement']
     const [departmentList, setDepartmentList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [delID, setDelID] = useState(null);
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    const [departmntFunction, setDepartmentFunction] = useState('')
+    const [departmentLevel, setDepartmentLevel] = useState('')
+    
+
+    const filterDepartmentList = async () => {
+        console.log(departmntFunction, departmentLevel)
+        await apiInstance.get('departments', { params: { funct: departmntFunction, level: departmentLevel } })
+            .then(res => {
+                setDepartmentList(res.data.data)
+            })
+    }
     const items = React.useMemo(() => {
 
         const start = (page - 1) * rowsPerPage;
@@ -82,7 +95,7 @@ export default function DepartmentTable() {
                     <Dropdown>
                         <DropdownTrigger className="hidden sm:flex">
                             <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                                Department
+                                Function
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu
@@ -90,11 +103,12 @@ export default function DepartmentTable() {
                             aria-label="Table Columns"
                             closeOnSelect={false}
                             selectionMode="single"
+                            onAction={(key) => setDepartmentFunction(key)}
 
                         >
-                            {departmentList.map(item => (
-                                <DropdownItem key={item._id} value={item._id} className="capitalize">
-                                    {item.name}
+                            {functions.map(item => (
+                                <DropdownItem key={item} value={item} className="capitalize">
+                                    {item}
                                 </DropdownItem>
                             ))}
                         </DropdownMenu>
@@ -102,28 +116,29 @@ export default function DepartmentTable() {
                     <Dropdown>
                         <DropdownTrigger className="hidden sm:flex">
                             <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                                Type
+                                Level
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu
+                            onAction={(key) => setDepartmentLevel(key)}
                             disallowEmptySelection
                             aria-label="Table Columns"
                             closeOnSelect={false}
                             selectionMode="single"
 
                         >
-                            <DropdownItem key='M-F' value='M-F' className="capitalize">
-                                All
+                            <DropdownItem key='Strategic' value='Strategic' className="capitalize">
+                                Strategic
                             </DropdownItem>
-                            <DropdownItem key='M-S' value='M-S' className="capitalize">
-                                Attend
+                            <DropdownItem key='Tactical' value='Tactical' className="capitalize">
+                                Tactical
                             </DropdownItem>
-                            <DropdownItem key='All Day' value='All Day' className="capitalize">
-                                Dismiss
+                            <DropdownItem key='Operation' value='Operation' className="capitalize">
+                                Operation
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
-                    <Button color="primary" endContent={<SearchIcon className='w-5 h-4' />}>
+                    <Button color="primary" endContent={<SearchIcon className='w-5 h-4' />} onClick={filterDepartmentList}>
                         Search
                     </Button>
                 </div>

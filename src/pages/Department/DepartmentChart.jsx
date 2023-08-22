@@ -13,6 +13,7 @@ export default function DepartmentChart() {
         const getOrgData = async () => {
             await apiInstance.get('departments/org-chart').then((res) => {
                 setOrgHierarchy(res.data)
+                console.log(res.data,'chart data')
             })
         }
         getOrgData()
