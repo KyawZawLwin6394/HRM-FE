@@ -9,6 +9,8 @@ import {
   ModalBody,
   ModalFooter,
 } from "@nextui-org/react";
+import { Link } from "@nextui-org/react";
+import { AnchorIcon } from "../../assets/Icons/AnchorIcon.jsx";
 import { Image } from "@nextui-org/react";
 import { useRef, useState, useEffect } from "react";
 import apiInstance from "../../util/api.js";
@@ -24,7 +26,7 @@ export default function EmployeeInput() {
 
   const [other, setOther] = useState([]);
   const addressRef = useRef();
-
+  const [showOther, setShowOther] = useState([]);
   const [euCer, setEuCer] = useState(null);
   const [recLetter, setRecLetter] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -38,6 +40,13 @@ export default function EmployeeInput() {
   const [departmentList, setDepartmentList] = useState([]);
   const [showMarried, setShowMarried] = useState(false);
   const [employee, setEmployee] = useState([])
+  const [department, setDepartment] = useState(null);
+
+  const [profileAnchor, setProfileAnchor] = useState('');
+  const [marriedAnchor, setMarriedAnchor] = useState('');
+  const [recLetAnchor, setRecLetAnchor] = useState('');
+  const [cvAnchor, setcvAnchor] = useState('');
+  const [eduAnchor, seteduAnchor] = useState('');
 
   const handleChange = (e) => {
     let array = [];
@@ -46,15 +55,13 @@ export default function EmployeeInput() {
     }
     setOther(array);
   };
-  
+
   useEffect(() => {
     const getPosition = async () => {
       await apiInstance
         .get(`positions`, { params: { limit: 80 } })
         .then((res) => {
           setPositionList(res.data.data);
-          setPositionID(positionList.filter((el) => el._id === res.data.data.relatedPosition ? res.data.data.relatedPosition._id : '')[0]);
-          console.log(res.data.data, "po");
         });
     };
 
@@ -63,13 +70,22 @@ export default function EmployeeInput() {
         .get("user/" + EmpID, { params: { limit: 80 } })
         .then((res) => {
           //   setEmpList(res.data.data);
-          console.log(res.data.data, "heee");
           setEmployee(res.data.data)
           setDirectManager(res.data.data.relatedDepartment.directManager.givenName)
           setDirectManagerID(res.data.data.relatedDepartment.directManager._id)
           setPositionID(res.data.data.relatedPosition)
+          handleInputChange('relatedDepartment', res.data.data.relatedDepartment._id)
+          handleInputChange('relatedPosition', res.data.data.relatedPosition._id)
+          setDepartment(res.data.data.relatedDepartment)
+          if (res.data.data.isMarried === true) setShowMarried(!showMarried)
+          setProfileAnchor(res.data.data.profile.length > 0 ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' + res.data.data.profile[0].imgUrl : '')
+          seteduAnchor(res.data.data.educationCertificate.length > 0 ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' + res.data.data.educationCertificate[0].imgUrl : '')
+          setcvAnchor(res.data.data["CV"].length > 0 ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' + res.data.data["CV"][0].imgUrl : '')
+          setMarriedAnchor(res.data.data.married.length > 0 ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' + res.data.data.married[0].imgUrl : '')
+          console.log(res.data.data.recommendationLetter[0].imgUrl, 'rectLetter2')
+          setRecLetAnchor(res.data.data.recommendationLetter.length > 0 ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' + res.data.data.recommendationLetter[0].imgUrl : '')
           if (res.data.data.other) {
-            setOther(res.data.data.other);
+            setShowOther(res.data.data.other);
           }
         });
     };
@@ -78,11 +94,10 @@ export default function EmployeeInput() {
         .get(`departments`, { params: { limit: 80 } })
         .then((res) => {
           setDepartmentList(res.data.data);
-          console.log(res.data.data, "dep");
         });
     };
-    getDeparttment();
     getEmployee();
+    getDeparttment();
     getPosition();
   }, []);
 
@@ -93,7 +108,6 @@ export default function EmployeeInput() {
   };
 
   const handlePosition = (val) => {
-    console.log(positionList.filter((el) => el._id === val)[0], "bas sal");
     setPositionID(positionList.filter((el) => el._id === val)[0]);
     handleInputChange('relatedPosition', val)
   };
@@ -110,21 +124,18 @@ export default function EmployeeInput() {
   const handleCer = (e) => {
     if (e.target.files) {
       setEuCer(e.target.files[0]);
-      console.log(e.target.files, "file");
     }
   };
 
   const handleRecLetter = (e) => {
     if (e.target.files) {
       setRecLetter(e.target.files[0]);
-      console.log(e.target.files, "file");
     }
   };
 
   const handleProfile = (e) => {
     if (e.target.files) {
       setProfile(e.target.files[0]);
-      console.log(e.target.files, "file");
     }
   };
 
@@ -138,37 +149,47 @@ export default function EmployeeInput() {
 
   const handleUpdate = async () => {
     const formData = new FormData();
-    console.log(marriedFile, 'marriedFile')
-    formData.append("givenName", employee.givenName);
-    formData.append("email", employee.email);
-    formData.append("NRC", employee['NRC']);
-    formData.append("address", employee.address);
-    formData.append("DOB", employee['DOB']);
-    formData.append("emergencyContact", employee.emergencyContact);
-    formData.append("phone", employee.phone);
-    formData.append("passportNo", employee.passportNo);
-    formData.append("educationBackground", employee.educationBackground);
-    formData.append("edu", euCer);
-    formData.append("workExperience", employee.workExperience);
-    formData.append("cv", employee.cv);
-    formData.append("pf", profile);
-    formData.append("relatedPosition", employee.relatedPosition);
-    formData.append("recLet", recLetter);
-    formData.append("firstInterviewDate", employee.firstInterviewDate);
-    formData.append("firstInterviewResult", employee.firstInterviewResult);
-    formData.append("secondInterviewDate", employee.secondInterviewDate);
-    formData.append("secondInterviewResult", employee.secondInterviewResult);
-    formData.append("fatherName", employee.fatherName);
-    formData.append("gender", employee.gender);
-    formData.append("employedDate", employee.employedDate);
-    if (marriedFile) formData.append("married", marriedFile);
-    formData.append("isMarried", employee.isMarried)
-    formData.append("description", employee.description);
-    formData.append("directManager", employee.directManager);
-    formData.append("relatedDepartment", employee.relatedDepartment);
-    other.forEach((item) => {
+    // Append fields using ternary if they exist in the employee object
+    employee.givenName ? formData.append("givenName", employee.givenName) : undefined;
+    employee.email ? formData.append("email", employee.email) : undefined;
+    employee['NRC'] ? formData.append("NRC", employee['NRC']) : undefined;
+    employee.address ? formData.append("address", employee.address) : undefined;
+    employee['DOB'] ? formData.append("DOB", employee['DOB']) : undefined;
+    employee.emergencyContact ? formData.append("emergencyContact", employee.emergencyContact) : undefined;
+    employee.phone ? formData.append("phone", employee.phone) : undefined;
+    employee.passportNo ? formData.append("passportNo", employee.passportNo) : undefined;
+    employee.educationBackground ? formData.append("educationBackground", employee.educationBackground) : undefined;
+    euCer ? formData.append("edu", euCer) : undefined;
+    employee.workExperience ? formData.append("workExperience", employee.workExperience) : undefined;
+    employee.cv ? formData.append("cv", employee.cv) : undefined;
+    profile ? formData.append("pf", profile) : undefined;
+    employee.relatedPosition ? formData.append("relatedPosition", employee.relatedPosition) : undefined;
+    recLetter ? formData.append("recLet", recLetter) : undefined;
+    employee.firstInterviewDate ? formData.append("firstInterviewDate", employee.firstInterviewDate) : undefined;
+    employee.firstInterviewResult ? formData.append("firstInterviewResult", employee.firstInterviewResult) : undefined;
+    employee.secondInterviewDate ? formData.append("secondInterviewDate", employee.secondInterviewDate) : undefined;
+    employee.secondInterviewResult ? formData.append("secondInterviewResult", employee.secondInterviewResult) : undefined;
+    employee.fatherName ? formData.append("fatherName", employee.fatherName) : undefined;
+
+    // Append gender and employedDate using ternary if they exist in the employee object
+    employee.gender ? formData.append("gender", employee.gender) : undefined;
+    employee.employedDate ? formData.append("employedDate", employee.employedDate) : undefined;
+
+    // Append marriedFile if it exists in the employee object
+    if (marriedFile) {
+      formData.append("married", marriedFile);
+    }
+
+    // Append other fields using ternary if they exist in the employee object
+    employee.isMarried ? formData.append("isMarried", employee.isMarried) : undefined;
+    employee.description ? formData.append("description", employee.description) : undefined;
+    employee.directManager ? formData.append("directManager", employee.directManager) : undefined;
+    employee.relatedDepartment ? formData.append("relatedDepartment", employee.relatedDepartment) : undefined;
+    EmpID ? formData.append('id', EmpID) : undefined;
+    // other ? formData.append('other', other) : undefined;
+    other ? other.forEach((item) => {
       formData.append("other", item); // Assuming 'item' is a File object
-    });
+    }) : undefined
     await apiInstance.put('user', formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -184,8 +205,8 @@ export default function EmployeeInput() {
         console.log(err)
       })
   }
-  console.log(other, 'this is other')
   return (
+
     <div className="w-full flex flex-col gap-4">
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
         <Input
@@ -295,6 +316,17 @@ export default function EmployeeInput() {
             onChange={(e) => handleInputChange('cv', e.target.files[0])}
             placeholder=" "
             labelPlacement="outside"
+            endContent={
+              cvAnchor ? (
+                <Link
+                  isExternal
+                  showAnchorIcon
+                  href={cvAnchor}
+                  anchorIcon={<AnchorIcon />}
+                >
+                </Link>
+              ) : ''
+            }
           />
         </div>
       </div>
@@ -315,6 +347,17 @@ export default function EmployeeInput() {
           onChange={handleCer}
           placeholder=" "
           labelPlacement="outside"
+          endContent={
+            eduAnchor ? (
+              <Link
+                isExternal
+                showAnchorIcon
+                href={eduAnchor}
+                anchorIcon={<AnchorIcon />}
+              >
+              </Link>
+            ) : ''
+          }
         />
       </div>
       <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -370,10 +413,10 @@ export default function EmployeeInput() {
             id="countries"
             onChange={(e) => handleDirectManager(e.target.value)}
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>{employee.relatedDepartment ? employee.relatedDepartment.name : 'Not Set'}</option>
+            <option hidden>{department?.name}</option>
 
             {departmentList.map((option) => (
-              <option key={option} value={option._id}>
+              <option key={option._id} value={option._id}>
                 {option.name}
               </option>
             ))}
@@ -427,7 +470,7 @@ export default function EmployeeInput() {
             id="countries"
             onChange={(e) => handlePosition(e.target.value)}
             className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>{employee.relatedPosition ? employee.relatedPosition.name : 'Not Set'}</option>
+            <option hidden>{positionID?.name}</option>
             {positionList.map((option) => (
               <option key={option} value={option._id}>
                 {option.name}
@@ -544,6 +587,17 @@ export default function EmployeeInput() {
                 placeholder="Married Date"
                 variant={variant}
                 labelPlacement="outside"
+                endContent={
+                  marriedAnchor ? (
+                    <Link
+                      isExternal
+                      showAnchorIcon
+                      href={marriedAnchor}
+                      anchorIcon={<AnchorIcon />}
+                    >
+                    </Link>
+                  ) : ''
+                }
               />
             )}
           </div>
@@ -625,6 +679,17 @@ export default function EmployeeInput() {
           placeholder=" "
           labelPlacement="outside"
           variant={variant}
+          endContent={
+            recLetAnchor ? (
+              <Link
+                isExternal
+                showAnchorIcon
+                href={recLetAnchor}
+                anchorIcon={<AnchorIcon />}
+              >
+              </Link>
+            ) : ''
+          }
         />
         <Input
           type="file"
@@ -633,7 +698,21 @@ export default function EmployeeInput() {
           placeholder=" "
           labelPlacement="outside"
           variant={variant}
+          endContent={
+            profileAnchor ? (
+              <Link
+                isExternal
+                showAnchorIcon
+                href={profileAnchor}
+                anchorIcon={<AnchorIcon />}
+              >
+              </Link>
+            ) : ''
+          }
         />
+        <div>
+
+        </div>
       </div>
 
       <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
@@ -658,7 +737,7 @@ export default function EmployeeInput() {
                   <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <FileUploader
                       multiple={true}
-                      onChange={handleChange}
+                      handleChange={handleChange}
                       name="file"
                       types={fileTypes}
                     />
@@ -691,7 +770,7 @@ export default function EmployeeInput() {
           </ModalContent>
         </Modal>
         <div className="flex mt-5">
-          {other.map((item) => (
+          {showOther.map((item) => (
             <>
               <Image
                 src={

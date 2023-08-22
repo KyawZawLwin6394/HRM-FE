@@ -1,7 +1,9 @@
-import axios from 'axios'
-// const url = 'http://localhost:9000/api/'
-const url = 'http://hrmbackend.kwintechnologykw11.com:5000/api/'
-const storeToken = localStorage.getItem('token')
+
+import axios from 'axios';
+//const url = 'http://localhost:9000/api/'
+const url = 'http://hrmbackend.kwintechnologykw11.com:5000/api/';
+const storeToken = localStorage.getItem('token');
+
 const apiInstance = axios.create({
   baseURL: url,
   headers: {
