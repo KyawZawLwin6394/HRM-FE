@@ -35,7 +35,9 @@ import { SearchIcon } from '../Navbar/search'
 import { FileUploader } from 'react-drag-drop-files'
 import { TfiImport } from 'react-icons/tfi'
 import { BsCloudArrowUpFill } from 'react-icons/bs'
-export default function AttendanceTable () {
+import { PlusIcon } from '../../assets/Icons/PlusIcon'
+
+export default function AttendanceTable() {
   const [attendanceList, setAttendanceList] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [delID, setDelID] = useState(null)
@@ -236,7 +238,7 @@ export default function AttendanceTable () {
             </PopoverContent>
           </Popover>
           <Link to='/att-add'>
-            <Button color='primary'>Add</Button>
+            <Button color='primary' endContent={<PlusIcon />}>Add</Button>
           </Link>
         </div>
       </div>
