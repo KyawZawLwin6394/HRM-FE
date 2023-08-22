@@ -8,6 +8,8 @@ import {
   Modal,
   DropdownItem,
   ModalContent,
+  RadioGroup,
+  Radio,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -23,19 +25,26 @@ import {
   TableRow,
   TableCell
 } from '@nextui-org/react'
-import { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
+
+import React, { useState } from 'react'
+
+import { useEffect } from 'react'
 import apiInstance from '../../util/api'
 import { EditIcon } from '../Table/editicon'
 import { DeleteIcon } from '../Table/deleteicon'
-import React from 'react'
+
 import { Link } from 'react-router-dom'
 import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
 // import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import { SearchIcon } from '../Navbar/search'
 import { FileUploader } from 'react-drag-drop-files'
 import { TfiImport } from 'react-icons/tfi'
-import { BsCloudArrowUpFill } from 'react-icons/bs'
+import { BsCloudArrowUpFill, BsPlusSquareDotted } from 'react-icons/bs'
+
 export default function AttendanceTable () {
+  //   const [selected, setSelected] = React.useState('')
+
   const [attendanceList, setAttendanceList] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [delID, setDelID] = useState(null)
@@ -45,6 +54,8 @@ export default function AttendanceTable () {
   const [pages, setPages] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [departmentList, setDepartmentList] = React.useState([])
+  const [attendance, setAttendance] = useState([])
+
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
@@ -71,7 +82,52 @@ export default function AttendanceTable () {
     setPages(Math.ceil(attendanceList.length / newRowsPerPage))
     setPage(1) // Reset the current page to 1 when rows per page changes
   }
+  const handleInputChange = (fieldName, value) => {
+    setAttendance(prevValues => ({
+      ...prevValues,
+      [fieldName]: value
+    }))
+  }
 
+  const handleCheck = async (id, radio) => {
+    const attendance = attendanceList.filter(el => el._id === id)
+    console.log(radio, 'ty')
+    if (radio === 'Attend') {
+      //   setSelected('Attend')
+      let data = attendance
+      data.id = id
+      data.type = radio
+
+      await apiInstance
+        .put('attendance', data)
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Successfully Updated'
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+    if (radio === 'Dismiss') {
+      let data = attendanceList.filter(el => el._id === id)
+      data.id = id
+      data.type = radio
+
+      await apiInstance
+        .put('attendance', data)
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Successfully Updated'
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
   const handleExcelImport = async () => {
     setPopOverOpen(false)
     const formData = new FormData()
@@ -85,7 +141,7 @@ export default function AttendanceTable () {
         .get(`attendances`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
         .then(res => {
           setAttendanceList(res.data.data)
-          //   console.log(res.data.data, 'att')
+          console.log(res.data.data, 'att')
           setPages(res.data._metadata.page_count)
         })
     }
@@ -236,7 +292,9 @@ export default function AttendanceTable () {
             </PopoverContent>
           </Popover>
           <Link to='/att-add'>
-            <Button color='primary'>Add</Button>
+            <Button endContent={<BsPlusSquareDotted />} color='primary'>
+              Add
+            </Button>
           </Link>
         </div>
       </div>
@@ -285,6 +343,10 @@ export default function AttendanceTable () {
           <TableColumn key='relatedDepartment'>Department</TableColumn>
           <TableColumn key='type'>Type</TableColumn>
           <TableColumn key='source'>Source</TableColumn>
+          <TableColumn key='source' className='text-center'>
+            Check
+          </TableColumn>
+
           <TableColumn key='action'>Action</TableColumn>
         </TableHeader>
         <TableBody emptyContent={'No Positions to display.'}>
@@ -303,6 +365,18 @@ export default function AttendanceTable () {
               </TableCell>
               <TableCell>{item.type}</TableCell>
               <TableCell>{item.source}</TableCell>
+              <TableCell>
+                <RadioGroup
+                  //   color={selected === 'Attend' ? 'success' : 'danger'}
+                  //   value={selected}
+                  onChange={e => handleInputChange(handleCheck, e.target.value)}
+                  orientation='horizontal'
+                >
+                  <Radio value='Attend'>Attend</Radio>
+                  <Radio value='Dismiss'>Dismiss</Radio>
+                </RadioGroup>
+              </TableCell>
+
               <TableCell>
                 <div className='relative flex items-center gap-2'>
                   <Tooltip content='Edit Position'>
