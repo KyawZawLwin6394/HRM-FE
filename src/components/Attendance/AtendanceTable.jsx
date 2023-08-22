@@ -97,6 +97,7 @@ export default function AttendanceTable () {
       data.id = id
       data.type = radio
 
+
       await apiInstance
         .put('attendance', data)
         .then(() => {
@@ -114,6 +115,7 @@ export default function AttendanceTable () {
       data.id = id
       data.type = radio
 
+
       await apiInstance
         .put('attendance', data)
         .then(() => {
@@ -126,6 +128,25 @@ export default function AttendanceTable () {
           console.log(err)
         })
     }
+
+    if (radio === 'Dismiss') {
+      let data = attendanceList.filter(el => el._id === id)
+      data.id = id
+      data.type = radio
+
+      await apiInstance
+        .put('attendance', data)
+        .then(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Successfully Updated'
+          })
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+
   }
   const handleExcelImport = async () => {
     setPopOverOpen(false)
