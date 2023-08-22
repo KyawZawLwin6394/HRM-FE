@@ -2,36 +2,34 @@ import { Button, Input } from '@nextui-org/react'
 import apiInstance from '../../util/api'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 export default function DepartmentInputForm () {
+  const location = useLocation()
+  const AttendanceID = location.pathname.split('/')[2]
+  console.log(AttendanceID, 'id')
   const variant = 'faded'
   const [departmentList, setDepartmentList] = useState([])
   const [userList, setUserList] = useState([])
+  const [attendance, setAttendance] = useState([])
 
   const handleInputChange = (fieldName, value) => {
-    setData(prevValues => ({
+    setAttendance(prevValues => ({
       ...prevValues,
       [fieldName]: value
     }))
   }
 
-  const [data, setData] = useState({
-    name: null,
-    time: null,
-    date: null,
-    source: null,
-    type: null,
-    relatedDepartment: null
-  })
+  const handleUpdate = async () => {
+    let data = attendance
+    data.id = AttendanceID
 
-  const handleRegister = async () => {
     await apiInstance
-      .post('attendance', data)
+      .put('attendance', data)
       .then(() => {
         Swal.fire({
           icon: 'success',
-          title: 'Successfully Registered'
+          title: 'Successfully Updated'
         })
       })
       .catch(err => {
@@ -49,7 +47,15 @@ export default function DepartmentInputForm () {
     const getUserList = async () => {
       await apiInstance.get('users').then(res => setUserList(res.data.data))
     }
+    const getAttendance = async () => {
+      await apiInstance
+        .get('attendance/' + AttendanceID)
+        .then(res => setAttendance(res.data.data[0]))
+    }
+    getAttendance()
+
     getUserList()
+
     getDepartmentList()
   }, [])
 
@@ -62,7 +68,9 @@ export default function DepartmentInputForm () {
             onChange={e => handleInputChange('relatedUser', e.target.value)}
             className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
           >
-            <option hidden>Choose Employee Name</option>
+            <option hidden value={attendance.relatedUser?._id}>
+              {attendance.relatedUser?.givenName}
+            </option>
 
             {userList.map(option => (
               <option key={option._id} value={option._id}>
@@ -75,6 +83,7 @@ export default function DepartmentInputForm () {
           type='time'
           label='Time'
           placeholder='Time'
+          defaultValue={attendance?.time}
           variant={variant}
           onChange={e => handleInputChange('time', e.target.value)}
           labelPlacement='outside'
@@ -85,6 +94,7 @@ export default function DepartmentInputForm () {
           <label className='text-sm font-semibold'>Date</label>
           <Input
             type='date'
+            defaultValue={attendance.date?.split('T')[0]}
             variant={variant}
             onChange={e => handleInputChange('date', e.target.value)}
           />
@@ -95,7 +105,9 @@ export default function DepartmentInputForm () {
             onChange={e => handleInputChange('source', e.target.value)}
             className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
           >
-            <option hidden>Choose Source</option>
+            <option hidden value={attendance?.source}>
+              {attendance?.source}
+            </option>
 
             <option value='Excel'>Excel</option>
             <option value='Manual'>Manual</option>
@@ -109,7 +121,9 @@ export default function DepartmentInputForm () {
             onChange={e => handleInputChange('type', e.target.value)}
             className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
           >
-            <option hidden>Choose Source</option>
+            <option hidden value={attendance?.type}>
+              {attendance?.type}
+            </option>
 
             <option value='Attend'>Attend</option>
             <option value='Dismiss'>Dismiss</option>
@@ -123,7 +137,9 @@ export default function DepartmentInputForm () {
             }
             className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
           >
-            <option hidden>Choose Department</option>
+            <option hidden value={attendance.relatedDepartment?._id}>
+              {attendance.relatedDepartment?.name}
+            </option>
             {departmentList.map(option => (
               <option key={option} value={option._id}>
                 {option.name}
@@ -137,8 +153,8 @@ export default function DepartmentInputForm () {
         <Button color='danger'>
           <Link to='/attendance'>Cancel</Link>
         </Button>
-        <Button color='primary' onClick={() => handleRegister()}>
-          Register
+        <Button color='primary' onClick={() => handleUpdate()}>
+          Update
         </Button>
       </div>
     </div>
