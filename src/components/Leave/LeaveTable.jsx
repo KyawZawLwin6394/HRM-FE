@@ -11,7 +11,7 @@ import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { PlusIcon } from "../../assets/Icons/PlusIcon";
 
 export default function LeaveTable() {
-    const [positionList, setLeaveList] = useState([])
+    const [leaveList, setLeaveList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [delID, setDelID] = useState(null);
 
@@ -21,8 +21,8 @@ export default function LeaveTable() {
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        return positionList.slice(start, end);
-    }, [page, positionList]);
+        return leaveList.slice(start, end);
+    }, [page, leaveList]);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && isOpen) {
@@ -33,7 +33,7 @@ export default function LeaveTable() {
     const onRowsChange = (event) => {
         const newRowsPerPage = parseInt(event.target.value);
         setRowsPerPage(newRowsPerPage);
-        setPages(Math.ceil(positionList.length / newRowsPerPage));
+        setPages(Math.ceil(leaveList.length / newRowsPerPage));
         setPage(1); // Reset the current page to 1 when rows per page changes
     };
 
@@ -69,7 +69,7 @@ export default function LeaveTable() {
         console.log(setDelID)
         await apiInstance.delete('leave/' + delID)
             .then(() => {
-                setLeaveList(positionList.filter(item => item._id !== delID))
+                setLeaveList(leaveList.filter(item => item._id !== delID))
                 onClose()
             })
     }
@@ -127,7 +127,7 @@ export default function LeaveTable() {
           </Dropdown> */}
             </div>
             <div className="flex justify-between items-center mb-3">
-                <span className="text-default-400 text-small">Total {positionList.length} Leaves</span>
+                <span className="text-default-400 text-small">Total {leaveList.length} Leaves</span>
                 <label className="flex items-center text-default-400 text-small">
                     Rows per page:
                     <select
