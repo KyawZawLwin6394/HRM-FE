@@ -190,7 +190,7 @@ export default function LeaveTable() {
                                 <div className="relative flex items-center gap-2">
 
                                     <Tooltip content="Edit Leave">
-                                        <Link to={`/position/update/${item._id}`}>
+                                        <Link to={`/leave/update/${item._id}`}>
                                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                                                 <EditIcon />
                                             </span>
