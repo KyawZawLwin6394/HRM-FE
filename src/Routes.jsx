@@ -18,6 +18,7 @@ import AttendanceAdd from './pages/Attendance/AttendanceAdd'
 import AttendanceUpdate from './pages/Attendance/AttendanceUpdate'
 import Leave from './pages/Leave/Leave'
 import LeaveAdd from './pages/Leave/LeaveAdd'
+import LeaveUpdate from './pages/Leave/LeaveUpdate'
 
 export default function RouteFile() {
   return (
@@ -61,6 +62,7 @@ export default function RouteFile() {
             {/* Leave */}
             <Route path='/leave' element={<Leave />} ></Route>
             <Route path='/leave/register' element={<LeaveAdd />} ></Route>
+              <Route path='/leave/update/:id' element={<LeaveUpdate />} ></Route>
 
             {/* Attendance */}
             <Route path='/attendance' element={<Attendance />}></Route>
