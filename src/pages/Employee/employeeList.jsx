@@ -7,15 +7,14 @@ import {
   Divider,
   Button
 } from '@nextui-org/react'
-import { BsPlusSquareDotted } from 'react-icons/bs'
-
+import { PlusIcon } from '../../assets/Icons/PlusIcon'
 import Table from '../../components/Employee/employeeList'
 import { Link } from 'react-router-dom'
 
 import { useEffect } from 'react'
 import apiInstance from '../../util/api'
 
-export default function Employee () {
+export default function Employee() {
   useEffect(() => {
     const getEmployeeLists = async () => {
       await apiInstance.get('users').then(response => {
@@ -46,15 +45,15 @@ export default function Employee () {
               <CardHeader className='justify-between'>
                 <div></div>
                 <div className='font-semibold'>Employee List</div>
-                <Link to='/emp-add'>
-                  <Button
-                    endContent={<BsPlusSquareDotted />}
-                    color='primary'
-                    className='text-sm '
-                  >
-                    Add
-                  </Button>
-                </Link>
+
+                <Button
+                  endContent={<PlusIcon />}
+                  color='primary'
+                  className='text-sm '
+                ><Link to='/emp-add'>
+                    Add</Link>
+                </Button>
+
               </CardHeader>
               <CardBody className=''>
                 <Table />

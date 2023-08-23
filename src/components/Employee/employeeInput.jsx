@@ -13,6 +13,7 @@ import { useRef, useState, useEffect } from "react";
 import apiInstance from "../../util/api.js";
 import Swal from "sweetalert2";
 import { FileUploader } from "react-drag-drop-files";
+import { Link } from "react-router-dom";
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
@@ -140,7 +141,7 @@ export default function EmployeeInput() {
     console.log(otherDoc, "doc");
 
     const formData = new FormData();
-    console.log(marriedFile,'marriedFile')
+    console.log(marriedFile, 'marriedFile')
     formData.append("givenName", nameRef.current.value);
     formData.append("email", emailRef.current.value);
     formData.append("password", passRef.current.value);
@@ -689,19 +690,20 @@ export default function EmployeeInput() {
       <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
         <Button
           size="sm"
+          color="danger"
+          variant="shadow"
+          className="rounded-xl px-4 py-0 text-left">
+          <Link to='/emp'>Cancel</Link>
+        </Button>
+        <Button
+          size="sm"
           color="primary"
           variant="shadow"
           className="rounded-xl px-4 py-0 text-left"
           onClick={create}>
           Register
         </Button>
-        <Button
-          size="sm"
-          color="primary"
-          variant="shadow"
-          className="rounded-xl px-4 py-0 text-left">
-          Cancel
-        </Button>
+
       </div>
     </div>
   );

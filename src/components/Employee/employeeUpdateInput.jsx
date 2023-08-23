@@ -20,7 +20,7 @@ import { useLocation } from 'react-router-dom'
 
 const fileTypes = ['JPG', 'PNG', 'GIF']
 
-export default function EmployeeInput () {
+export default function EmployeeInput() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const variant = ['faded']
 
@@ -89,35 +89,31 @@ export default function EmployeeInput () {
           setProfileAnchor(
             res.data.data.profile.length > 0
               ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' +
-                  res.data.data.profile[0].imgUrl
+              res.data.data.profile[0].imgUrl
               : ''
           )
           seteduAnchor(
             res.data.data.educationCertificate.length > 0
               ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' +
-                  res.data.data.educationCertificate[0].imgUrl
+              res.data.data.educationCertificate[0].imgUrl
               : ''
           )
           setcvAnchor(
             res.data.data['CV'].length > 0
               ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' +
-                  res.data.data['CV'][0].imgUrl
+              res.data.data['CV'][0].imgUrl
               : ''
           )
           setMarriedAnchor(
             res.data.data.married.length > 0
               ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' +
-                  res.data.data.married[0].imgUrl
+              res.data.data.married[0].imgUrl
               : ''
           )
-          // console.log(
-          //   res.data.data.recommendationLetter[0].imgUrl,
-          //   'rectLetter2'
-          // )
           setRecLetAnchor(
             res.data.data.recommendationLetter.length > 0
               ? 'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm' +
-                  res.data.data.recommendationLetter[0].imgUrl
+              res.data.data.recommendationLetter[0].imgUrl
               : ''
           )
           if (res.data.data.other) {
@@ -256,8 +252,8 @@ export default function EmployeeInput () {
     // other ? formData.append('other', other) : undefined;
     other
       ? other.forEach(item => {
-          formData.append('other', item) // Assuming 'item' is a File object
-        })
+        formData.append('other', item) // Assuming 'item' is a File object
+      })
       : undefined
     await apiInstance
       .put('user', formData, {
@@ -907,6 +903,14 @@ export default function EmployeeInput () {
       <div className='flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
         <Button
           size='sm'
+          color='danger'
+          variant='shadow'
+          className='rounded-xl px-4 py-0 text-left'
+        >
+          Cancel
+        </Button>
+        <Button
+          size='sm'
           color='primary'
           variant='shadow'
           className='rounded-xl px-4 py-0 text-left'
@@ -914,14 +918,7 @@ export default function EmployeeInput () {
         >
           Register
         </Button>
-        <Button
-          size='sm'
-          color='primary'
-          variant='shadow'
-          className='rounded-xl px-4 py-0 text-left'
-        >
-          Cancel
-        </Button>
+
       </div>
     </div>
   )

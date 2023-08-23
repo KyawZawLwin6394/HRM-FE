@@ -22,7 +22,6 @@ export default function DepartmentTable() {
 
     const [departmntFunction, setDepartmentFunction] = useState('')
     const [departmentLevel, setDepartmentLevel] = useState('')
-    
 
     const filterDepartmentList = async () => {
         console.log(departmntFunction, departmentLevel)
@@ -32,7 +31,6 @@ export default function DepartmentTable() {
             })
     }
     const items = React.useMemo(() => {
-
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
         return departmentList.slice(start, end);
@@ -53,7 +51,7 @@ export default function DepartmentTable() {
 
     useEffect(() => {
         const getDepartments = async () => {
-            await apiInstance.get(`departments`, { params: { limit: 80 } })
+            await apiInstance.get(`departments`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
                 .then(res => {
                     setDepartmentList(res.data.data)
                     setPages(res.data._metadata.page_count)
@@ -125,7 +123,6 @@ export default function DepartmentTable() {
                             aria-label="Table Columns"
                             closeOnSelect={false}
                             selectionMode="single"
-
                         >
                             <DropdownItem key='Strategic' value='Strategic' className="capitalize">
                                 Strategic

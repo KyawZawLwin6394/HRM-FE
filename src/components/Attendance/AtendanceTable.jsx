@@ -36,7 +36,8 @@ import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
 import { SearchIcon } from '../Navbar/search'
 import { FileUploader } from 'react-drag-drop-files'
 import { TfiImport } from 'react-icons/tfi'
-import { BsCloudArrowUpFill, BsPlusSquareDotted } from 'react-icons/bs'
+import { BsCloudArrowUpFill } from 'react-icons/bs'
+import { PlusIcon } from '../../assets/Icons/PlusIcon';
 
 export default function AttendanceTable() {
 
@@ -267,11 +268,11 @@ export default function AttendanceTable() {
               </div>
             </PopoverContent>
           </Popover>
-          <Link to='/att-add'>
-            <Button endContent={<BsPlusSquareDotted />} color='primary'>
-              Add
-            </Button>
-          </Link>
+
+          <Button endContent={<PlusIcon />} color='primary'>
+            <Link to='/att-add'>Add</Link>
+          </Button>
+
         </div>
       </div>
       <div className='flex justify-between items-center mb-3'>

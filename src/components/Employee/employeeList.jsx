@@ -24,7 +24,6 @@ import { DeleteIcon } from "../Table/deleteicon";
 import { EyeIcon } from "../Table/eyeicon";
 import { Link } from 'react-router-dom';
 
-
 export default function EmployeeTable() {
   const [empList, setEmpList] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -141,7 +140,7 @@ export default function EmployeeTable() {
             <TableRow key={item._id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                {console.log(item.profile,'profile')}   
+                {console.log(item.profile, 'profile')}
                 <User
                   avatarProps={{
                     radius: "lg",
