@@ -15,9 +15,10 @@ export default function LeaveInputForm() {
     const status = ['Approved', 'Declined'];
     const fileTypes = ["JPG", "PNG", "GIF"];
     const [attachFile, setAttachFile] = useState(null);
-    const [img,setImg]=useState('')
+    const [img,setImg]=useState([])
     const LeaveID=useLocation().pathname.split('/')[3]
 
+    
     const handleInputChange = (fieldName, value) => {
         setLeaveList(prevValues => ({
             ...prevValues,
@@ -50,12 +51,13 @@ console.log(value === leaveList.relatedUser?._id)
      
     }
 
-    const handleRegister = async () => {
+    const handleUpdate = async () => {
         const formData = new FormData()
-        formData.append('startDate',leaveList.startDate)
+        formData.append('id',LeaveID)
+        formData.append('createdAt',leaveList.startDate)
         formData.append('endDate',leaveList.endDate)
-        formData.append('relatedUser',leaveList.relatedUser)
-        formData.append('relatedPosition',leaveList.relatedPosition)
+        formData.append('relatedUser',leaveList.relatedUser._id)
+        formData.append('relatedPosition',leaveList.relatedPosition._id)
         formData.append('reason',leaveList.reason)
         formData.append('leaveType',leaveList.leaveType)
         formData.append('status',leaveList.status)
@@ -64,7 +66,7 @@ console.log(value === leaveList.relatedUser?._id)
                 formData.append("attach", item); // Assuming 'item' is a File object
             });
         }
-        await apiInstance.post('leave', formData)
+        await apiInstance.put('leave', formData)
 
             .then(() => {
                 Swal.fire({
@@ -86,8 +88,9 @@ console.log(value === leaveList.relatedUser?._id)
                 const getLeaveList = async () => {
             await apiInstance.get('leave/'+LeaveID)
                 .then(res => {
+                    console.log(res.data.data[0])
                     setLeaveList(res.data.data[0])
-                    setImg(res.data.data[0].attach[0].imgUrl)
+                    setImg(res.data.data[0].attach)
                 }
                 )
                 
@@ -114,7 +117,7 @@ console.log(value === leaveList.relatedUser?._id)
                     type="date"
                     label="End Date"
                     placeholder="Date"
-                   defaultValue={leaveList.endDate?.split('T')[0]}
+                   value={leaveList.endDate?.split('T')[0]}
                     variant={variant}
                     onChange={(e) => handleInputChange('endDate', e.target.value)}
                     labelPlacement="outside"
@@ -154,7 +157,7 @@ console.log(value === leaveList.relatedUser?._id)
                     type="text"
                     label="Reason"
                     placeholder="Reason..."
-                    defaultValue={leaveList?.reason}
+                    value={leaveList?.reason}
                     onChange={(e) => handleInputChange('reason', e.target.value)}
                     variant={variant}
                     labelPlacement="outside"
@@ -195,16 +198,21 @@ console.log(value === leaveList.relatedUser?._id)
                         name="file"
                         types={fileTypes}
                     />
-                       <Image
+                    {img.map((item)=>(
+                        <>
+ <Image
                 src={
                   'http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/' +
-                  img
+                  item.imgUrl
                 }
                 style={{ width: '200px', height: '150px' }}
                 className='mt-4'
 
              
               />
+                        </>
+                    ))}
+                      
                 </div>
                
 
@@ -216,7 +224,7 @@ console.log(value === leaveList.relatedUser?._id)
                         Cancel
                     </Link>
                 </Button>
-                <Button color="primary" onClick={() => handleRegister()}>Register</Button>
+                <Button color="primary" onClick={() => handleUpdate()}>Update</Button>
             </div>
         </div >
     )
