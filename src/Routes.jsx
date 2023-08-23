@@ -16,8 +16,10 @@ import DepartmentUpdate from './pages/Department/DepartmentUpdate'
 import Attendance from './pages/Attendance/Attendance'
 import AttendanceAdd from './pages/Attendance/AttendanceAdd'
 import AttendanceUpdate from './pages/Attendance/AttendanceUpdate'
+import Leave from './pages/Leave/Leave'
+import LeaveAdd from './pages/Leave/LeaveAdd'
 
-export default function RouteFile () {
+export default function RouteFile() {
   return (
     <>
       <BrowserRouter>
@@ -55,13 +57,15 @@ export default function RouteFile () {
             <Route path='/position/register' element={<PositionRegsiter />} />
             <Route path='/position/update/:id' element={<PositionUpdate />} />
 
+
+            {/* Leave */}
+            <Route path='/leave' element={<Leave />} ></Route>
+            <Route path='/leave/register' element={<LeaveAdd />} ></Route>
+
             {/* Attendance */}
             <Route path='/attendance' element={<Attendance />}></Route>
             <Route path='/att-add' element={<AttendanceAdd />}></Route>
-            <Route
-              path='/att-update/:id'
-              element={<AttendanceUpdate />}
-            ></Route>
+            <Route path='/att-update/:id' element={<AttendanceUpdate />} ></Route>
           </Route>
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
         </Routes>
