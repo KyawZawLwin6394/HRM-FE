@@ -26,24 +26,20 @@ import {
   TableCell
 } from '@nextui-org/react'
 import Swal from 'sweetalert2'
-
 import React, { useState } from 'react'
-
 import { useEffect } from 'react'
 import apiInstance from '../../util/api'
 import { EditIcon } from '../Table/editicon'
 import { DeleteIcon } from '../Table/deleteicon'
-
 import { Link } from 'react-router-dom'
 import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
-// import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import { SearchIcon } from '../Navbar/search'
 import { FileUploader } from 'react-drag-drop-files'
 import { TfiImport } from 'react-icons/tfi'
 import { BsCloudArrowUpFill, BsPlusSquareDotted } from 'react-icons/bs'
 
-export default function AttendanceTable () {
-  //   const [selected, setSelected] = React.useState('')
+export default function AttendanceTable() {
+
   const [attendanceList, setAttendanceList] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [delID, setDelID] = useState(null)
@@ -82,57 +78,38 @@ export default function AttendanceTable () {
   }
 
 
-  const handleCheck = async (val,id) => {
-  
-    console.log(val, 'ty')
-    if (val === 'Attend') {
-      const data={
-       
-        type:val
-      }
-      data.id=id
-      await apiInstance
-        .put('attendance',data)
-        .then(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Successfully Updated'
-          })
-
-
+  const handleCheck = async (val, id) => {
+    await apiInstance
+      .put('attendance', { type: val, id: id })
+      .then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Successfully Updated'
         })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-    if (val === 'Dismiss') {
-         const data={
-      
-        type:val
-      }
-        data.id=id
-      
-      await apiInstance
-        .put('attendance',data)
-        .then(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Successfully Updated'
-          })
-         
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-
+      })
+      .catch(err => {
+        console.log(err)
+      })
 
   }
   const handleExcelImport = async () => {
     setPopOverOpen(false)
     const formData = new FormData()
-    formData.append('other', otherDoc)
-    console.log(formData)
+    if (otherDoc) {
+      otherDoc.forEach((item) => {
+        formData.append("attendanceImport", item); // Assuming 'item' is a File object
+      });
+      Swal.showLoading()
+    }
+    await apiInstance.post('attendances/excel ', formData)
+      .then(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Successfully Imported'
+        }).then(() => {
+          window.location.reload()
+        })
+      })
   }
 
   useEffect(() => {
@@ -157,7 +134,7 @@ export default function AttendanceTable () {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isOpen, rowsPerPage,attendanceList])
+  }, [isOpen, rowsPerPage])
 
   const handleOpen = event => {
     onOpen()
@@ -268,7 +245,6 @@ export default function AttendanceTable () {
                   multiple={true}
                   handleChange={handleChange}
                   name='file'
-                  types={['JPG', 'PNG', 'GIF']}
                   className='py-3'
                 />
                 <div className='py-4 flex flex-row justify-between'>
@@ -338,7 +314,8 @@ export default function AttendanceTable () {
         <TableHeader>
           <TableColumn key='no'>No</TableColumn>
           <TableColumn key='date'>Date</TableColumn>
-          <TableColumn key='time'>Time</TableColumn>
+          <TableColumn key='time'>Clock In</TableColumn>
+          <TableColumn key='time'>Clock Out</TableColumn>
           <TableColumn key='relatedUser'>Name</TableColumn>
           <TableColumn key='relatedDepartment'>Department</TableColumn>
           <TableColumn key='type'>Type</TableColumn>
@@ -354,7 +331,8 @@ export default function AttendanceTable () {
             <TableRow key={item._id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>{item.date?.split('T')[0]}</TableCell>
-              <TableCell>{item.time}</TableCell>
+              <TableCell>{item.clockIn}</TableCell>
+              <TableCell>{item.clockOut}</TableCell>
               <TableCell>
                 {item.relatedUser ? item.relatedUser.givenName : 'Not Set'}
               </TableCell>
@@ -367,11 +345,10 @@ export default function AttendanceTable () {
               <TableCell>{item.source}</TableCell>
               <TableCell>
                 <RadioGroup
-                  //   color={selected === 'Attend' ? 'success' : 'danger'}
-                    value={item.type === 'Attend' ? 'Attend' : 'Dismiss'}
-                  onChange={e => handleCheck(e.target.value,item._id)}
+                  value={item.type === 'Attend' ? 'Attend' : 'Dismiss'}
+                  onChange={e => handleCheck(e.target.value, item._id)}
                   orientation='horizontal'
-               
+
                 >
                   <Radio value='Attend' >Attend</Radio>
                   <Radio value='Dismiss'>Dismiss</Radio>
