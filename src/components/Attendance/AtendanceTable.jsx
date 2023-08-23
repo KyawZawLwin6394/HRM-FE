@@ -53,7 +53,6 @@ export default function AttendanceTable () {
   const [pages, setPages] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const [departmentList, setDepartmentList] = React.useState([])
-  const [attendance, setAttendance] = useState([])
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
@@ -81,71 +80,52 @@ export default function AttendanceTable () {
     setPages(Math.ceil(attendanceList.length / newRowsPerPage))
     setPage(1) // Reset the current page to 1 when rows per page changes
   }
-  const handleInputChange = (fieldName, value) => {
-    setAttendance(prevValues => ({
-      ...prevValues,
-      [fieldName]: value
-    }))
-  }
-
-  const handleCheck = async (id, radio) => {
-    const attendance = attendanceList.filter(el => el._id === id)
-    console.log(radio, 'ty')
-    if (radio === 'Attend') {
-      //   setSelected('Attend')
-      let data = attendance
-      data.id = id
-      data.type = radio
 
 
+  const handleCheck = async (val,id) => {
+  
+    console.log(val, 'ty')
+    if (val === 'Attend') {
+      const data={
+       
+        type:val
+      }
+      data.id=id
       await apiInstance
-        .put('attendance', data)
+        .put('attendance',data)
         .then(() => {
           Swal.fire({
             icon: 'success',
             title: 'Successfully Updated'
           })
+
+
         })
         .catch(err => {
           console.log(err)
         })
     }
-    if (radio === 'Dismiss') {
-      let data = attendanceList.filter(el => el._id === id)
-      data.id = id
-      data.type = radio
-
-
+    if (val === 'Dismiss') {
+         const data={
+      
+        type:val
+      }
+        data.id=id
+      
       await apiInstance
-        .put('attendance', data)
+        .put('attendance',data)
         .then(() => {
           Swal.fire({
             icon: 'success',
             title: 'Successfully Updated'
           })
+         
         })
         .catch(err => {
           console.log(err)
         })
     }
 
-    if (radio === 'Dismiss') {
-      let data = attendanceList.filter(el => el._id === id)
-      data.id = id
-      data.type = radio
-
-      await apiInstance
-        .put('attendance', data)
-        .then(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Successfully Updated'
-          })
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
 
   }
   const handleExcelImport = async () => {
@@ -177,7 +157,7 @@ export default function AttendanceTable () {
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [isOpen, rowsPerPage])
+  }, [isOpen, rowsPerPage,attendanceList])
 
   const handleOpen = event => {
     onOpen()
@@ -388,11 +368,12 @@ export default function AttendanceTable () {
               <TableCell>
                 <RadioGroup
                   //   color={selected === 'Attend' ? 'success' : 'danger'}
-                  //   value={selected}
-                  onChange={e => handleInputChange(handleCheck, e.target.value)}
+                    value={item.type === 'Attend' ? 'Attend' : 'Dismiss'}
+                  onChange={e => handleCheck(e.target.value,item._id)}
                   orientation='horizontal'
+               
                 >
-                  <Radio value='Attend'>Attend</Radio>
+                  <Radio value='Attend' >Attend</Radio>
                   <Radio value='Dismiss'>Dismiss</Radio>
                 </RadioGroup>
               </TableCell>
