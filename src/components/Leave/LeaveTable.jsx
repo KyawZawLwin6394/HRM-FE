@@ -1,5 +1,5 @@
 import {
-    Tooltip, Table, TableHeader, Modal, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell
+    Tooltip, Table, TableHeader, Modal, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell, Input, RadioGroup, Radio
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
@@ -9,15 +9,28 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { PlusIcon } from "../../assets/Icons/PlusIcon";
+import { EyeIcon } from '../Table/eyeicon';
 
 export default function LeaveTable() {
     const [leaveList, setLeaveList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: isOpenStatus, onOpen: onOpenStatus, onClose: onCloseStatus } = useDisclosure();
     const [delID, setDelID] = useState(null);
-
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [leave, setLeave] = useState(null);
+
+    const [data, setData] = useState({
+        leaveToken: null,
+        leaveAllowed: null,
+        remark: null,
+        isPaid: null
+    });
+
+    const handleInputChange = async (fieldName, value) => {
+        setData(prveData => ({ ...prveData, [fieldName]: value }))
+    }
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -60,9 +73,19 @@ export default function LeaveTable() {
         setDelID(event.currentTarget.getAttribute('data-key'))
     }
 
+
+    const handleOpenStatus = (item) => {
+        onOpenStatus();
+        setLeave(item)
+    }
+
     const handleClose = () => {
         onClose();
         setDelID(null)
+    }
+
+    const handleCloseStatus = () => {
+        onCloseStatus();
     }
 
     const handleDelete = async () => {
@@ -71,6 +94,21 @@ export default function LeaveTable() {
             .then(() => {
                 setLeaveList(leaveList.filter(item => item._id !== delID))
                 onClose()
+            })
+    }
+
+    const handleStatusEdit = async (status) => {
+        let payload = {}
+        payload.id = leave._id
+        if (status) payload.status = status
+        if (data.leaveToken) payload.leaveToken = data.leaveToken
+        if (data.leaveAllowed) payload.leaveAllowed = data.leaveAllowed
+        if (data.remark) payload.remark = data.remark
+        if (data.isPaid) payload.isPaid = data.isPaid
+        console.log(payload)
+        await apiInstance.put('leave', payload)
+            .then(res => {
+                console.log(res.data.data)
             })
     }
 
@@ -134,7 +172,6 @@ export default function LeaveTable() {
                         className="bg-transparent outline-none text-default-400 text-small"
                         onChange={(e) => onRowsChange(e)}
                     >
-
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -168,9 +205,11 @@ export default function LeaveTable() {
                     <TableColumn key="End Date">End Date</TableColumn>
                     <TableColumn key="Name">Name</TableColumn>
                     <TableColumn key="Position">Position</TableColumn>
+                    <TableColumn key="Department">Department</TableColumn>
                     <TableColumn key="Reason">Reason</TableColumn>
                     <TableColumn key="Leave Type">Leave Type</TableColumn>
                     <TableColumn key="Status">Status</TableColumn>
+                    <TableColumn key="Edit">Edit</TableColumn>
                     <TableColumn key="Action">Action</TableColumn>
                 </TableHeader>
                 <TableBody
@@ -183,9 +222,19 @@ export default function LeaveTable() {
                             <TableCell>{item.endDate?.split('T')[0]}</TableCell>
                             <TableCell>{item.relatedUser?.givenName}</TableCell>
                             <TableCell>{item.relatedPosition?.name}</TableCell>
+                            <TableCell>{item.relatedDepartment?.name}</TableCell>
                             <TableCell>{item.reason}</TableCell>
                             <TableCell>{item.leaveType}</TableCell>
                             <TableCell>{item.status}</TableCell>
+                            <TableCell>
+                                <div className="relative flex justify-center">
+                                    <Tooltip content="Edit Status">
+                                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50" onClick={() => handleOpenStatus(item)}>
+                                            <EyeIcon />
+                                        </span>
+                                    </Tooltip>
+                                </div>
+                            </TableCell>
                             <TableCell>
                                 <div className="relative flex items-center gap-2">
 
@@ -231,6 +280,44 @@ export default function LeaveTable() {
                     )}
                 </ModalContent>
             </Modal>
+
+            <Modal backdrop='opaque' isOpen={isOpenStatus} onClose={handleCloseStatus} size="lg">
+                <ModalContent>
+                    <ModalHeader className="flex flex-col gap-1">Leave Approval</ModalHeader>
+                    <ModalBody className="my-2">
+                        <div className="flex justify-between">
+                            <label><span className="font-semibold">Name</span>: {leave?.relatedUser?.givenName}</label>
+                            <label><span className="font-semibold">Position</span>: {leave?.relatedPosition?.name}</label>
+                        </div>
+                        <div className="flex justify-between">
+                            <label><span className="font-semibold">From</span>: {leave?.startDate?.split('T')[0]}</label>
+                            <label><span className="font-semibold">To</span>: {leave?.endDate?.split('T')[0]}</label>
+                        </div>
+                        <div className="flex justify-between gap-4 py-2 flex-auto">
+                            <Input label='Leave Token' type='text' onChange={(e) => handleInputChange('leaveToken', e.target.value)}></Input>
+                            <Input label='Leave Allowed' type="number" onChange={(e) => handleInputChange('leaveAllowed', e.target.value)}></Input>
+                        </div>
+                        <div className="flex justify-between gap-3 flex-col">
+                            <Input label='Remark' onChange={(e) => handleInputChange('remark', e.target.value)}></Input>
+                            <div></div>
+                            <RadioGroup orientation="horizontal" onValueChange={(e) => handleInputChange('isPaid', e)}>
+                                <Radio value={true}>Paid Leave</Radio>
+                                <Radio value={false}>Unpaid Leave</Radio>
+                            </RadioGroup>
+                        </div>
+
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="danger" onClick={() => handleStatusEdit('Decline')}>
+                            No, Decline
+                        </Button>
+                        <Button className="text-white" color="success" onClick={() => handleStatusEdit('Approved')}>
+                            Yes, Approve
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+
         </>
     )
 }
