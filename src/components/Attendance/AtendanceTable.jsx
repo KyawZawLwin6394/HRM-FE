@@ -78,8 +78,14 @@ export default function AttendanceTable() {
     setPage(1) // Reset the current page to 1 when rows per page changes
   }
 
-
   const handleCheck = async (val, id) => {
+    const updatedItems = items.map(item => {
+      if (item._id === id) {
+        return { ...item, type: val };
+      }
+      return item;
+    });
+    setAttendanceList(updatedItems);
     await apiInstance
       .put('attendance', { type: val, id: id })
       .then(() => {
@@ -346,10 +352,9 @@ export default function AttendanceTable() {
               <TableCell>{item.source}</TableCell>
               <TableCell>
                 <RadioGroup
-                  value={item.type === 'Attend' ? 'Attend' : 'Dismiss'}
-                  onChange={e => handleCheck(e.target.value, item._id)}
+                  onValueChange={e => handleCheck(e, item._id)}
                   orientation='horizontal'
-
+                  defaultValue={item.type}
                 >
                   <Radio value='Attend' >Attend</Radio>
                   <Radio value='Dismiss'>Dismiss</Radio>

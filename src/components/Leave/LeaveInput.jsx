@@ -9,9 +9,10 @@ import { FileUploader } from "react-drag-drop-files";
 export default function LeaveInputForm() {
     const variant = 'faded';
     const [employeeList, setEmployeeList] = useState([])
+    const [departmentList, setDepartmentList] = useState([])
     const [position, setPosition] = useState(null)
     const leaveType = ['Casual', 'Medical', 'Vacation', 'Maternity'];
-    const status = ['Approved', 'Declined'];
+    // const status = ['Approved', 'Declined'];
     const fileTypes = ["JPG", "PNG", "GIF"];
     const [attachFile, setAttachFile] = useState(null);
 
@@ -35,7 +36,7 @@ export default function LeaveInputForm() {
         relatedPosition: null,
         reason: null,
         leaveType: null,
-        status: null
+        relatedDepartment: null
     });
 
     const handleEmployee = async (value) => {
@@ -53,7 +54,8 @@ export default function LeaveInputForm() {
         formData.append('relatedPosition', data.relatedPosition)
         formData.append('reason', data.reason)
         formData.append('leaveType', data.leaveType)
-        formData.append('status', data.status)
+        formData.append('status', 'Unset')
+        formData.append('relatedDepartment', data.relatedDepartment)
         if (attachFile) {
             attachFile.forEach((item) => {
                 formData.append("attach", item); // Assuming 'item' is a File object
@@ -77,8 +79,12 @@ export default function LeaveInputForm() {
             await apiInstance.get('users')
                 .then(res => setEmployeeList(res.data.data))
         }
+        const getDepartmentList = async () => {
+            await apiInstance.get('departments')
+                .then(res => setDepartmentList(res.data.data))
+        }
         getEmployeeList()
-
+        getDepartmentList()
     }, [])
 
     return (
@@ -155,13 +161,13 @@ export default function LeaveInputForm() {
 
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 min-h-20">
-                    <label className="text-sm font-semibold">Status</label>
+                    <label className="text-sm font-semibold">Department</label>
                     <select
-                        onChange={(e) => handleInputChange('status', e.target.value)}
+                        onChange={(e) => handleInputChange('relatedDepartment', e.target.value)}
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-                        <option hidden>Choose Status</option>
-                        {status.map(item => (
-                            <option key={item} value={item}>{item}</option>
+                        <option hidden>Choose Department</option>
+                        {departmentList.map(item => (
+                            <option key={item._id} value={item._id}>{item.name}</option>
                         ))}
                     </select>
                 </div>
