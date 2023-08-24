@@ -81,7 +81,7 @@ export default function Sidebar() {
                     <div className='hover:bg-default-100 px-4 py-2'>
                       <BadgeIcon />
                       &nbsp;&nbsp;
-                      <span className='m-auto'>PayRoll</span>
+                      <span className='m-auto'>Payroll</span>
                     </div>
                   </Link>
                 </AccordionItem>

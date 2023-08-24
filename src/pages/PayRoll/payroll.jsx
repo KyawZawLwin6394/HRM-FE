@@ -11,7 +11,7 @@ export default function Department() {
                     <Card className="rounded-md shadow-md py-3 min-h-[890px]">
                         <CardHeader className="flex justify-center">
                             <div className="font-semibold font-nunito">
-                                Pay Roll Calculation
+                                Payroll Calculation
                             </div>
                         </CardHeader>
                         <CardBody >

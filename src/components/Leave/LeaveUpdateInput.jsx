@@ -49,7 +49,7 @@ export default function LeaveInputForm() {
         }
      
 
-    }
+
 
     const handleUpdate = async () => {
         const formData = new FormData()
@@ -112,6 +112,7 @@ export default function LeaveInputForm() {
     }, [])
 
     return (
+     
         <div className="gap-4">
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                 <Input
