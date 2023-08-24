@@ -34,20 +34,23 @@ export default function LeaveInputForm() {
     };
  
 
-    const handleEmployee = async (value,leaveList) => {
-console.log(value === leaveList.relatedUser?._id)
-        console.log(leaveList)
-        handleInputChange('relatedUser', value)
-        if(leaveList.relatedUser){
-              const employee = leaveList.relatedUser._id === value
-              console.log(employee,'item')
-        handleInputChange('relatedPosition', employee[0].relatedPosition._id)
-        setPosition(employee[0].relatedPosition)
+    const handleEmployee = async (value) => {
+
+        console.log(value)
+        if(leaveList){
+             handleInputChange('relatedUser', leaveList.relatedUser?._id)
+        handleInputChange('relatedPosition', leaveList.relatedPosition?._id)
+        setPosition(leaveList.relatedPosition)
         }else{
+   handleInputChange('relatedUser', value)
+ 
    const employee = employeeList.filter(item => item._id === value)
+   console.log(employee)
         handleInputChange('relatedPosition', employee[0].relatedPosition._id)
         setPosition(employee[0].relatedPosition)
         }
+     
+      
      
     }
 
@@ -56,8 +59,8 @@ console.log(value === leaveList.relatedUser?._id)
         formData.append('id',LeaveID)
         formData.append('createdAt',leaveList.startDate)
         formData.append('endDate',leaveList.endDate)
-        formData.append('relatedUser',leaveList.relatedUser._id)
-        formData.append('relatedPosition',leaveList.relatedPosition._id)
+        formData.append('relatedUser',leaveList.relatedUser)
+        formData.append('relatedPosition',leaveList.relatedPosition)
         formData.append('reason',leaveList.reason)
         formData.append('leaveType',leaveList.leaveType)
         formData.append('status',leaveList.status)
@@ -128,7 +131,7 @@ console.log(value === leaveList.relatedUser?._id)
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <label className="text-sm font-semibold">Employee</label>
                     <select
-                        onChange={(e) => handleEmployee(e.target.value,leaveList)}
+                        onChange={(e) => handleEmployee(e.target.value)}
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
                         <option hidden value={leaveList.relatedUser?._id}>{leaveList.relatedUser?.givenName}</option>
                         {employeeList.map(item => (
@@ -145,7 +148,7 @@ console.log(value === leaveList.relatedUser?._id)
                     <select
                         disabled
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-                        <option hidden>{leaveList.relatedPosition ? leaveList.relatedPosition.name : 'Not set'}</option>
+                        <option hidden>{position ? position.name : 'Not set'}</option>
                      
                         
                     </select>

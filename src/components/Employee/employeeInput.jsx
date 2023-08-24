@@ -525,7 +525,7 @@ export default function EmployeeInput() {
                 className="mt-7"
                 type="file"
                 onChange={handleMarriedFile}
-                value={positionID ? positionID.mealAllowance : "Not Set"}
+         
                 placeholder="Married Date"
                 variant={variant}
                 labelPlacement="outside"
