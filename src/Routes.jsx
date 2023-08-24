@@ -19,6 +19,8 @@ import AttendanceUpdate from './pages/Attendance/AttendanceUpdate'
 import Leave from './pages/Leave/Leave'
 import LeaveAdd from './pages/Leave/LeaveAdd'
 import LeaveUpdate from './pages/Leave/LeaveUpdate'
+import PayRoll from './pages/PayRoll/payroll'
+import PayRollAdd from './pages/PayRoll/payrolladd'
 
 export default function RouteFile() {
   return (
@@ -53,6 +55,11 @@ export default function RouteFile() {
             <Route path='/emp-add' element={<EmployeeAdd />} />
             <Route path='/emp-update/:id' element={<EmployeeUpdate />} />
 
+         {/* Pay Roll */}
+            <Route path='/payroll' element={<PayRoll />} />
+            <Route path='/pay-add' element={<PayRollAdd />} />
+            {/* <Route path='/emp-update/:id' element={<EmployeeUpdate />} /> */}
+
             {/* Position */}
             <Route path='/position' element={<Position />} />
             <Route path='/position/register' element={<PositionRegsiter />} />
@@ -69,6 +76,7 @@ export default function RouteFile() {
             <Route path='/att-add' element={<AttendanceAdd />}></Route>
             <Route path='/att-update/:id' element={<AttendanceUpdate />} ></Route>
           </Route>
+          
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
         </Routes>
       </BrowserRouter>
