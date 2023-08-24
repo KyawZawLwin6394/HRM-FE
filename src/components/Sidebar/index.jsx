@@ -77,6 +77,13 @@ export default function Sidebar() {
                       <span className='m-auto'>Leave</span>
                     </div>
                   </Link>
+                   <Link to='/payroll'>
+                    <div className='hover:bg-default-100 px-4 py-2'>
+                      <BadgeIcon />
+                      &nbsp;&nbsp;
+                      <span className='m-auto'>PayRoll</span>
+                    </div>
+                  </Link>
                 </AccordionItem>
 
                 {/* Position */}
