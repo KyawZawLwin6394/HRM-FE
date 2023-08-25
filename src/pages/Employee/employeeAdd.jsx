@@ -18,9 +18,9 @@ export default function employeeAdd() {
       <div className="sidebar">
         <Sidebar />
       </div>
-      <div className=" flex-grow">
-        <div className="body">
-          <Card className="ml-1 rounded-md">
+      <div className="flex-grow ">
+        <div className="body ">
+          <Card className="rounded-md">
             <CardHeader className="justify-between">
               <Button
                 variant="light"

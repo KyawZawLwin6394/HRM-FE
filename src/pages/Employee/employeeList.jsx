@@ -39,7 +39,7 @@ export default function Employee() {
         <div className='sidebar'>
           <Sidebar />
         </div>
-        <div className=' flex-grow'>
+        <div className='flex-grow'>
           <div className=''>
             <Card className='rounded-sm shadow-md py-3 min-h-[890px]'>
               <CardHeader className='justify-between'>
