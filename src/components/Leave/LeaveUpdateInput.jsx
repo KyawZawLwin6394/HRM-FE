@@ -46,10 +46,10 @@ export default function LeaveInputForm() {
         handleInputChange('relatedPosition', employee[0].relatedPosition._id)
         setPosition(employee[0].relatedPosition)
 
-        }
-     
-
     }
+
+
+
 
     const handleUpdate = async () => {
         const formData = new FormData()
