@@ -45,7 +45,6 @@ export default function LeaveInputForm() {
         console.log(employee)
         handleInputChange('relatedPosition', employee[0].relatedPosition._id)
         setPosition(employee[0].relatedPosition)
-
     }
 
 
@@ -112,6 +111,7 @@ export default function LeaveInputForm() {
     }, [])
 
     return (
+     
         <div className="gap-4">
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                 <Input

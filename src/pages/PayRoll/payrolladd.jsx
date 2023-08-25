@@ -12,7 +12,7 @@ export default function LeaveAdd() {
                     <Card className="rounded-sm shadow-md py-3 min-h-[890px]" >
                         <CardHeader className="flex justify-center">
                             <label className="font-semibold font-nunito">
-                                PayRoll Register
+                                Payroll Register
                             </label>
                         </CardHeader>
                         <CardBody>
