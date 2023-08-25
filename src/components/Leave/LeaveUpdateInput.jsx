@@ -45,9 +45,8 @@ export default function LeaveInputForm() {
         console.log(employee)
         handleInputChange('relatedPosition', employee[0].relatedPosition._id)
         setPosition(employee[0].relatedPosition)
+    }
 
-        }
-     
 
 
 
