@@ -8,7 +8,7 @@ import { FileUploader } from "react-drag-drop-files";
 import { Image } from '@nextui-org/react';
 
 export default function LeaveInputForm() {
-    const leaveType = ['Casual', 'Medical', 'Vacation', 'Maternity'];
+    const leaveType = ['Casual', 'Medical', 'Vacation', 'Maternity:Male', 'Maternity:Female'];
     // const status = ['Approved', 'Declined'];
     const [departmentList, setDepartmentList] = useState([]);
     const fileTypes = ["JPG", "PNG", "GIF"];
@@ -90,12 +90,12 @@ export default function LeaveInputForm() {
                     console.log(res.data.data[0])
                     setLeaveList(res.data.data[0])
                     setImg(res.data.data[0].attach)
-                    setPosition(res.data.data[0].relatedPosition)
-                    handleInputChange('relatedPosition', res.data.data[0].relatedPosition._id)
+                    setPosition(res.data.data[0].relatedUser.relatedPosition)
+                    handleInputChange('relatedPosition', res.data.data[0].relatedUser.relatedPosition._id)
                     setUser(res.data.data[0].relatedUser)
                     handleInputChange('relatedUser', res.data.data[0].relatedUser._id)
-                    setDepartment(res.data.data[0].relatedDepartment)
-                    handleInputChange('relatedDepartment', res.data.data[0].relatedDepartment._id)
+                    setDepartment(res.data.data[0].relatedUser.relatedDepartment)
+                    handleInputChange('relatedDepartment', res.data.data[0].relatedUser.relatedDepartment._id)
                 }
                 )
         }
@@ -111,7 +111,7 @@ export default function LeaveInputForm() {
     }, [])
 
     return (
-     
+
         <div className="gap-4">
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                 <Input
@@ -192,6 +192,7 @@ export default function LeaveInputForm() {
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 min-h-20">
                     <label className="text-sm font-semibold">Department</label>
                     <select
+                        disabled
                         onChange={(e) => handleInputChange('relatedDepartment', e.target.value)}
                         className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
                         <option hidden value={department?._id}>{department?.name}</option>

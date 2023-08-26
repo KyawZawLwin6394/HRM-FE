@@ -10,8 +10,11 @@ import { Link } from "react-router-dom";
 import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import { EyeIcon } from '../Table/eyeicon';
+import Swal from 'sweetalert2';
 
 export default function LeaveTable() {
+    const handleLeaveType = { Casual: 'casualLeaves', Medical: 'medicalLeaves', Vacation: 'vacationLeaves', 'Maternity:Male': 'maternityLeaveMale', 'Maternity:Female': 'maternityLeaveFemale' }
+    // const leaveType = ['Casual', 'Medical', 'Vacation', 'Maternity:Male', 'Maternity:Female'];
     const [leaveList, setLeaveList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isOpenStatus, onOpen: onOpenStatus, onClose: onCloseStatus } = useDisclosure();
@@ -20,6 +23,8 @@ export default function LeaveTable() {
     const [pages, setPages] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [leave, setLeave] = useState(null);
+    const [leaveTaken, setLeaveTaken] = useState(null);
+    const [leaveAllowed, setLeaveAllowed] = useState(null);
 
     const [data, setData] = useState({
         leaveToken: null,
@@ -77,6 +82,9 @@ export default function LeaveTable() {
     const handleOpenStatus = (item) => {
         onOpenStatus();
         setLeave(item)
+        setLeaveAllowed(item.relatedUser[handleLeaveType[item.leaveType]])
+        setLeaveTaken(item.relatedUser.relatedPosition[handleLeaveType[item.leaveType]] - item.relatedUser[handleLeaveType[item.leaveType]])
+        console.log(leaveTaken, leaveAllowed, 'This is it')
     }
 
     const handleClose = () => {
@@ -98,17 +106,31 @@ export default function LeaveTable() {
     }
 
     const handleStatusEdit = async (status) => {
-        let payload = {}
-        payload.id = leave._id
+        let payload = {
+            id: leave._id,
+            employeeID: leave.relatedUser._id,
+            Ltype: handleLeaveType[leave.leaveType],
+            startDate: leave.startDate,
+            endDate: leave.endDate
+        };
         if (status) payload.status = status
-        if (data.leaveToken) payload.leaveToken = data.leaveToken
-        if (data.leaveAllowed) payload.leaveAllowed = data.leaveAllowed
+        if (leaveTaken) payload.leaveToken = leaveTaken
+        if (leaveAllowed) payload.leaveAllowed = leaveAllowed
         if (data.remark) payload.remark = data.remark
         if (data.isPaid) payload.isPaid = data.isPaid
         console.log(payload)
-        await apiInstance.put('leave', payload)
-            .then(res => {
-                console.log(res.data.data)
+        await apiInstance.put('leaves/status', payload)
+            .then(() => {
+                setLeaveList(leaveList.map(item => item._id === leave._id ? { ...item, status: status } : item))
+                onCloseStatus()
+            })
+            .catch((error) => {
+                console.log(error)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.response.data.message,
+                });
             })
     }
 
@@ -201,6 +223,7 @@ export default function LeaveTable() {
             >
                 <TableHeader>
                     <TableColumn key="no">No</TableColumn>
+                    <TableColumn key="code">Code</TableColumn>
                     <TableColumn key="Start Date">Start Date</TableColumn>
                     <TableColumn key="End Date">End Date</TableColumn>
                     <TableColumn key="Name">Name</TableColumn>
@@ -218,12 +241,13 @@ export default function LeaveTable() {
                     {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
+                            <TableCell>{item?.code}</TableCell>
                             <TableCell>{item.startDate?.split('T')[0]}</TableCell>
                             <TableCell>{item.endDate?.split('T')[0]}</TableCell>
                             <TableCell>{item.relatedUser?.givenName}</TableCell>
-                            <TableCell>{item.relatedPosition?.name}</TableCell>
-                            <TableCell>{item.relatedDepartment?.name}</TableCell>
-                            <TableCell>{item.reason}</TableCell>
+                            <TableCell>{item.relatedUser?.relatedPosition?.name}</TableCell>
+                            <TableCell>{item.relatedUser?.relatedDepartment?.name}</TableCell>
+                            <TableCell>{item.reason ? item.reason : 'Not Set'}</TableCell>
                             <TableCell>{item.leaveType}</TableCell>
                             <TableCell>{item.status}</TableCell>
                             <TableCell>
@@ -237,7 +261,6 @@ export default function LeaveTable() {
                             </TableCell>
                             <TableCell>
                                 <div className="relative flex items-center gap-2">
-
                                     <Tooltip content="Edit Leave">
                                         <Link to={`/leave/update/${item._id}`}>
                                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
@@ -281,29 +304,47 @@ export default function LeaveTable() {
                 </ModalContent>
             </Modal>
 
-            <Modal backdrop='opaque' isOpen={isOpenStatus} onClose={handleCloseStatus} size="lg">
+            <Modal backdrop='opaque' isOpen={isOpenStatus} onClose={handleCloseStatus} size="xl">
                 <ModalContent>
                     <ModalHeader className="flex flex-col gap-1">Leave Approval</ModalHeader>
                     <ModalBody className="my-2">
                         <div className="flex justify-between">
                             <label><span className="font-semibold">Name</span>: {leave?.relatedUser?.givenName}</label>
-                            <label><span className="font-semibold">Position</span>: {leave?.relatedPosition?.name}</label>
+                            <label><span className="font-semibold">Position</span>: {leave?.relatedUser?.relatedPosition?.name}</label>
+                        </div>
+                        <div className="flex justify-between">
+                            <label><span className="font-semibold">Leave Type</span>: {leave?.leaveType}</label>
+                            <label><span className="font-semibold">Department</span>: {leave?.relatedUser?.relatedDepartment?.name}</label>
                         </div>
                         <div className="flex justify-between">
                             <label><span className="font-semibold">From</span>: {leave?.startDate?.split('T')[0]}</label>
                             <label><span className="font-semibold">To</span>: {leave?.endDate?.split('T')[0]}</label>
                         </div>
-                        <div className="flex justify-between gap-4 py-2 flex-auto">
-                            <Input label='Leave Token' type='text' onChange={(e) => handleInputChange('leaveToken', e.target.value)}></Input>
-                            <Input label='Leave Allowed' type="number" onChange={(e) => handleInputChange('leaveAllowed', e.target.value)}></Input>
+                        {/* <Divider></Divider> */}
+                        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+                            <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                                <label className="text-sm font-semibold">Leave Taken</label>
+                                <Input isDisabled value={leaveTaken} type='text' onChange={(e) => handleInputChange('leaveTaken', e.target.value)}></Input>
+                            </div>
+                            <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                                <label className="text-sm font-semibold">Leave Allowed</label>
+                                <Input isDisabled value={leaveAllowed} type="number" onChange={(e) => handleInputChange('leaveAllowed', e.target.value)}></Input>
+                            </div>
+
                         </div>
-                        <div className="flex justify-between gap-3 flex-col">
-                            <Input label='Remark' onChange={(e) => handleInputChange('remark', e.target.value)}></Input>
-                            <div></div>
-                            <RadioGroup orientation="horizontal" onValueChange={(e) => handleInputChange('isPaid', e)}>
-                                <Radio value={true}>Paid Leave</Radio>
-                                <Radio value={false}>Unpaid Leave</Radio>
-                            </RadioGroup>
+                        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+                            <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                                <label className="text-sm font-semibold">Remark</label>
+                                <Input value={leave?.remark} onChange={(e) => handleInputChange('remark', e.target.value)}></Input>
+                            </div>
+                            <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                                <label className="text-sm font-semibold">Paid / Unpaid</label>
+                                <div className="pt-2"></div>
+                                <RadioGroup orientation="horizontal" onValueChange={(e) => handleInputChange('isPaid', e)} value={leave?.isPaid}>
+                                    <Radio value={true}>Paid Leave</Radio>
+                                    <Radio value={false}>Unpaid Leave</Radio>
+                                </RadioGroup>
+                            </div>
                         </div>
 
                     </ModalBody>
@@ -316,7 +357,7 @@ export default function LeaveTable() {
                         </Button>
                     </ModalFooter>
                 </ModalContent>
-            </Modal>
+            </Modal >
 
         </>
     )

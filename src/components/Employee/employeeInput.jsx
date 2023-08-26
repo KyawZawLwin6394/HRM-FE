@@ -171,7 +171,11 @@ export default function EmployeeInput() {
     formData.append("description", description);
     formData.append("directManager", directManagerID);
     formData.append("relatedDepartment", relatedDepartment);
-    console.log(otherDoc)
+    formData.append("casualLeaves", positionID.casualLeaves)
+    formData.append("medicalLeaves", positionID.medicalLeaves)
+    formData.append("vacationLeaves", positionID.vacationLeaves)
+    formData.append("maternityLeaveMale", positionID.maternityLeaveMale)
+    formData.append("maternityLeaveFemale", positionID.maternityLeaveFemale)
     otherDoc.forEach((item) => {
       formData.append("other", item); // Assuming 'item' is a File object
     });
@@ -525,7 +529,7 @@ export default function EmployeeInput() {
                 className="mt-7"
                 type="file"
                 onChange={handleMarriedFile}
-         
+
                 placeholder="Married Date"
                 variant={variant}
                 labelPlacement="outside"

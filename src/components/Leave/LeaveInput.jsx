@@ -11,10 +11,12 @@ export default function LeaveInputForm() {
     const [employeeList, setEmployeeList] = useState([])
     const [departmentList, setDepartmentList] = useState([])
     const [position, setPosition] = useState(null)
-    const leaveType = ['Casual', 'Medical', 'Vacation', 'Maternity'];
-    // const status = ['Approved', 'Declined'];
-    const fileTypes = ["JPG", "PNG", "GIF"];
+    const [department, setDepartment] = useState(null)
     const [attachFile, setAttachFile] = useState(null);
+    const [code, setCode] = useState(null);
+    const leaveType = ['Casual', 'Medical', 'Vacation', 'Maternity:Male', 'Maternity:Female'];
+    const fileTypes = ["JPG", "PNG", "GIF"];
+
 
     const handleInputChange = (fieldName, value) => {
         setData(prevValues => ({
@@ -44,6 +46,7 @@ export default function LeaveInputForm() {
         const employee = employeeList.filter(item => item._id === value)
         handleInputChange('relatedPosition', employee[0].relatedPosition._id)
         setPosition(employee[0].relatedPosition)
+        setDepartment(employee[0].relatedDepartment)
     }
 
     const handleRegister = async () => {
@@ -51,11 +54,11 @@ export default function LeaveInputForm() {
         formData.append('startDate', data.startDate)
         formData.append('endDate', data.endDate)
         formData.append('relatedUser', data.relatedUser)
-        formData.append('relatedPosition', data.relatedPosition)
         formData.append('reason', data.reason)
         formData.append('leaveType', data.leaveType)
         formData.append('status', 'Unset')
-        formData.append('relatedDepartment', data.relatedDepartment)
+        formData.append('code', code.code)
+        formData.append('seq', code.seq)
         if (attachFile) {
             attachFile.forEach((item) => {
                 formData.append("attach", item); // Assuming 'item' is a File object
@@ -83,6 +86,13 @@ export default function LeaveInputForm() {
             await apiInstance.get('departments')
                 .then(res => setDepartmentList(res.data.data))
         }
+        const getCode = async () => {
+            await apiInstance.get('leaves/code')
+                .then(res => {
+                    setCode(res.data)
+                })
+        }
+        getCode()
         getEmployeeList()
         getDepartmentList()
     }, [])
@@ -118,10 +128,33 @@ export default function LeaveInputForm() {
                         {employeeList.map(item => (
                             <option key={item._id} value={item._id}>{item.givenName}</option>
                         ))}
+                    </select>
+                </div>
+                <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                    <Input
+                        type="text"
+                        isDisabled
+                        label="Leave No"
+                        value={code?.code}
+                        placeholder="LC-25823-1"
+                        variant={variant}
+                        onChange={(e) => handleInputChange('endDate', e.target.value)}
+                        labelPlacement="outside"
+                    />
+                </div>
+            </div>
 
-                        {/* <option value="Male">Department 1</option>
-                <option value="Female">Department 2</option> */}
-
+            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+                <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 min-h-20">
+                    <label className="text-sm font-semibold">Department</label>
+                    <select
+                        disabled
+                        onChange={(e) => handleInputChange('relatedDepartment', e.target.value)}
+                        className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
+                        <option hidden>{department ? department.name : 'Not Set'}</option>
+                        {departmentList.map(item => (
+                            <option key={item._id} value={item._id}>{item.name}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
@@ -135,14 +168,6 @@ export default function LeaveInputForm() {
             </div>
 
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-                <Input
-                    type="text"
-                    label="Reason"
-                    placeholder="Reason..."
-                    onChange={(e) => handleInputChange('reason', e.target.value)}
-                    variant={variant}
-                    labelPlacement="outside"
-                />
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <label className="text-sm font-semibold">Type</label>
                     <select
@@ -157,30 +182,27 @@ export default function LeaveInputForm() {
 
                     </select>
                 </div>
+                <Input
+                    type="text"
+                    label="Reason"
+                    placeholder="Reason..."
+                    onChange={(e) => handleInputChange('reason', e.target.value)}
+                    variant={variant}
+                    labelPlacement="outside"
+                />
+
             </div>
 
-            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-                <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 min-h-20">
-                    <label className="text-sm font-semibold">Department</label>
-                    <select
-                        onChange={(e) => handleInputChange('relatedDepartment', e.target.value)}
-                        className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-                        <option hidden>Choose Department</option>
-                        {departmentList.map(item => (
-                            <option key={item._id} value={item._id}>{item.name}</option>
-                        ))}
-                    </select>
-                </div>
-                <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <div className="mt-3"></div>
-                    <FileUploader
-                        multiple={true}
-                        handleChange={handleChange}
-                        name="file"
-                        types={fileTypes}
-                    />
-                </div>
 
+
+            <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                <div className="mt-3"></div>
+                <FileUploader
+                    multiple={true}
+                    handleChange={handleChange}
+                    name="file"
+                    types={fileTypes}
+                />
             </div>
 
             <div className="flex justify-center gap-10 py-4">
