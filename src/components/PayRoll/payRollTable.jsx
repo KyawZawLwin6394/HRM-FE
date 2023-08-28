@@ -9,32 +9,31 @@ import { SearchIcon } from "../Navbar/search";
 import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { Link } from "react-router-dom";
 
-
-export default function DepartmentTable() {
-    const functions = ['Jan','Feb','March','April','May','June','July','Aug','Sep','Oct','Nov','Dec']
-    const [departmentList, setDepartmentList] = useState([])
+export default function PayrollTable() {
+    const functions = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const [payrollList, setPayrollList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
-
+    const [departmentList, setDepartmentList] = useState([]);
     const [delID, setDelID] = useState(null);
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-    const [departmntFunction, setDepartmentFunction] = useState('')
-    const [departmentLevel, setDepartmentLevel] = useState('')
+    const [departmntFunction, setPayrollFunction] = useState('')
+    const [departmentID, setDepartmentID] = useState('')
 
-    const filterDepartmentList = async () => {
-        console.log(departmntFunction, departmentLevel)
-        await apiInstance.get('departments', { params: { funct: departmntFunction, level: departmentLevel } })
+    const filterPayrollList = async () => {
+        console.log(departmntFunction, payrollLevel)
+        await apiInstance.get('payrolls', { params: { funct: departmntFunction, level: payrollLevel } })
             .then(res => {
-                setDepartmentList(res.data.data)
+                setPayrollList(res.data.data)
             })
     }
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        return departmentList.slice(start, end);
-    }, [page, departmentList]);
+        return payrollList.slice(start, end);
+    }, [page, payrollList]);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && isOpen) {
@@ -45,19 +44,26 @@ export default function DepartmentTable() {
     const onRowsChange = (event) => {
         const newRowsPerPage = parseInt(event.target.value);
         setRowsPerPage(newRowsPerPage);
-        setPages(Math.ceil(departmentList.length / newRowsPerPage));
+        setPages(Math.ceil(payrollList.length / newRowsPerPage));
         setPage(1); // Reset the current page to 1 when rows per page changes
     };
 
     useEffect(() => {
-        const getDepartments = async () => {
-            await apiInstance.get(`departments`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
+        const getPayrolls = async () => {
+            await apiInstance.get(`payrolls`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
                 .then(res => {
-                    setDepartmentList(res.data.data)
+                    setPayrollList(res.data.data)
                     setPages(res.data._metadata.page_count)
                 })
         }
+        const getDepartments = async () => {
+            await apiInstance.get('departments')
+                .then(res => {
+                    setDepartmentList(res.data.data)
+                })
+        }
         getDepartments()
+        getPayrolls()
         document.addEventListener('keydown', handleKeyDown);
 
         return () => {
@@ -78,9 +84,9 @@ export default function DepartmentTable() {
 
     const handleDelete = async () => {
         console.log(setDelID)
-        await apiInstance.delete('department/' + delID)
+        await apiInstance.delete('payroll/' + delID)
             .then(() => {
-                setDepartmentList(departmentList.filter(item => item._id !== delID))
+                setPayrollList(payrollList.filter(item => item._id !== delID))
                 onClose()
             })
     }
@@ -101,7 +107,7 @@ export default function DepartmentTable() {
                             aria-label="Table Columns"
                             closeOnSelect={false}
                             selectionMode="single"
-                            onAction={(key) => setDepartmentFunction(key)}
+                            onAction={(key) => setPayrollFunction(key)}
 
                         >
                             {functions.map(item => (
@@ -114,29 +120,29 @@ export default function DepartmentTable() {
                     <Dropdown>
                         <DropdownTrigger className="hidden sm:flex">
                             <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                              Department
+                                Department
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu
-                            onAction={(key) => setDepartmentLevel(key)}
+                            onAction={(key) => setDepartmentID(key)}
                             disallowEmptySelection
                             aria-label="Table Columns"
                             closeOnSelect={false}
                             selectionMode="single"
                         >
-                           {departmentList.map(item => (
-                                <DropdownItem key={item} value={item} className="capitalize">
+                            {departmentList.map(item => (
+                                <DropdownItem key={item._id} value={item._id} className="capitalize">
                                     {item.name}
                                 </DropdownItem>
                             ))}
                         </DropdownMenu>
                     </Dropdown>
-                    <Button color="primary" endContent={<SearchIcon className='w-5 h-4' />} onClick={filterDepartmentList}>
+                    <Button color="primary" endContent={<SearchIcon className='w-5 h-4' />} onClick={filterPayrollList}>
                         Search
                     </Button>
                 </div>
                 <div className="flex gap-3">
-          
+
                     <Button color="primary" endContent={<PlusIcon />}>
                         <Link to='/pay-add'>
                             Add
@@ -145,7 +151,7 @@ export default function DepartmentTable() {
                 </div>
             </div>
             <div className="flex justify-between items-center mb-3">
-                <span className="text-default-400 text-small">Total {departmentList.length} Departments</span>
+                <span className="text-default-400 text-small">Total {payrollList.length} Payrolls</span>
                 <label className="flex items-center text-default-400 text-small">
                     Rows per page:
                     <select
@@ -185,53 +191,51 @@ export default function DepartmentTable() {
                     <TableColumn>No</TableColumn>
                     <TableColumn>Name</TableColumn>
                     <TableColumn>Position</TableColumn>
-                    <TableColumn>Department</TableColumn>
+                    <TableColumn>Payroll</TableColumn>
                     <TableColumn>Basic Salary</TableColumn>
-                    <TableColumn>Total Attendance Days</TableColumn>
-                    <TableColumn>Paid Leave Days</TableColumn>
+                    <TableColumn>Total Attendance</TableColumn>
+                    <TableColumn>Paid Leaves</TableColumn>
+                    <TableColumn>Unpaid Leaves</TableColumn>
                     <TableColumn>Entitled Salary</TableColumn>
                     <TableColumn className='text-center'>Calculate</TableColumn>
                     <TableColumn>Actions</TableColumn>
                 </TableHeader>
                 <TableBody
-                    emptyContent={"No Departments to display."}
+                    emptyContent={"No Payrolls to display."}
                 >
                     {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
-                            <TableCell>{item.name}</TableCell>
-                            <TableCell>{item.description}</TableCell>
-                            <TableCell>{item.function}</TableCell>
-                            <TableCell>{item.level}</TableCell>
-                            <TableCell>{item.reportingTo ? item.reportingTo.name : 'Not Set'}</TableCell>
-                            <TableCell>{item.directManager ? item.directManager.givenName : 'Not Set'}</TableCell>
-                            <TableCell>{item.assistantManager ? item.assistantManager.givenName : 'Not Set'}</TableCell>
+                            <TableCell>{item?.relatedUser?.givenName}</TableCell>
+                            <TableCell>{item?.relatedUser?.relatedPosition?.name}</TableCell>
+                            <TableCell>{item?.relatedUser?.relatedDepartment?.name}</TableCell>
+                            <TableCell>{item?.relatedUser?.relatedPosition?.basicSalary}</TableCell>
+                            <TableCell className="text-center">{item.totalAttendance}</TableCell>
+                            <TableCell className="text-center">{item.paidLeaves}</TableCell>
+                            <TableCell className="text-center">{item.unpaidLeaves}</TableCell>
+                            <TableCell className="text-center">{item.entitledSalary}</TableCell>
                             <TableCell>  <div className="flex gap-1">
-          
-          <Link to={'/payslip/'+item._id}>
- <Button color="primary" size='sm'>
-                      
-                            Pay Slip
-                    
-                    </Button>
-          </Link>
-                   
-                          <Button color="primary" size='sm' >
-                        <Link to='/department/register'>
-                            Extra
-                        </Link>
-                    </Button>
-                </div></TableCell>
+                                <Button color="primary" size='sm'>
+                                    <Link to={'/payslip/' + item._id}>
+                                        Pay Slip
+                                    </Link>
+                                </Button>
+                                <Button color="primary" size='sm' >
+                                    <Link to='/payroll/register'>
+                                        Extra
+                                    </Link>
+                                </Button>
+                            </div></TableCell>
                             <TableCell>
                                 <div className="relative flex items-center gap-2">
-                                    <Tooltip content="Edit Department">
-                                        <Link to={`/department/update/${item._id}`}>
+                                    <Tooltip content="Edit Payroll">
+                                        <Link to={`/payroll/update/${item._id}`}>
                                             <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                                                 <EditIcon />
                                             </span>
                                         </Link>
                                     </Tooltip>
-                                    <Tooltip color="danger" content="Delete Department">
+                                    <Tooltip color="danger" content="Delete Payroll">
                                         <span data-key={item._id} className="text-lg text-danger cursor-pointer active:opacity-50" onClick={(e) => handleOpen(e)}>
                                             <DeleteIcon />
                                         </span>
@@ -242,11 +246,11 @@ export default function DepartmentTable() {
                     ))}
                 </TableBody>
             </Table>
-            <Modal backdrop='blur'  isOpen={isOpen} onClose={handleClose} >
+            <Modal backdrop='blur' isOpen={isOpen} onClose={handleClose} >
                 <ModalContent >
                     {(handleClose) => (
                         <>
-                            <ModalHeader className="flex flex-col gap-1">Delete Department</ModalHeader>
+                            <ModalHeader className="flex flex-col gap-1">Delete Payroll</ModalHeader>
                             <ModalBody>
                                 <p>
                                     Are you sure you want to delete this position?
@@ -265,7 +269,7 @@ export default function DepartmentTable() {
                     )}
                 </ModalContent>
             </Modal>
-              
+
         </>
     )
 }

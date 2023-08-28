@@ -111,11 +111,11 @@ export default function LeaveTable() {
             employeeID: leave.relatedUser._id,
             Ltype: handleLeaveType[leave.leaveType],
             startDate: leave.startDate,
-            endDate: leave.endDate
+            endDate: leave.endDate,
+            leaveAllowed: leaveAllowed,
+            leaveTaken: leaveTaken
         };
         if (status) payload.status = status
-        if (leaveTaken) payload.leaveToken = leaveTaken
-        if (leaveAllowed) payload.leaveAllowed = leaveAllowed
         if (data.remark) payload.remark = data.remark
         if (data.isPaid) payload.isPaid = data.isPaid
         console.log(payload)
