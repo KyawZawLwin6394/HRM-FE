@@ -38,10 +38,10 @@ export default function LeaveInputForm() {
     <div className="gap-4">
       <Card className="shadow-lg" id="print">
         <CardHeader className="text-3xl font-semibold justify-center">
-          Payslip For August
+          Payslip For Month
         </CardHeader>
-        <CardBody className=''>
-          <table className="">
+        <CardBody className='justify-center' >
+          {/* <table className="table-fixed">
             <tbody style={{ marginTop: "5em" }} className='space-y-10'>
               <tr key="1" className='text-lg'>
                 <th>ID</th>
@@ -128,7 +128,47 @@ export default function LeaveInputForm() {
                 <td >30000</td>
               </tr>
             </tbody>
-          </table>
+          </table> */}
+          <table >
+
+  <thead style={{ border:'1px solid'}} className='justify-center text-2xl'>
+    <tr>
+      <th className='py-3 px-3 '>Name : Kaung Set Hein</th>
+      <th className='py-3 px-3 text-end'> ID : 107</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody style={{ border:'1px solid'}} className='text-xl' >
+    <tr>
+      <td className='py-3 px-3'>Position</td>
+      <td style={{ borderLeft:'1px solid'}} className='px-3'></td>
+      <td style={{ borderBottom:'1px solid'}} className='px-3'>React Developer</td>
+    </tr>
+    <tr>
+      <td className='py-3 px-3'>Total Attendance Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>22 Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>180000 MMK</td>
+    </tr>
+    <tr>
+      <td className='py-3 px-3'>Paid Leave Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>3 Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>25000 MMK</td>
+    </tr>
+      <tr>
+      <td className=''></td>
+      <td style={{ borderBottom:'1px solid'}} className='px-3'></td>
+      <td style={{ borderBottom:'1px solid'}} className='px-3'>Net Salary : 155000 MMK</td>
+    </tr>
+  </tbody>
+</table>
+<div className='flex gap-4 mt-3'>
+  <p>
+    Month : Aug
+  </p>
+  <p>
+    Year : 2023
+  </p>
+</div>
            {/* <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
            <label >ID</label>
                 <Input
@@ -151,7 +191,7 @@ export default function LeaveInputForm() {
                 style={{
                   textAlign: "center",
                   fontSize: "20px",
-                  marginTop: "10em",
+                  marginTop: "5em",
                 }}
                 id="printtop
 ">
