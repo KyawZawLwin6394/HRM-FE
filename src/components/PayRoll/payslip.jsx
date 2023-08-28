@@ -4,13 +4,25 @@ import {
   CardFooter,
   CardHeader,
   Button,
-  
+  Input
 } from "@nextui-org/react";
 import apiInstance from "../../util/api";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function LeaveInputForm() {
+  const print = () => {
+    // document.getElementById('printtop').style({ marginTop: '100px' })
+
+    // document.getElementById('printtop').style.position = 'running(footer)'
+
+    let printContents = document.getElementById("print").innerHTML;
+    let originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+    window.location.reload();
+  };
   const [employeeList, setEmployeeList] = useState([]);
 
   useEffect(() => {
@@ -24,118 +36,112 @@ export default function LeaveInputForm() {
 
   return (
     <div className="gap-4">
-      <Card className="shadow-lg">
-        <CardHeader className="text-2xl font-semibold justify-center">
+      <Card className="shadow-lg" id="print">
+        <CardHeader className="text-3xl font-semibold justify-center">
           Payslip For August
         </CardHeader>
-        <CardBody style={{ margin:'auto 30px' }}>
-             <table className="hover:table-fixed">
-      <thead>
-       
-      </thead>
-      <tbody style={{ marginTop:'5em' }}>
-        <tr key="1" >
-          <th className='text-lg'>ID</th>
-      <td></td>
-            <td className='text-lg'>KS-107</td>
-        </tr>
-        <tr key="1" >
-          <th className='text-lg'>Name</th>
-<td></td>
-            <td className='text-lg'>Kaung Set Hein</td>
-        </tr>
-                <tr key="1" >
-          <th className='text-lg'>Position</th>
-<td></td>
-            <td className='text-lg'>React Devloper</td>
-        </tr>
-                <tr key="1" >
-          <th className='text-lg'>Total Attendance Days</th>
-       
+        <CardBody className=''>
+          <table className="">
+            <tbody style={{ marginTop: "5em" }} className='space-y-10'>
+              <tr key="1" className='text-lg'>
+                <th>ID</th>
+                <td></td>
+                <td>KS-107</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Name</th>
+                <td></td>
+                <td>Kaung Set Hein</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Position</th>
+                <td></td>
+                <td>React Devloper</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Total Attendance Days</th>
 
-            <td className='text-lg'>3 Days</td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Paid Leave Days</th>
-       
+                <td>3 Days</td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Paid Leave Days</th>
 
-            <td className='text-lg'>1 Days</td>
-            <td className='text-lg'>1000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Unpaid Leave Days</th>
-       
+                <td>1 Days</td>
+                <td>1000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Unpaid Leave Days</th>
 
-            <td className='text-lg'>3 Days</td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Meal Allowance Days</th>
-       
+                <td>3 Days</td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Meal Allowance Days</th>
 
-            <td className='text-lg'>3 Days</td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Total Attendance Days</th>
-       
+                <td>3 Days</td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Total Attendance Days</th>
 
-            <td className='text-lg'>3 Days</td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Travel Allowance Days</th>
-       
+                <td>3 Days</td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Travel Allowance Days</th>
 
-            <td className='text-lg'>3 Days</td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Incentice</th>
-       
+                <td>3 Days</td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Incentice</th>
 
-            <td className='text-lg'>Reason</td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Bonus</th>
-       
+                <td>Reason</td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Bonus</th>
 
-            <td className='text-lg'>Reason</td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Sub Total</th>
-       
+                <td>Reason</td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" className='text-lg'>
+                <th>Sub Total</th>
 
-            <td className='text-lg'></td>
-            <td className='text-lg'>3000</td>
-        </tr>
-            <tr key="1" >
-          <th className='text-lg'>Income Tax</th>
-       
+                <td></td>
+                <td>3000</td>
+              </tr>
+              <tr key="1" style={{ borderBottom: "1px solid"}} className='text-lg'>
+                <th>Income Tax</th>
 
-            <td className='text-lg'>%</td>
-            <td className='text-lg'>3000</td>
-          
-               
-        </tr>
-        <div className='py-3'>
- <div style={{ borderBottom: "1px solid"}}>
-      {/* <div style={{ borderBottom: "1px solid"}} className=''></div> */}
-        </div>
-        </div>
-       
-           <tr key="1">
-          <th className='text-lg'>Net Salary</th>
-       
+                <td>%</td>
+                <td>3000</td>
+                 
+              </tr>
+            
 
-            <td className='text-lg'></td>
-            <td className='text-lg'>30000</td>
-        </tr>
-      </tbody>
-    </table>
+              <tr key="1" className='text-lg'>
+                <th>Net Salary</th>
+
+                <td ></td>
+                <td >30000</td>
+              </tr>
+            </tbody>
+          </table>
+           {/* <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+           <label >ID</label>
+                <Input
+                    type="text"
+                    value='Kaung Set Hein'
+                    className='font-semibold'
+                    // variant={variant}
+                    // onChange={(e) => handleInputChange('startDate', e.target.value)}
+                    labelPlacement="outside"
+                   
+                />
+            </div> */}
+
         </CardBody>
         <CardFooter>
           <div className="block w-full">
@@ -172,12 +178,14 @@ export default function LeaveInputForm() {
               </div>
             </div>
             <div></div>
-            <div className="text-center mt-20">
-              <Button color="primary">Print</Button>
-            </div>
           </div>
         </CardFooter>
       </Card>
+      <div className="text-center mt-20">
+        <Button color="primary" onClick={print}>
+          Print
+        </Button>
+      </div>
     </div>
   );
 }
