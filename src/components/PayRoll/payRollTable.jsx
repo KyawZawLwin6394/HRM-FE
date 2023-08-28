@@ -8,11 +8,13 @@ import React from "react";
 import { SearchIcon } from "../Navbar/search";
 import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { Link } from "react-router-dom";
+import ExtraPay from './extrapay'
 
 export default function PayrollTable() {
     const functions = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const [payrollList, setPayrollList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
+      const { isOpen:isOpenExtra, onOpen:onOpenExtra, onClose:onCloseExtra } = useDisclosure();
     const [departmentList, setDepartmentList] = useState([]);
     const [delID, setDelID] = useState(null);
     const [page, setPage] = React.useState(1);
@@ -71,9 +73,12 @@ export default function PayrollTable() {
     }, [isOpen, rowsPerPage])
 
     const handleOpen = (event) => {
-        onOpen();
+onOpen()
         console.log(event.currentTarget.getAttribute('data-key'))
         setDelID(event.currentTarget.getAttribute('data-key'))
+    }
+    const handleExtraOpen=()=>{
+    onOpenExtra()   
     }
 
     const handleClose = () => {
@@ -142,9 +147,9 @@ export default function PayrollTable() {
                 <div className="flex gap-3">
 
                     <Button color="primary" endContent={<PlusIcon />}>
-                        <Link to='/pay-add'>
-                            Add
-                        </Link>
+                     
+                           Calculate
+              
                     </Button>
                 </div>
             </div>
@@ -195,7 +200,6 @@ export default function PayrollTable() {
                     <TableColumn>Paid Leaves</TableColumn>
                     <TableColumn>Unpaid Leaves</TableColumn>
                     <TableColumn>Entitled Salary</TableColumn>
-                    <TableColumn className='text-center'>Calculate</TableColumn>
                     <TableColumn>Actions</TableColumn>
                 </TableHeader>
                 <TableBody
@@ -218,13 +222,13 @@ export default function PayrollTable() {
                                         Pay Slip
                                     </Link>
                                 </Button>
-                                <Button color="primary" size='sm' >
-                                    <Link to='/payroll/register'>
+                                <Button color="primary" size='sm' onClick={handleExtraOpen} >
+                                   
                                         Extra
-                                    </Link>
+                                    
                                 </Button>
                             </div></TableCell>
-                            <TableCell>
+                            {/* <TableCell>
                                 <div className="relative flex items-center gap-2">
                                     <Tooltip content="Edit Payroll">
                                         <Link to={`/payroll/update/${item._id}`}>
@@ -239,7 +243,7 @@ export default function PayrollTable() {
                                         </span>
                                     </Tooltip>
                                 </div>
-                            </TableCell>
+                            </TableCell> */}
                         </TableRow>
                     ))}
                 </TableBody>
@@ -268,6 +272,19 @@ export default function PayrollTable() {
                 </ModalContent>
             </Modal>
 
+   <Modal backdrop='blur' isOpen={isOpenExtra} onClose={onCloseExtra} size='lg' >
+                <ModalContent >
+                    {() => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1 text-center">Extra Pay</ModalHeader>
+                            <ModalBody>
+                              <ExtraPay/>
+                            </ModalBody>
+                           
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
         </>
     )
 }
