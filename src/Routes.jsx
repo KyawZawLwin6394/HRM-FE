@@ -21,6 +21,7 @@ import LeaveAdd from './pages/Leave/LeaveAdd'
 import LeaveUpdate from './pages/Leave/LeaveUpdate'
 import PayRoll from './pages/PayRoll/payroll'
 import PayRollAdd from './pages/PayRoll/payrolladd'
+import Payslip from './pages/PayRoll/payslip'
 
 export default function RouteFile() {
   return (
@@ -58,7 +59,7 @@ export default function RouteFile() {
          {/* Pay Roll */}
             <Route path='/payroll' element={<PayRoll />} />
             <Route path='/pay-add' element={<PayRollAdd />} />
-            {/* <Route path='/emp-update/:id' element={<EmployeeUpdate />} /> */}
+            <Route path='/payslip/:id' element={<Payslip />} />
 
             {/* Position */}
             <Route path='/position' element={<Position />} />

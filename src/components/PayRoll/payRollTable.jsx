@@ -12,12 +12,9 @@ import { Link } from "react-router-dom";
 
 export default function DepartmentTable() {
     const functions = ['Jan','Feb','March','April','May','June','July','Aug','Sep','Oct','Nov','Dec']
-    const cell=['ID No','Name','Position','Total Attendance Days']
     const [departmentList, setDepartmentList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure();
-        const { isOpen:isOpenSlip, onOpen:onOpenSlip, onClose:onCloseSlip } = useDisclosure();
-        const [paySlipID,setPaySlipID]=useState('')
-        const [size,setSize]=useState('')
+
     const [delID, setDelID] = useState(null);
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
@@ -74,11 +71,6 @@ export default function DepartmentTable() {
         setDelID(event.currentTarget.getAttribute('data-key'))
     }
 
-        const handleOpen1 = (event,id,size) => {
-        onOpenSlip();
-        setSize(size)
-     setPaySlipID(id)
-    }
     const handleClose = () => {
         onClose();
         setDelID(null)
@@ -216,11 +208,14 @@ export default function DepartmentTable() {
                             <TableCell>{item.assistantManager ? item.assistantManager.givenName : 'Not Set'}</TableCell>
                             <TableCell>  <div className="flex gap-1">
           
-                    <Button color="primary"  onClick={(e)=>handleOpen1(e,item._id,'xl')} size='sm'>
+          <Link to={'/payslip/'+item._id}>
+ <Button color="primary" size='sm'>
                       
                             Pay Slip
                     
                     </Button>
+          </Link>
+                   
                           <Button color="primary" size='sm' >
                         <Link to='/department/register'>
                             Extra
@@ -270,44 +265,7 @@ export default function DepartmentTable() {
                     )}
                 </ModalContent>
             </Modal>
-              <Modal backdrop='opaque' size={size} isOpen={isOpenSlip} onClose={onCloseSlip}>
-                <ModalContent>
-                    {() => (
-                        <>
-                            <ModalHeader className="flex gap-1 justify-center">Pay Slip</ModalHeader>
-                            <ModalBody className='flex zgap-1 '>
-                                 <Table hideHeader aria-label="Example static collection table">
-      <TableHeader>
-        <TableColumn>NAME</TableColumn>
-        <TableColumn>ROLE</TableColumn>
-        <TableColumn>STATUS</TableColumn>
-      </TableHeader>
-      <TableBody>
-      {cell.map((item)=>(
-  <TableRow key={item}>
-          <TableCell>{item}</TableCell>
-          <TableCell>:</TableCell>
-          <TableCell>123456</TableCell>
-        </TableRow>
-      ))}
-     
-     
-      </TableBody>
-    </Table>
-                            </ModalBody>
-                            <ModalFooter>
-                                {/* <Button color="default" variant="light" onClick={onCloseSlip}>
-                                    No, Cancel
-                                </Button>
-                                <Button color="danger" onPress={() => handleDelete()} onKeyDown={handleKeyDown}>
-                                    Yes, I am sure
-                                    <Kbd className="bg-danger-500" keys={['enter']}></Kbd>
-                                </Button> */}
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
+              
         </>
     )
 }
