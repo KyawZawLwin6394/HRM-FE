@@ -18,17 +18,16 @@ export default function PayrollTable() {
     const [page, setPage] = React.useState(1);
     const [pages, setPages] = React.useState(1);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-    const [departmntFunction, setPayrollFunction] = useState('')
+    const [month, setMonth] = useState('')
     const [departmentID, setDepartmentID] = useState('')
 
     const filterPayrollList = async () => {
-        console.log(departmntFunction, payrollLevel)
-        await apiInstance.get('payrolls', { params: { funct: departmntFunction, level: payrollLevel } })
+        await apiInstance.get('payrolls', { params: { month: month, relatedDepartment: departmentID } })
             .then(res => {
                 setPayrollList(res.data.data)
             })
     }
+
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -94,7 +93,6 @@ export default function PayrollTable() {
     return (
         <>
             <div className="flex flex-row gap-3 justify-between">
-
                 <div className="flex gap-3 mb-3 flex-row">
                     <Dropdown>
                         <DropdownTrigger className="hidden sm:flex">
@@ -107,7 +105,7 @@ export default function PayrollTable() {
                             aria-label="Table Columns"
                             closeOnSelect={false}
                             selectionMode="single"
-                            onAction={(key) => setPayrollFunction(key)}
+                            onAction={(key) => setMonth(key)}
 
                         >
                             {functions.map(item => (
