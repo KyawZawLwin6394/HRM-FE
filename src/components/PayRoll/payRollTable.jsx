@@ -28,6 +28,13 @@ export default function PayrollTable() {
             })
     }
 
+    const handlePayrollCalculation = async () => {
+        await apiInstance.get('payrolls/calculate', { params: { month: month, relatedDepartment: departmentID } })
+            .then(res => {
+                setPayrollList(res.data.data)
+            })
+    }
+
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
@@ -97,7 +104,7 @@ export default function PayrollTable() {
                     <Dropdown>
                         <DropdownTrigger className="hidden sm:flex">
                             <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
-                                Month
+                                {month ? month : 'Month'}
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu
@@ -138,13 +145,11 @@ export default function PayrollTable() {
                     <Button color="primary" endContent={<SearchIcon className='w-5 h-4' />} onClick={filterPayrollList}>
                         Search
                     </Button>
+
                 </div>
                 <div className="flex gap-3">
-
-                    <Button color="primary" endContent={<PlusIcon />}>
-                        <Link to='/pay-add'>
-                            Add
-                        </Link>
+                    <Button color="primary" endContent={<PlusIcon />} onClick={handlePayrollCalculation}>
+                        Calculate
                     </Button>
                 </div>
             </div>
