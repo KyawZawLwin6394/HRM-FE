@@ -2,7 +2,7 @@ import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import Payslip from "../../components/PayRoll/payslip";
 
-export default function LeaveAdd() {
+export default function PaySlip() {
 
     return (
         <div className='flex'>

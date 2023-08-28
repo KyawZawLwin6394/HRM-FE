@@ -1,8 +1,8 @@
 import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
-import PayRollInputForm from "../../components/PayRoll/payRollInput";
+import ExtraPayForm from "../../components/PayRoll/extrapay";
 
-export default function LeaveAdd() {
+export default function ExtraPay() {
 
     return (
         <div className='flex'>
@@ -12,11 +12,11 @@ export default function LeaveAdd() {
                     <Card className="rounded-sm shadow-md py-3 min-h-[890px]" >
                         <CardHeader className="flex justify-center">
                             <label className="font-semibold font-nunito">
-                                Payroll Register
+                                Extra Pay
                             </label>
                         </CardHeader>
                         <CardBody>
-                            < PayRollInputForm />
+                            < ExtraPayForm />
                         </CardBody>
                         <Divider></Divider>
                         <CardFooter>

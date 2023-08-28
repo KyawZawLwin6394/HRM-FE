@@ -2,7 +2,7 @@ import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/rea
 import Sidebar from "../../components/Sidebar";
 import PayRollTable from "../../components/PayRoll/payRollTable";
 
-export default function Department() {
+export default function Payroll() {
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>

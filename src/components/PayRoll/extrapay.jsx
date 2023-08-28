@@ -87,19 +87,19 @@ export default function LeaveInputForm() {
         <div className="gap-4">
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                 <Input
-                    type="date"
-                    label="Start Date"
-                    placeholder="Date"
+                    type="text"
+                    label="ID"
+                    placeholder="Enter ID"
                     variant={variant}
-                    onChange={(e) => handleInputChange('startDate', e.target.value)}
+                    onChange={(e) => handleInputChange('id', e.target.value)}
                     labelPlacement="outside"
                 />
                 <Input
-                    type="date"
-                    label="End Date"
-                    placeholder="Date"
+                    type="text"
+                    label="Name"
+                    placeholder="Enter name"
                     variant={variant}
-                    onChange={(e) => handleInputChange('endDate', e.target.value)}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
                     labelPlacement="outside"
                 />
             </div>
@@ -167,7 +167,7 @@ export default function LeaveInputForm() {
                         ))}
                     </select>
                 </div>
-                <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                {/* <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                     <div className="mt-3"></div>
                     <FileUploader
                         multiple={true}
@@ -175,7 +175,7 @@ export default function LeaveInputForm() {
                         name="file"
                         types={fileTypes}
                     />
-                </div>
+                </div> */}
 
             </div>
 
