@@ -11,6 +11,7 @@ import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import { EyeIcon } from '../Table/eyeicon';
 import Swal from 'sweetalert2';
+import { convertAndDisplayTZ } from "../../util/Util";
 
 export default function LeaveTable() {
     const handleLeaveType = { Casual: 'casualLeaves', Medical: 'medicalLeaves', Vacation: 'vacationLeaves', 'Maternity:Male': 'maternityLeaveMale', 'Maternity:Female': 'maternityLeaveFemale' }
@@ -242,8 +243,8 @@ export default function LeaveTable() {
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item?.code}</TableCell>
-                            <TableCell>{item.startDate?.split('T')[0]}</TableCell>
-                            <TableCell>{item.endDate?.split('T')[0]}</TableCell>
+                            <TableCell>{item.startDate ? convertAndDisplayTZ(item.startDate) : 'Not Set'}</TableCell>
+                            <TableCell>{item.endDate ? convertAndDisplayTZ(item.endDate) : 'Not Set'}</TableCell>
                             <TableCell>{item.relatedUser?.givenName}</TableCell>
                             <TableCell>{item.relatedUser?.relatedPosition?.name}</TableCell>
                             <TableCell>{item.relatedUser?.relatedDepartment?.name}</TableCell>
@@ -317,8 +318,8 @@ export default function LeaveTable() {
                             <label><span className="font-semibold">Department</span>: {leave?.relatedUser?.relatedDepartment?.name}</label>
                         </div>
                         <div className="flex justify-between">
-                            <label><span className="font-semibold">From</span>: {leave?.startDate?.split('T')[0]}</label>
-                            <label><span className="font-semibold">To</span>: {leave?.endDate?.split('T')[0]}</label>
+                            <label><span className="font-semibold">From</span>: {leave ? convertAndDisplayTZ(leave.startDate) : 'Not Set'}</label>
+                            <label><span className="font-semibold">To</span>: {leave? convertAndDisplayTZ(leave.endDate) : 'Not Set'}</label>
                         </div>
                         {/* <Divider></Divider> */}
                         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">

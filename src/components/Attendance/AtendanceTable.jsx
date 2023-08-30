@@ -38,6 +38,7 @@ import { FileUploader } from 'react-drag-drop-files'
 import { TfiImport } from 'react-icons/tfi'
 import { BsCloudArrowUpFill } from 'react-icons/bs'
 import { PlusIcon } from '../../assets/Icons/PlusIcon';
+import { convertAndDisplayTZ } from '../../util/Util';
 
 export default function AttendanceTable() {
 
@@ -337,7 +338,7 @@ export default function AttendanceTable() {
           {items.map((item, index) => (
             <TableRow key={item._id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.date?.split('T')[0]}</TableCell>
+              <TableCell>{item.date? convertAndDisplayTZ(item.date) : 'Not Set'}</TableCell>
               <TableCell>{item.clockIn}</TableCell>
               <TableCell>{item.clockOut}</TableCell>
               <TableCell>

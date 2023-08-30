@@ -1,3 +1,4 @@
 {
-    "url": "http://localhost:9000/api/"
+    "url": "http://localhost:9000/api/",
+    "timeZone":"Asia/Yangon"
 }
