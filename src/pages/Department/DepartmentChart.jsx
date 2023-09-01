@@ -61,8 +61,8 @@ export default function DepartmentChart() {
     return (
         <div className='flex'>
             <div className="sidebar"><Sidebar /></div>
-            <div className="py-3 flex-grow">
-                <div className="body  py-1">
+            <div className="flex-grow">
+                <div className="">
                     <Card className="rounded-md shadow-md py-3 min-h-[860px]">
                         <CardHeader className="flex justify-center">
                             <div className="font-semibold text-medium">
