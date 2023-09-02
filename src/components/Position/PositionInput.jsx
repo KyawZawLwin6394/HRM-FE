@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form';
 export default function PositionInputForm() {
     const variant = 'faded';
     const [departmentList, setDepartmentList] = useState([])
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { form, register, handleSubmit, formState: { errors } } = useForm();
     const handleInputChange = (fieldName, value) => {
         setData(prevValues => ({
             ...prevValues,
@@ -43,7 +43,7 @@ export default function PositionInputForm() {
     });
 
     const handleRegister = async () => {
-
+        // alert(JSON.stringify(data))
         await apiInstance.post('position', data)
             .then(() => {
                 Swal.fire({
@@ -204,15 +204,19 @@ export default function PositionInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                     <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                         <div className="w-1/3">
-                            <label className={`text-sm font-semibold`}>Incentive</label>
+                            <label className={`text-sm font-semibold ${errors.isIncentive && errors.isIncentive.type === 'required' ? 'text-[#f31260]' : ''}`}>Incentive</label>
                             <RadioGroup
+                                name='isIncentive'
                                 orientation="horizontal"
                                 className="mt-2"
+                                onChange={(e) => form.setFieldValue("isIncentive", e.target.value)}
                                 validationState={errors.isIncentive && errors.isIncentive.type === 'required' ? 'invalid' : 'valid'}
                             >
                                 <Radio id="isIncentive" value={true} {...register('isIncentive', { required: true, onChange: (e) => handleInputChange('isIncentive', e.target.value) })}>Yes</Radio>
                                 <Radio id="isIncentive" value={false} {...register('isIncentive', { required: true, onChange: (e) => handleInputChange('isIncentive', e.target.value) })}>No</Radio>
                             </RadioGroup>
+
+
                         </div>
                         <Input
                             type="text"
@@ -237,10 +241,15 @@ export default function PositionInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                     <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                         <div className="w-1/3">
-                            <label className="text-sm font-semibold">Bonus</label>
-                            <RadioGroup orientation="horizontal" className="mt-2">
-                                <Radio value={true} onChange={(e) => handleInputChange('isBonus', e.target.value)}>Yes</Radio>
-                                <Radio value={false} onChange={(e) => handleInputChange('isBonus', e.target.value)}>No</Radio>
+                            <label className={`text-sm font-semibold ${errors.isBonus && errors.isBonus.type === 'required' ? 'text-[#f31260]' : ''}`}>Bonus</label>
+                            <RadioGroup
+                                name='isBonus'
+                                orientation="horizontal"
+                                className="mt-2"
+                                onChange={(e) => form.setFieldValue("isBonus", e.target.value)}
+                                validationState={errors.isBonus && errors.isBonus.type === 'required' ? 'invalid' : 'valid'}>
+                                <Radio id="isBonus" value={true} {...register('isBonus', { required: true, onChange: (e) => handleInputChange('isBonus', e.target.value) })}>Yes</Radio>
+                                <Radio id="isBonus" value={false} {...register('isBonus', { required: true, onChange: (e) => handleInputChange('isBonus', e.target.value) })}>No</Radio>
                             </RadioGroup>
                         </div>
                         <Input
@@ -266,10 +275,15 @@ export default function PositionInputForm() {
                 <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                     <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                         <div className="w-1/3">
-                            <label className="text-sm font-semibold">Travel Allowance</label>
-                            <RadioGroup orientation="horizontal" className="mt-2">
-                                <Radio value={true} onChange={(e) => handleInputChange('isTravelAllowance', e.target.value)}>Yes</Radio>
-                                <Radio value={false} onChange={(e) => handleInputChange('isTravelAllowance', e.target.value)}>No</Radio>
+                            <label className={`text-sm font-semibold ${errors.isTravelAllowance && errors.isTravelAllowance.type === 'required' ? 'text-[#f31260]' : ''}`}>Travel Allowance</label>
+                            <RadioGroup
+                                name='isTravelAllowance'
+                                orientation="horizontal"
+                                className="mt-2"
+                                onChange={(e) => form.setFieldValue("isTravelAllowance", e.target.value)}
+                                validationState={errors.isTravelAllowance && errors.isTravelAllowance.type === 'required' ? 'invalid' : 'valid'}>
+                                <Radio value={true}  {...register('isTravelAllowance', { required: true, onChange: (e) => handleInputChange('isTravelAllowance', e.target.value) })}>Yes</Radio>
+                                <Radio value={false} {...register('isTravelAllowance', { required: true, onChange: (e) => handleInputChange('isTravelAllowance', e.target.value) })}>No</Radio>
                             </RadioGroup>
                         </div>
                         <Input
@@ -283,10 +297,16 @@ export default function PositionInputForm() {
                     </div>
                     <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                         <div className="w-1/3">
-                            <label className="text-sm font-semibold">Meal Allowance</label>
-                            <RadioGroup orientation="horizontal" className="mt-2" >
-                                <Radio value={true} onChange={(e) => handleInputChange('isMealAllowance', e.target.value)}>Yes</Radio>
-                                <Radio value={false} onChange={(e) => handleInputChange('isMealAllowance', e.target.value)}>No</Radio>
+                            <label className={`text-sm font-semibold ${errors.isMealAllowance && errors.isMealAllowance.type === 'required' ? 'text-[#f31260]' : ''}`}>Meal Allowance</label>
+                            <RadioGroup
+                                name='isMealAllowance'
+                                orientation="horizontal"
+                                className="mt-2"
+                                onChange={(e) => form.setFieldValue("isMealAllowance", e.target.value)}
+                                validationState={errors.isMealAllowance && errors.isMealAllowance.type === 'required' ? 'invalid' : 'valid'}
+                            >
+                                <Radio value={true}  {...register('isMealAllowance', { required: true, onChange: (e) => handleInputChange('isMealAllowance', e.target.value) })}>Yes</Radio>
+                                <Radio value={false} {...register('isMealAllowance', { required: true, onChange: (e) => handleInputChange('isMealAllowance', e.target.value) })}>No</Radio>
                             </RadioGroup>
                         </div>
                         <Input
