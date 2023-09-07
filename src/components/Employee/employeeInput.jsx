@@ -14,12 +14,14 @@ import apiInstance from "../../util/api.js";
 import Swal from "sweetalert2";
 import { FileUploader } from "react-drag-drop-files";
 import { Link } from "react-router-dom";
+import { useForm } from 'react-hook-form';
 
 const fileTypes = ["JPG", "PNG", "GIF"];
 
 export default function EmployeeInput() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const variant = ["faded"];
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const emailRef = useRef();
   const passRef = useRef();
@@ -203,485 +205,493 @@ export default function EmployeeInput() {
   };
   return (
     <div className="gap-6">
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="text"
-          isRequired
-          label="Name"
-          placeholder="Name"
-          ref={nameRef}
-          variant={variant}
-          labelPlacement="outside"
-        />
-        <Input
-          type="number"
-          label="Phone No"
-          ref={phoneRef}
-          placeholder="Phone Number"
-          variant={variant}
-          labelPlacement="outside"
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="date"
-          label="Age/DOB"
-          ref={DOBRef}
-          placeholder="you@example.com"
-          labelPlacement="outside"
-          variant={variant}
-        />
-        <Input
-          isRequired
-          type="text"
-          variant={variant}
-          label="NRC"
-          placeholder="NRC.."
-          ref={nrcRef}
-          labelPlacement="outside"
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="text"
-          label="Passport No"
-          placeholder="Passport Number.."
-          labelPlacement="outside"
-          ref={passportRef}
-          variant={variant}
-        />
-        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-          <label className="text-sm font-semibold">Gender</label>
-          <select
-            ref={genderRef}
-            id="countries"
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          isRequired
-          type="email"
-          variant={variant}
-          ref={emailRef}
-          label="Personal Email"
-          placeholder=" "
-          labelPlacement="outside"
-        />
-        <Input
-          isRequired
-          type="password"
-          label="Password"
-          ref={passRef}
-          variant={variant}
-          placeholder="Password.."
-          labelPlacement="outside"
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+      <form onSubmit={handleSubmit(create)}>
+        {console.log(errors, 'errors')}
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
           <Input
             type="text"
-            label="Address"
-            placeholder="Address.."
-            labelPlacement="outside"
-            ref={addressRef}
+            validationState={errors.name && errors.name.type === 'required' ? 'invalid' : 'valid'}
+            label="Name"
+            placeholder="Name"
+            ref={nameRef}
             variant={variant}
+            labelPlacement="outside"
+            {...register('name', { required: true })}
           />
-        </div>
-        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
           <Input
-            type="file"
-            label="CV"
+            type="number"
+            label="Phone No"
+            ref={phoneRef}
+            placeholder="Phone Number"
             variant={variant}
-            onChange={handlefile}
-            placeholder=" "
             labelPlacement="outside"
           />
         </div>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="text"
-          variant={variant}
-          ref={EuBackRef}
-          label="Education Background"
-          placeholder=" "
-          labelPlacement="outside"
-        />
-        <Input
-          type="file"
-          label="Education Certificate"
-          variant={variant}
-          onChange={handleCer}
-          placeholder=" "
-          labelPlacement="outside"
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="date"
-          ref={firstInRef}
-          label="First Interview Date"
-          placeholder="you@example.com"
-          labelPlacement="outside"
-          variant={variant}
-        />
-        <Input
-          type="text"
-          label="First Interview Result"
-          ref={firstResRef}
-          placeholder="..."
-          labelPlacement="outside"
-          variant={variant}
-        />
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4">
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
           <Input
             type="date"
-            label="Second Interview Date"
-            ref={secInRef}
+            label="Age/DOB"
+            ref={DOBRef}
+            placeholder="you@example.com"
+            labelPlacement="outside"
+            variant={variant}
+          />
+          <Input
+            type="text"
+            variant={variant}
+            label="NRC"
+            placeholder="NRC.."
+            ref={nrcRef}
+            labelPlacement="outside"
+          />
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <Input
+            type="text"
+            label="Passport No"
+            placeholder="Passport Number.."
+            labelPlacement="outside"
+            ref={passportRef}
+            variant={variant}
+          />
+          <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <label className={`text-sm font-semibold ${errors.gender && errors.gender.type === 'required' ? 'text-[#f31260]' : ''}`}>Gender</label>
+            <select
+              ref={genderRef}
+              id="countries"
+              {...register('gender', { required: true })}
+              className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
+              <option hidden value=''>Choose Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <Input
+
+            type="email"
+            variant={variant}
+            ref={emailRef}
+            validationState={errors.email && errors.email.type === 'required' ? 'invalid' : 'valid'}
+            label="Personal Email"
+            placeholder="example@gmail.com"
+            labelPlacement="outside"
+            {...register('email', { required: true })}
+          />
+          <Input
+            validationState={errors.password && errors.password.type === 'required' ? 'invalid' : 'valid'}
+            type="password"
+            label="Password"
+            ref={passRef}
+            variant={variant}
+            placeholder="Password.."
+            labelPlacement="outside"
+            {...register('password', { required: true })}
+          />
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <Input
+              type="text"
+              label="Address"
+              placeholder="Address.."
+              labelPlacement="outside"
+              ref={addressRef}
+              variant={variant}
+            />
+          </div>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <Input
+              type="file"
+              label="CV"
+              variant={variant}
+              onChange={handlefile}
+              placeholder=" "
+              labelPlacement="outside"
+            />
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <Input
+            type="text"
+            variant={variant}
+            ref={EuBackRef}
+            label="Education Background"
             placeholder=" "
+            labelPlacement="outside"
+          />
+          <Input
+            type="file"
+            label="Education Certificate"
+            variant={variant}
+            onChange={handleCer}
+            placeholder=" "
+            labelPlacement="outside"
+          />
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <Input
+            type="date"
+            ref={firstInRef}
+            label="First Interview Date"
+            placeholder="you@example.com"
+            labelPlacement="outside"
+            variant={variant}
+          />
+          <Input
+            type="text"
+            label="First Interview Result"
+            ref={firstResRef}
+            placeholder="..."
+            labelPlacement="outside"
+            variant={variant}
+          />
+        </div>
+
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4">
+            <Input
+              type="date"
+              label="Second Interview Date"
+              ref={secInRef}
+              placeholder=" "
+              labelPlacement="outside"
+              variant={variant}
+            />
+          </div>
+          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+            <Input
+              type="text"
+              ref={secResRef}
+              label="Second Interview Result"
+              variant={variant}
+              placeholder="..."
+              labelPlacement="outside"
+            />
+          </div>
+        </div>
+
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <label className={`text-sm font-semibold ${errors.department && errors.department.type === 'required' ? 'text-[#f31260]' : ''}`}>Department</label>
+            <select
+              id="countries"
+              {...register('department', { required: true })}
+              onChange={(e) => handleDirectManager(e.target.value)}
+              className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
+              <option value='' hidden>Choose Department</option>
+
+              {departmentList.map((option) => (
+                <option key={option} value={option._id}>{option.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <label className="text-sm font-semibold">Direct Manager</label>
+            <select
+              id="countries"
+              className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
+
+              <option hidden value={directManagerID}>{directManager}</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <Input
+            type="text"
+            variant={variant}
+            label="Father Name"
+            placeholder=" "
+            ref={fatherRef}
+            labelPlacement="outside"
+          />
+          <Input
+            type="date"
+            label="Employed Date"
+            placeholder=" "
+            ref={empDateRef}
             labelPlacement="outside"
             variant={variant}
           />
         </div>
         <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
           <Input
-            type="text"
-            ref={secResRef}
-            label="Second Interview Result"
+            type="tel"
             variant={variant}
-            placeholder="..."
+            label="Emergecy Contact"
+            ref={ECRef}
+            placeholder=" "
             labelPlacement="outside"
           />
-        </div>
-      </div>
-
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-          <label className="text-sm font-semibold">Department</label>
-          <select
-            id="countries"
-            onChange={(e) => handleDirectManager(e.target.value)}
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Department</option>
-
-            {departmentList.map((option) => (
-              <option key={option} value={option._id}>{option.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-          <label className="text-sm font-semibold">Direct Manager</label>
-          <select
-            id="countries"
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-
-            <option hidden value={directManagerID}>{directManager}</option>
-          </select>
-        </div>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="text"
-          variant={variant}
-          label="Father Name"
-          placeholder=" "
-          ref={fatherRef}
-          labelPlacement="outside"
-        />
-        <Input
-          type="date"
-          label="Employed Date"
-          placeholder=" "
-          ref={empDateRef}
-          labelPlacement="outside"
-          variant={variant}
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="tel"
-          variant={variant}
-          label="Emergecy Contact"
-          ref={ECRef}
-          placeholder=" "
-          labelPlacement="outside"
-        />
-        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-          <label className="text-sm font-semibold">Position</label>
-          <select
-            id="countries"
-            onChange={(e) => handlePosition(e.target.value)}
-            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-            <option hidden>Choose Position</option>
-            {positionList.map((option) => (
-              <option key={option} value={option._id}>
-                {option.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
-        <Input
-          type="text"
-          ref={workExpRef}
-          label="Work Experience"
-          placeholder=" "
-          labelPlacement="outside"
-          variant={variant}
-        />
-
-        <Input
-          type="number"
-          label="Basic Salary"
-          value={positionID?.basicSalary}
-          placeholder=" "
-          labelPlacement="outside"
-          variant={variant}
-        />
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <label className="text-sm font-semibold">Leave Entitled</label>
-          <div className="flex flex-row text-sm mt-1 gap-2">
-            <div>
-              <label>Casual</label>
-              <Input isDisabled={true} value={positionID.casualLeaves} className="py-1" />
-            </div>
-            <div>
-              <label>Medical</label>
-              <Input isDisabled={true} value={positionID.medicalLeaves} className="py-1" />
-            </div>
-            <div>
-              <label>Vacation</label>
-              <Input isDisabled={true} value={positionID.vacationLeaves} className="py-1" />
-            </div>
-            <div>
-              <label>
-                <abbr
-                  title="Maternity Male"
-                  style={{ textDecoration: "none", border: "none" }}>
-                  Male
-                </abbr>
-              </label>
-              <Input isDisabled={true} value={positionID.maternityLeaveMale} className="py-1" />
-            </div>
-            <div>
-              <label>
-                <abbr
-                  title="Maternity Female"
-                  style={{ textDecoration: "none", border: "none" }}>
-                  Female
-                </abbr>
-              </label>
-              <Input isDisabled={true} value={positionID.maternityLeaveFemale} className="py-1" />
-            </div>
+          <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+            <label className={`text-sm font-semibold ${errors.position && errors.position.type === 'required' ? 'text-[#f31260]' : ''}`}>Position</label>
+            <select
+              id="countries"
+              {...register('position', { required: true })}
+              onChange={(e) => handlePosition(e.target.value)}
+              className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
+              <option value='' hidden>Choose Position</option>
+              {positionList.map((option) => (
+                <option key={option} value={option._id}>
+                  {option.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <div className="w-1/3">
-              <label className="text-sm font-semibold">Meal Allowance</label>
-              <RadioGroup
-                orientation="horizontal"
-                className="mt-8"
-                value={positionID ? positionID.isMealAllowance : ""}>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
-              </RadioGroup>
-            </div>
-            <Input
-              className="mt-11"
-              type="number"
-              value={positionID ? positionID.mealAllowance : "Not Set"}
-              placeholder="Meal Allowance"
-              variant={variant}
-              labelPlacement="outside"
-            />
-          </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
+          <Input
+            type="text"
+            ref={workExpRef}
+            label="Work Experience"
+            placeholder=" "
+            labelPlacement="outside"
+            variant={variant}
+          />
+
+          <Input
+            type="number"
+            label="Basic Salary"
+            value={positionID?.basicSalary}
+            placeholder=" "
+            labelPlacement="outside"
+            variant={variant}
+          />
         </div>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <div className="w-1/3">
-              <label className="text-sm font-semibold">Married</label>
-              <RadioGroup
-                orientation="horizontal"
-                className="mt-3"
-                onValueChange={(e) => setIsMarried(e)}
-              >
-                <Radio value={true} onClick={() => setShowMarried(!showMarried)}>Yes</Radio>
-                <Radio value={false} >No</Radio>
-              </RadioGroup>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+            <label className="text-sm font-semibold">Leave Entitled</label>
+            <div className="flex flex-row text-sm mt-1 gap-2">
+              <div>
+                <label>Casual</label>
+                <Input isDisabled={true} value={positionID.casualLeaves} className="py-1" />
+              </div>
+              <div>
+                <label>Medical</label>
+                <Input isDisabled={true} value={positionID.medicalLeaves} className="py-1" />
+              </div>
+              <div>
+                <label>Vacation</label>
+                <Input isDisabled={true} value={positionID.vacationLeaves} className="py-1" />
+              </div>
+              <div>
+                <label>
+                  <abbr
+                    title="Maternity Male"
+                    style={{ textDecoration: "none", border: "none" }}>
+                    Male
+                  </abbr>
+                </label>
+                <Input isDisabled={true} value={positionID.maternityLeaveMale} className="py-1" />
+              </div>
+              <div>
+                <label>
+                  <abbr
+                    title="Maternity Female"
+                    style={{ textDecoration: "none", border: "none" }}>
+                    Female
+                  </abbr>
+                </label>
+                <Input isDisabled={true} value={positionID.maternityLeaveFemale} className="py-1" />
+              </div>
             </div>
-            {showMarried && (
+          </div>
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+              <div className="w-1/3">
+                <label className="text-sm font-semibold">Meal Allowance</label>
+                <RadioGroup
+                  orientation="horizontal"
+                  className="mt-8"
+                  value={positionID ? positionID.isMealAllowance : ""}>
+                  <Radio value={true}>Yes</Radio>
+                  <Radio value={false}>No</Radio>
+                </RadioGroup>
+              </div>
               <Input
-                className="mt-7"
-                type="file"
-                onChange={handleMarriedFile}
-
-                placeholder="Married Date"
+                className="mt-11"
+                type="number"
+                value={positionID ? positionID.mealAllowance : "Not Set"}
+                placeholder="Meal Allowance"
                 variant={variant}
                 labelPlacement="outside"
               />
-            )}
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+              <div className="w-1/3">
+                <label className="text-sm font-semibold">Married</label>
+                <RadioGroup
+                  orientation="horizontal"
+                  className="mt-3"
+                  onValueChange={(e) => setIsMarried(e)}
+                >
+                  <Radio value={true} onClick={() => setShowMarried(!showMarried)}>Yes</Radio>
+                  <Radio value={false} >No</Radio>
+                </RadioGroup>
+              </div>
+              {showMarried && (
+                <Input
+                  className="mt-7"
+                  type="file"
+                  onChange={handleMarriedFile}
 
-          </div>
-        </div>
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <div className="w-1/3">
-              <label className="text-sm font-semibold">Travel Allowance</label>
-              <RadioGroup
-                orientation="horizontal"
-                className="mt-3"
-                value={positionID ? positionID.isTravelAllowance : ""}>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
-              </RadioGroup>
-            </div>
-            <Input
-              className="mt-7"
-              type="number"
-              value={positionID ? positionID.travelAllowance : "Not Set"}
-              placeholder="Travel Allowance"
-              variant={variant}
-              labelPlacement="outside"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <div className="w-1/3">
-              <label className="text-sm font-semibold">Yearly Bonus</label>
-              <RadioGroup
-                orientation="horizontal"
-                className="mt-3"
-                value={positionID ? positionID.isBonus : ""}>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
-              </RadioGroup>
-            </div>
-            <Input
-              className="mt-7"
-              type="number"
-              value={positionID ? positionID.bonus : "Not Set"}
-              placeholder="Bonus"
-              variant={variant}
-              labelPlacement="outside"
-            />
-          </div>
-        </div>
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-          <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-            <div className="w-1/3">
-              <label className="text-sm font-semibold">Incentive</label>
-              <RadioGroup
-                orientation="horizontal"
-                className="mt-3"
-                value={positionID ? positionID.isIncentive : ""}>
-                <Radio value={true}>Yes</Radio>
-                <Radio value={false}>No</Radio>
-              </RadioGroup>
-            </div>
-            <Input
-              className="mt-7"
-              type="number"
-              value={positionID ? positionID.incentive : "Not Set"}
-              placeholder="Incentive"
-              variant={variant}
-              labelPlacement="outside"
-            />
-          </div>
-        </div>
-      </div>
-      <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-        <Input
-          type="file"
-          onChange={handleRecLetter}
-          label="Recommendation Letter"
-          placeholder=" "
-          labelPlacement="outside"
-          variant={variant}
-        />
-        <Input
-          type="file"
-          onChange={handleProfile}
-          label="Profile"
-          placeholder=" "
-          labelPlacement="outside"
-          variant={variant}
-        />
-      </div>
+                  placeholder="Married Date"
+                  variant={variant}
+                  labelPlacement="outside"
+                />
+              )}
 
-      <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
-        <label className="text-sm font-semibold">Other Document</label> &nbsp;
-        <Button
-          isIconOnly
-          size="sm"
-          color="primary"
-          variant="shadow"
-          className="rounded-xl px-4 py-0 text-left"
-          onPress={onOpen}>
-          +
-        </Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  Other Document
-                </ModalHeader>
-                <ModalBody>
-                  <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <FileUploader
-                      multiple={true}
-                      handleChange={handleChange}
-                      name="file"
-                      types={fileTypes}
-                    />
-                    {/* <p>
+            </div>
+          </div>
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+              <div className="w-1/3">
+                <label className="text-sm font-semibold">Travel Allowance</label>
+                <RadioGroup
+                  orientation="horizontal"
+                  className="mt-3"
+                  value={positionID ? positionID.isTravelAllowance : ""}>
+                  <Radio value={true}>Yes</Radio>
+                  <Radio value={false}>No</Radio>
+                </RadioGroup>
+              </div>
+              <Input
+                className="mt-7"
+                type="number"
+                value={positionID ? positionID.travelAllowance : "Not Set"}
+                placeholder="Travel Allowance"
+                variant={variant}
+                labelPlacement="outside"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+              <div className="w-1/3">
+                <label className="text-sm font-semibold">Yearly Bonus</label>
+                <RadioGroup
+                  orientation="horizontal"
+                  className="mt-3"
+                  value={positionID ? positionID.isBonus : ""}>
+                  <Radio value={true}>Yes</Radio>
+                  <Radio value={false}>No</Radio>
+                </RadioGroup>
+              </div>
+              <Input
+                className="mt-7"
+                type="number"
+                value={positionID ? positionID.bonus : "Not Set"}
+                placeholder="Bonus"
+                variant={variant}
+                labelPlacement="outside"
+              />
+            </div>
+          </div>
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+            <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+              <div className="w-1/3">
+                <label className="text-sm font-semibold">Incentive</label>
+                <RadioGroup
+                  orientation="horizontal"
+                  className="mt-3"
+                  value={positionID ? positionID.isIncentive : ""}>
+                  <Radio value={true}>Yes</Radio>
+                  <Radio value={false}>No</Radio>
+                </RadioGroup>
+              </div>
+              <Input
+                className="mt-7"
+                type="number"
+                value={positionID ? positionID.incentive : "Not Set"}
+                placeholder="Incentive"
+                variant={variant}
+                labelPlacement="outside"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+          <Input
+            type="file"
+            onChange={handleRecLetter}
+            label="Recommendation Letter"
+            placeholder=" "
+            labelPlacement="outside"
+            variant={variant}
+          />
+          <Input
+            type="file"
+            onChange={handleProfile}
+            label="Profile"
+            placeholder=" "
+            labelPlacement="outside"
+            variant={variant}
+          />
+        </div>
+
+        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
+          <label className="text-sm font-semibold">Other Document</label> &nbsp;
+          <Button
+            isIconOnly
+            size="sm"
+            color="primary"
+            variant="shadow"
+            className="rounded-xl px-4 py-0 text-left"
+            onPress={onOpen}>
+            +
+          </Button>
+          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    Other Document
+                  </ModalHeader>
+                  <ModalBody>
+                    <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+                      <FileUploader
+                        multiple={true}
+                        handleChange={handleChange}
+                        name="file"
+                        types={fileTypes}
+                      />
+                      {/* <p>
                   {otherDoc
                     ? `File name: ${otherDoc[0].name}`
                     : ""}
                 </p> */}
 
-                    <Input
-                      type="text"
-                      label="Description"
-                      placeholder=""
-                      onChange={(e) => setDescription(e.target.value)}
-                      variant="faded"
-                      className="mt-5"
-                    />
-                  </div>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="danger" variant="light" onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button color="primary" onPress={onClose}>
-                    Save
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-        <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
-          {/* <p>{img[0]}</p>
+                      <Input
+                        type="text"
+                        label="Description"
+                        placeholder=""
+                        onChange={(e) => setDescription(e.target.value)}
+                        variant="faded"
+                        className="mt-5"
+                      />
+                    </div>
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="danger" variant="light" onClick={onClose}>
+                      Close
+                    </Button>
+                    <Button color="primary" onPress={onClose}>
+                      Save
+                    </Button>
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+          <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7">
+            {/* <p>{img[0]}</p>
           <img
             src={
               "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/employee/other/OTH-" +
@@ -689,26 +699,28 @@ export default function EmployeeInput() {
             }
             
           /> */}
+          </div>
         </div>
-      </div>
-      <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-        <Button
-          size="sm"
-          color="danger"
-          variant="shadow"
-          className="rounded-xl px-4 py-0 text-left">
-          <Link to='/emp'>Cancel</Link>
-        </Button>
-        <Button
-          size="sm"
-          color="primary"
-          variant="shadow"
-          className="rounded-xl px-4 py-0 text-left"
-          onClick={create}>
-          Register
-        </Button>
+        <div className="flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
+          <Button
+            size="sm"
+            color="danger"
+            variant="shadow"
+            className="rounded-xl px-4 py-0 text-left">
+            <Link to='/emp'>Cancel</Link>
+          </Button>
+          <Button
+            size="sm"
+            color="primary"
+            variant="shadow"
+            className="rounded-xl px-4 py-0 text-left"
+            type="submit"
+          >
+            Register
+          </Button>
 
-      </div>
+        </div>
+      </form>
     </div>
   );
 }
