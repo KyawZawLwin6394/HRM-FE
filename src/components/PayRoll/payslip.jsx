@@ -129,7 +129,7 @@ export default function LeaveInputForm() {
               </tr>
             </tbody>
           </table> */}
-          <table >
+          <table className='text-center sm:text-left'>
 
   <thead style={{ border:'1px solid'}} className='justify-center text-2xl'>
     <tr>
@@ -157,7 +157,7 @@ export default function LeaveInputForm() {
       <tr>
       <td className=''></td>
       <td style={{ borderBottom:'1px solid'}} className='px-3'></td>
-      <td style={{ borderBottom:'1px solid'}} className='px-3'>Net Salary : 155000 MMK</td>
+      <td style={{ borderBottom:'1px solid'}} className='px-3 text-center sm:text-left'>Net Salary : 155000 MMK</td>
     </tr>
   </tbody>
 </table>

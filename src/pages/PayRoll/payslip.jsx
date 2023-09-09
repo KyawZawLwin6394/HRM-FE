@@ -6,10 +6,10 @@ export default function PaySlip() {
 
     return (
         <div className='flex'>
-            <div className="sidebar"><Sidebar /></div>
-            <div className="flex-grow">
+            <div className="sidebar  w-full md:w-32 lg:w-48"><Sidebar /></div>
+            <div className="flex-grow  w-full md:w-32 lg:w-48">
                 <div className="body">
-                    <Card className="rounded-sm shadow-md py-3 min-h-[890px]" >
+                    <Card className="rounded-sm shadow-md py-3 min-h-[490px]" >
                         <CardHeader className="flex justify-center">
                             {/* <label className="font-semibold font-nunito">
                                 Payslip For Aug
