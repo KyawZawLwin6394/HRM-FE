@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form'
 
 const fileTypes = ['JPG', 'PNG', 'GIF']
 
-export default function EmployeeInput () {
+export default function EmployeeInput() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const variant = ['faded']
   const {
@@ -31,25 +31,25 @@ export default function EmployeeInput () {
   // const passRef = useRef()
   // const nrcRef = useRef()
   // const nameRef = useRef()
-  const [name,setName]=useState('')
-  const [email,setEmail]=useState('')
-  const [password,setPassword]=useState('')
-  const [nrc,setNrc]=useState('')
-const [address,setAddress]=useState('')
-const [dob,setDob]=useState('')
-const [ec,setEc]=useState('')
-const [phone,setPhone]=useState('')
-const [passPort,setPassPort]=useState('')
-const [euBack,setEuBack]=useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [nrc, setNrc] = useState('')
+  const [address, setAddress] = useState('')
+  const [dob, setDob] = useState('')
+  const [ec, setEc] = useState('')
+  const [phone, setPhone] = useState('')
+  const [passPort, setPassPort] = useState('')
+  const [euBack, setEuBack] = useState('')
   const [position, setPosition] = useState('')
-  const [workExp,setWorkExp]=useState('')
-  const [firstIn,setFirstIn]=useState('')
-  const [firstRes,setFirstRes]=useState('')
-  const [secIn,setSecIn]=useState('')
-  const [secRes,setSecRes]=useState('')
-  const [father,setFather]=useState('')
-  const [empDate,setEmpDate]=useState('')
-  const [gender,setGender]=useState('')
+  const [workExp, setWorkExp] = useState('')
+  const [firstIn, setFirstIn] = useState('')
+  const [firstRes, setFirstRes] = useState('')
+  const [secIn, setSecIn] = useState('')
+  const [secRes, setSecRes] = useState('')
+  const [father, setFather] = useState('')
+  const [empDate, setEmpDate] = useState('')
+  const [gender, setGender] = useState('')
 
   // const addressRef = useRef()
   // const DOBRef = useRef()
@@ -66,8 +66,8 @@ const [euBack,setEuBack]=useState('')
   // const fatherRef = useRef()
   // const empDateRef = useRef()
   // const genderRef = useRef()
-    const [euCer, setEuCer] = useState(null)
-   const [cv, setCV] = useState(null)
+  const [euCer, setEuCer] = useState(null)
+  const [cv, setCV] = useState(null)
   const [marriedFile, setMarriedFile] = useState([])
   const [recLetter, setRecLetter] = useState(null)
   const [profile, setProfile] = useState(null)
@@ -163,10 +163,10 @@ const [euBack,setEuBack]=useState('')
   }
   const create = () => {
     console.log(otherDoc, 'doc')
-console.log(name,'name')
+    console.log(name, 'name')
     const formData = new FormData()
     console.log(marriedFile, 'marriedFile')
-    formData.append('givenName',name)
+    formData.append('givenName', name)
     formData.append('email', email)
     formData.append('password', password)
     formData.append('NRC', nrc)
@@ -190,7 +190,7 @@ console.log(name,'name')
     formData.append('fatherName', father)
     formData.append('gender', gender)
     formData.append('employedDate', empDate)
-    if (marriedFile) formData.append('married', marriedFile)
+    if (marriedFile.length > 0) formData.append('married', marriedFile)
     formData.append('isMarried', isMarried)
     formData.append('description', description)
     formData.append('directManager', directManagerID)
@@ -228,7 +228,7 @@ console.log(name,'name')
   return (
     <div className='gap-6'>
       <form onSubmit={handleSubmit(create)}>
-      
+
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
           <Input
             type='text'
@@ -239,17 +239,17 @@ console.log(name,'name')
             }
             label='Name'
             placeholder='Name'
-  
+
             variant={variant}
             labelPlacement='outside'
-            {...register('name', { required: true,onChange:(e)=>setName(e.target.value) })}
+            {...register('name', { required: true, onChange: (e) => setName(e.target.value) })}
           />
           <Input
             type='number'
             label='Phone No'
             placeholder='Phone Number'
             variant={variant}
-            onChange={(e)=>setPhone(e.target.value)} 
+            onChange={(e) => setPhone(e.target.value)}
             labelPlacement='outside'
           />
         </div>
@@ -257,7 +257,7 @@ console.log(name,'name')
           <Input
             type='date'
             label='Age/DOB'
-          onChange={(e)=>setDob(e.target.value)} 
+            onChange={(e) => setDob(e.target.value)}
             placeholder='you@example.com'
             labelPlacement='outside'
             variant={variant}
@@ -268,7 +268,7 @@ console.log(name,'name')
             label='NRC'
             placeholder='NRC..'
             labelPlacement='outside'
-            onChange={(e)=>setNrc(e.target.value) }
+            onChange={(e) => setNrc(e.target.value)}
           />
         </div>
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
@@ -277,23 +277,22 @@ console.log(name,'name')
             label='Passport No'
             placeholder='Passport Number..'
             labelPlacement='outside'
-            onChange={(e)=>setPassPort(e.target.value)} 
+            onChange={(e) => setPassPort(e.target.value)}
             variant={variant}
           />
           <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
             <label
-              className={`text-sm font-semibold ${
-                errors.gender && errors.gender.type === 'required'
-                  ? 'text-[#f31260]'
-                  : ''
-              }`}
+              className={`text-sm font-semibold ${errors.gender && errors.gender.type === 'required'
+                ? 'text-[#f31260]'
+                : ''
+                }`}
             >
               Gender
             </label>
             <select
-              
+
               id='countries'
-              {...register('gender', { required: true,onChange:(e)=>setGender(e.target.value)}  )}
+              {...register('gender', { required: true, onChange: (e) => setGender(e.target.value) })}
               className='bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
             >
               <option hidden value=''>
@@ -316,7 +315,7 @@ console.log(name,'name')
             label='Personal Email'
             placeholder='example@gmail.com'
             labelPlacement='outside'
-            {...register('email', { required: true,onChange:(e)=>setEmail(e.target.value)  })}
+            {...register('email', { required: true, onChange: (e) => setEmail(e.target.value) })}
           />
           <Input
             validationState={
@@ -329,7 +328,7 @@ console.log(name,'name')
             variant={variant}
             placeholder='Password..'
             labelPlacement='outside'
-            {...register('password', { required: true,onChange:(e)=>setPassword(e.target.value)  })}
+            {...register('password', { required: true, onChange: (e) => setPassword(e.target.value) })}
           />
         </div>
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
@@ -339,7 +338,7 @@ console.log(name,'name')
               label='Address'
               placeholder='Address..'
               labelPlacement='outside'
-              onChange={(e)=>setAddress(e.target.value)} 
+              onChange={(e) => setAddress(e.target.value)}
               variant={variant}
             />
           </div>
@@ -358,7 +357,7 @@ console.log(name,'name')
           <Input
             type='text'
             variant={variant}
-            onChange={(e)=>setEuBack(e.target.value)} 
+            onChange={(e) => setEuBack(e.target.value)}
             label='Education Background'
             placeholder=' '
             labelPlacement='outside'
@@ -375,7 +374,7 @@ console.log(name,'name')
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
           <Input
             type='date'
-           onChange={(e)=>setFirstIn(e.target.value)} 
+            onChange={(e) => setFirstIn(e.target.value)}
             label='First Interview Date'
             placeholder='you@example.com'
             labelPlacement='outside'
@@ -384,7 +383,7 @@ console.log(name,'name')
           <Input
             type='text'
             label='First Interview Result'
-            onChange={(e)=>setFirstRes(e.target.value)}
+            onChange={(e) => setFirstRes(e.target.value)}
             placeholder='...'
             labelPlacement='outside'
             variant={variant}
@@ -396,7 +395,7 @@ console.log(name,'name')
             <Input
               type='date'
               label='Second Interview Date'
-              onChange={(e)=>setSecIn(e.target.value)} 
+              onChange={(e) => setSecIn(e.target.value)}
               placeholder=' '
               labelPlacement='outside'
               variant={variant}
@@ -405,7 +404,7 @@ console.log(name,'name')
           <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
             <Input
               type='text'
-              onChange={(e)=>setSecRes(e.target.value)} 
+              onChange={(e) => setSecRes(e.target.value)}
               label='Second Interview Result'
               variant={variant}
               placeholder='...'
@@ -417,18 +416,17 @@ console.log(name,'name')
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
           <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
             <label
-              className={`text-sm font-semibold ${
-                errors.department && errors.department.type === 'required'
-                  ? 'text-[#f31260]'
-                  : ''
-              }`}
+              className={`text-sm font-semibold ${errors.department && errors.department.type === 'required'
+                ? 'text-[#f31260]'
+                : ''
+                }`}
             >
               Department
             </label>
+            {console.log(errors)}
             <select
               id='countries'
-              {...register('department', { required: true })}
-              onChange={e => handleDirectManager(e.target.value)}
+              {...register('department', { onChange: (e) => handleDirectManager(e.target.value), required: true })}
               className='bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
             >
               <option value='' hidden>
@@ -460,14 +458,14 @@ console.log(name,'name')
             variant={variant}
             label='Father Name'
             placeholder=' '
-            onChange={(e)=>setFather(e.target.value)} 
+            onChange={(e) => setFather(e.target.value)}
             labelPlacement='outside'
           />
           <Input
             type='date'
             label='Employed Date'
             placeholder=' '
-           onChange={(e)=>setEmpDate(e.target.value)} 
+            onChange={(e) => setEmpDate(e.target.value)}
             labelPlacement='outside'
             variant={variant}
           />
@@ -477,17 +475,16 @@ console.log(name,'name')
             type='tel'
             variant={variant}
             label='Emergecy Contact'
-            onChange={(e)=>setEc(e.target.value)} 
+            onChange={(e) => setEc(e.target.value)}
             placeholder=' '
             labelPlacement='outside'
           />
           <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
             <label
-              className={`text-sm font-semibold ${
-                errors.position && errors.position.type === 'required'
-                  ? 'text-[#f31260]'
-                  : ''
-              }`}
+              className={`text-sm font-semibold ${errors.position && errors.position.type === 'required'
+                ? 'text-[#f31260]'
+                : ''
+                }`}
             >
               Position
             </label>
@@ -511,7 +508,7 @@ console.log(name,'name')
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
           <Input
             type='text'
-            onChange={(e)=>setWorkExp(e.target.value)} 
+            onChange={(e) => setWorkExp(e.target.value)}
             label='Work Experience'
             placeholder=' '
             labelPlacement='outside'
