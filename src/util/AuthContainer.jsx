@@ -2,14 +2,15 @@ import {
     Navigate,
     Outlet
 } from "react-router-dom";
-
+import apiInstance from "./api";
 
 const AuthContainer = () => {
     const token = localStorage.getItem('token')
-    let isAuthenticated;
-    token ? isAuthenticated = true : isAuthenticated = false
+    apiInstance.get('auth/verify').then((result) => {
+        result.data.isVerified ? '' : localStorage.removeItem('token')
+    })
     return (
-        isAuthenticated ? <Outlet /> : <Navigate to='/' />
+        token ? <Outlet /> : <Navigate to='/' />
     );
 };
 
