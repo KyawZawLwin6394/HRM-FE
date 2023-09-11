@@ -12,7 +12,7 @@ import {
 import { Link } from '@nextui-org/react'
 import { AnchorIcon } from '../../assets/Icons/AnchorIcon.jsx'
 import { Image } from '@nextui-org/react'
-import { useRef, useState, useEffect } from 'react'
+import {  useState, useEffect } from 'react'
 import apiInstance from '../../util/api.js'
 import Swal from 'sweetalert2'
 import { FileUploader } from 'react-drag-drop-files'
@@ -25,7 +25,7 @@ export default function EmployeeInput() {
   const variant = ['faded']
 
   const [other, setOther] = useState([])
-  const addressRef = useRef()
+  const [address,setAddress]=useState('')
   const [showOther, setShowOther] = useState([])
   const [euCer, setEuCer] = useState(null)
   const [recLetter, setRecLetter] = useState(null)
@@ -72,9 +72,9 @@ export default function EmployeeInput() {
           console.log(res.data.data, 'em lis')
           setEmployee(res.data.data)
           setDirectManager(
-            res.data.data.relatedDepartment.directManager.givenName
+            res.data.data.relatedDepartment.directManager?.givenName
           )
-          setDirectManagerID(res.data.data.relatedDepartment.directManager._id)
+          setDirectManagerID(res.data.data.relatedDepartment.directManager?._id)
           setPositionID(res.data.data.relatedPosition)
           handleInputChange(
             'relatedDepartment',
@@ -84,7 +84,7 @@ export default function EmployeeInput() {
             'relatedPosition',
             res.data.data.relatedPosition._id
           )
-          setDepartment(res.data.data.relatedDepartment)
+          setDepartment(res.data.data.relatedDepartment?.name)
           if (res.data.data.isMarried === true) setShowMarried(!showMarried)
           setProfileAnchor(
             res.data.data.profile.length > 0
@@ -367,9 +367,8 @@ export default function EmployeeInput() {
             label='Address'
             placeholder='Address..'
             value={employee.address}
-            onChange={e => handleInputChange('address', e.target.value)}
+            onChange={e => handleInputChange('address', setAddress(e.target.value))}
             labelPlacement='outside'
-            ref={addressRef}
             variant={variant}
           />
         </div>
@@ -492,7 +491,9 @@ export default function EmployeeInput() {
             onChange={e => handleDirectManager(e.target.value)}
             className='bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
           >
-            <option hidden>{department?.name}</option>
+          
+          {console.log(department,'de')}
+            <option hidden>{department}</option>
 
             {departmentList.map(option => (
               <option key={option._id} value={option._id}>
