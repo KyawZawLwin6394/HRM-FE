@@ -7,14 +7,7 @@ export default function LoginPage() {
 
   return (
     <>
-      {/* <div className="example-container float-none">
-      <motion.div style={{ rotate }} />
-    </div>
- <div className="example-container justify-items-start">
-      <motion.div style={{ rotate }} />
-    </div> */}
       <div className='flex justify-center'>
-
         <Card
           isFooterBlurred
           radius='sm'

@@ -12,7 +12,7 @@ const fields = loginFields
 let fieldsState = {}
 fields.forEach(field => (fieldsState[field.id] = ''))
 
-export default function Login () {
+export default function Login() {
   const navigate = useNavigate()
   const emailRef = useRef()
   const passRef = useRef()
@@ -27,18 +27,25 @@ export default function Login () {
       .then(res => {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('id', res.data.id)
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful',
+          text: 'Welcome back!',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6'
+        })
         navigate('/home')
       })
-      .catch(() => {
-        alert('error')
+      .catch((error) => {
+        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: error.response.data.message,
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6'
+        })
       })
-    Swal.fire({
-      icon: 'success',
-      title: 'Login Successful',
-      text: 'Welcome back!',
-      confirmButtonText: 'OK',
-      confirmButtonColor: '#3085d6'
-    })
   }
 
   //Handle Login API Integration here
