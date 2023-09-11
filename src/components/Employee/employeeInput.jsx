@@ -195,11 +195,11 @@ console.log(name,'name')
     formData.append('description', description)
     formData.append('directManager', directManagerID)
     formData.append('relatedDepartment', relatedDepartment)
-    formData.append('casualLeaves', positionID.casualLeaves)
-    formData.append('medicalLeaves', positionID.medicalLeaves)
-    formData.append('vacationLeaves', positionID.vacationLeaves)
-    formData.append('maternityLeaveMale', positionID.maternityLeaveMale)
-    formData.append('maternityLeaveFemale', positionID.maternityLeaveFemale)
+    formData.append('casualLeaves', positionID?.casualLeaves)
+    formData.append('medicalLeaves', positionID?.medicalLeaves)
+    formData.append('vacationLeaves', positionID?.vacationLeaves)
+    formData.append('maternityLeaveMale', positionID?.maternityLeaveMale)
+    formData.append('maternityLeaveFemale', positionID?.maternityLeaveFemale)
     otherDoc.forEach(item => {
       formData.append('other', item) // Assuming 'item' is a File object
     })
@@ -535,7 +535,7 @@ console.log(name,'name')
                 <label>Casual</label>
                 <Input
                   isDisabled={true}
-                  value={positionID.casualLeaves}
+                  value={positionID?.casualLeaves}
                   className='py-1'
                 />
               </div>
@@ -543,7 +543,7 @@ console.log(name,'name')
                 <label>Medical</label>
                 <Input
                   isDisabled={true}
-                  value={positionID.medicalLeaves}
+                  value={positionID?.medicalLeaves}
                   className='py-1'
                 />
               </div>
@@ -551,7 +551,7 @@ console.log(name,'name')
                 <label>Vacation</label>
                 <Input
                   isDisabled={true}
-                  value={positionID.vacationLeaves}
+                  value={positionID?.vacationLeaves}
                   className='py-1'
                 />
               </div>
@@ -566,7 +566,7 @@ console.log(name,'name')
                 </label>
                 <Input
                   isDisabled={true}
-                  value={positionID.maternityLeaveMale}
+                  value={positionID?.maternityLeaveMale}
                   className='py-1'
                 />
               </div>
@@ -581,7 +581,7 @@ console.log(name,'name')
                 </label>
                 <Input
                   isDisabled={true}
-                  value={positionID.maternityLeaveFemale}
+                  value={positionID?.maternityLeaveFemale}
                   className='py-1'
                 />
               </div>
