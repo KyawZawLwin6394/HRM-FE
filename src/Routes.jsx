@@ -22,6 +22,7 @@ import LeaveUpdate from './pages/Leave/LeaveUpdate'
 import PayRoll from './pages/PayRoll/payroll'
 import Payslip from './pages/PayRoll/payslip'
 import ExtraPay from './pages/PayRoll/extrapay'
+import AttendanceDetail from './pages/Attendance/AttendanceDetail'
 
 export default function RouteFile() {
   return (
@@ -56,10 +57,10 @@ export default function RouteFile() {
             <Route path='/emp-add' element={<EmployeeAdd />} />
             <Route path='/emp-update/:id' element={<EmployeeUpdate />} />
 
-         {/* Pay Roll */}
+            {/* Pay Roll */}
             <Route path='/payroll' element={<PayRoll />} />
             <Route path='/payslip/:id' element={<Payslip />} />
-             <Route path='/extra-pay/:id' element={<ExtraPay />} />
+            <Route path='/extra-pay/:id' element={<ExtraPay />} />
 
             {/* Position */}
             <Route path='/position' element={<Position />} />
@@ -70,14 +71,15 @@ export default function RouteFile() {
             {/* Leave */}
             <Route path='/leave' element={<Leave />} ></Route>
             <Route path='/leave/register' element={<LeaveAdd />} ></Route>
-              <Route path='/leave/update/:id' element={<LeaveUpdate />} ></Route>
+            <Route path='/leave/update/:id' element={<LeaveUpdate />} ></Route>
 
             {/* Attendance */}
             <Route path='/attendance' element={<Attendance />}></Route>
             <Route path='/att-add' element={<AttendanceAdd />}></Route>
             <Route path='/att-update/:id' element={<AttendanceUpdate />} ></Route>
+            <Route path='/att-detail' element={<AttendanceDetail />} ></Route>
           </Route>
-          
+
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
         </Routes>
       </BrowserRouter>
