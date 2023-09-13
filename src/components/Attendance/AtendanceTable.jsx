@@ -49,7 +49,7 @@ export default function AttendanceTable() {
   const [otherDoc, setOtherDoc] = useState([])
   const [page, setPage] = React.useState(1)
   const [pages, setPages] = React.useState(1)
-  const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [rowsPerPage, setRowsPerPage] = React.useState(15)
   const [departmentList, setDepartmentList] = React.useState([])
 
   const items = React.useMemo(() => {

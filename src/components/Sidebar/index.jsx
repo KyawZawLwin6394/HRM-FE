@@ -135,11 +135,11 @@ export default function Sidebar() {
                     </div>
                   </Link>
                   <Divider></Divider>
-                  <Link>
+                  <Link to='/att-detail'>
                     <div className='hover:bg-default-100 px-4 py-2'>
                       <BadgeIcon />
                       &nbsp;&nbsp;
-                      <span className='m-auto'>Attendance Update</span>
+                      <span className='m-auto'>Payroll Detail</span>
                     </div>
                   </Link>
                 </AccordionItem>

@@ -35,8 +35,10 @@ import { Link } from 'react-router-dom'
 import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
 import { SearchIcon } from '../Navbar/search'
 import { convertAndDisplayTZ } from '../../util/Util';
+import { PlusIcon } from '../../assets/Icons/PlusIcon'
 
 export default function AttendanceDetailPage() {
+    const months = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const disabled = false;
     const [isDepSelected, setIsDepSelected] = useState(true);
     const [attendanceList, setAttendanceList] = useState([])
@@ -44,10 +46,11 @@ export default function AttendanceDetailPage() {
     const [delID, setDelID] = useState(null)
     const [page, setPage] = React.useState(1)
     const [pages, setPages] = React.useState(1)
-    const [rowsPerPage, setRowsPerPage] = React.useState(5)
+    const [rowsPerPage, setRowsPerPage] = React.useState(10)
     const [departmentList, setDepartmentList] = React.useState([])
     const [employeeList, setEmployeeList] = useState([])
     const [profile, setProfile] = useState({})
+    const [month, setMonth] = useState('')
     const [img, setImg] = useState('https://placehold.co/250x250/png?text=User')
     const [filter, setFilter] = useState({
         dep: null,
@@ -63,9 +66,12 @@ export default function AttendanceDetailPage() {
                 setImg(`https://placehold.co/250x250/png?text=User`)
             }
         })
-        await apiInstance.get('attendances', { params: filter }).then(res => {
-            setAttendanceList(res.data.data)
-        })
+        await apiInstance
+            .get(`attendances/detail`, { params: { limit: 80, rowsPerPage: rowsPerPage, dep: filter.dep, emp: filter.emp, month: month } })
+            .then(res => {
+                setAttendanceList(res.data.data)
+                setPages(res.data._metadata.page_count)
+            })
     }
 
     const handleFilterInput = (value, name) => {
@@ -130,7 +136,7 @@ export default function AttendanceDetailPage() {
     useEffect(() => {
         const getAttendances = async () => {
             await apiInstance
-                .get(`attendances`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
+                .get(`attendances/detail`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
                 .then(res => {
                     setAttendanceList(res.data.data)
                     setPages(res.data._metadata.page_count)
@@ -173,7 +179,7 @@ export default function AttendanceDetailPage() {
     //
     return (
         <>
-            <div className='flex flex-row gap-5 '>
+            <div className='flex flex-row gap-5 justify-between '>
                 <div className='flex gap-4 mb-3 flex-row'>
                     <Dropdown >
                         <DropdownTrigger className='hidden sm:flex'>
@@ -229,12 +235,48 @@ export default function AttendanceDetailPage() {
                             ))}
                         </DropdownMenu>
                     </Dropdown>
+                    <Dropdown >
+                        <DropdownTrigger isDisabled={isDepSelected} className='hidden sm:flex'>
+                            <Button
+                                endContent={<ChevronDownIcon className='text-small' />}
+                                variant='flat'
+                            >
+                                {month ? month : 'Month'}
+                            </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu
+                            onAction={(value) => setMonth(value)}
+                            disallowEmptySelection
+                            aria-label='Table Columns'
+                            closeOnSelect={false}
+                            selectionMode='single'
+                        >
+                            {months.map(item => (
+                                <DropdownItem
+                                    key={item}
+                                    value={item}
+                                    className='capitalize'
+                                >
+                                    {item}
+                                </DropdownItem>
+                            ))}
+                        </DropdownMenu>
+                    </Dropdown>
                     <Button
                         color='primary'
+                        isDisabled={isDepSelected}
                         endContent={<SearchIcon className='w-5 h-4' />}
                         onClick={() => handleSearch()}
                     >
                         Search
+                    </Button>
+                </div>
+                <div className='flex gap-2 mb-3 flex-row'>
+                    <Button color='primary'>
+                        Calculate
+                    </Button>
+                    <Button endContent={<PlusIcon />} color='primary'>
+                        <Link to='/att-add'>Add</Link>
                     </Button>
                 </div>
             </div>
@@ -310,7 +352,8 @@ export default function AttendanceDetailPage() {
                                 isDisabled={disabled}
                                 size='sm'
                                 type="email"
-                                label="31"
+                                label="Total Attendance"
+                                value={attendanceList?.length}
                             />
                         </div>
                         <div className='flex-row flex gap-2 mb-2'>
@@ -371,7 +414,7 @@ export default function AttendanceDetailPage() {
                     <TableColumn key='time'>Clock Out</TableColumn>
                     <TableColumn key='relatedUser'>Name</TableColumn>
                     <TableColumn key='relatedDepartment'>Department</TableColumn>
-                    <TableColumn key='type'>Type</TableColumn>
+                    <TableColumn key='type'>Attend Type</TableColumn>
                     <TableColumn key='source'>Source</TableColumn>
                     <TableColumn key='source' className='text-center'>
                         Check
@@ -394,7 +437,7 @@ export default function AttendanceDetailPage() {
                                     ? item.relatedDepartment.name
                                     : 'Not Set'}
                             </TableCell>
-                            <TableCell>{item.type}</TableCell>
+                            <TableCell>{item.attendType}</TableCell>
                             <TableCell>{item.source}</TableCell>
                             <TableCell>
                                 <RadioGroup
