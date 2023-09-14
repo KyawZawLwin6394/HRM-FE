@@ -8,3 +8,7 @@ export function capitalize(str) {
 export function convertAndDisplayTZ(utcDate) {
   return moment.utc(utcDate).tz(config.timeZone).format('D-M-Y');
 }
+
+export function convertToWeekDayNames(utcDate) {
+  return moment.utc(utcDate).tz(config.timeZone).format('ddd');
+}

@@ -34,12 +34,13 @@ import { DeleteIcon } from '../Table/deleteicon'
 import { Link } from 'react-router-dom'
 import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
 import { SearchIcon } from '../Navbar/search'
-import { convertAndDisplayTZ } from '../../util/Util';
+import { convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util';
 import { PlusIcon } from '../../assets/Icons/PlusIcon'
 
 export default function AttendanceDetailPage() {
     const months = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const disabled = false;
+    const [isSearched, setIsSearched] = useState(true);
     const [isDepSelected, setIsDepSelected] = useState(true);
     const [attendanceList, setAttendanceList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -51,15 +52,35 @@ export default function AttendanceDetailPage() {
     const [employeeList, setEmployeeList] = useState([])
     const [profile, setProfile] = useState({})
     const [month, setMonth] = useState('')
+    const [payRoll, setPayroll] = useState({})
     const [img, setImg] = useState('https://placehold.co/250x250/png?text=User')
     const [filter, setFilter] = useState({
         dep: null,
         emp: null
     })
 
+    const handleCalculate = async () => {
+        await apiInstance.post('attendances/calculate', { dep: filter.dep, emp: filter.emp, month: month, basicSalary: profile.relatedPosition.basicSalary })
+            .then(res => {
+                setPayroll(res.data.data)
+            })
+            .catch(error => {
+                setPayroll(error.response.data.data)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Calculation Failed',
+                    text: error.response.data.message,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6'
+                })
+            })
+    }
+
     const handleSearch = async () => {
+        setIsSearched(false)
         await apiInstance.get('user/' + filter.emp).then(res => {
             setProfile(res.data.data)
+            console.log(res.data.data, 'user')
             if (res.data.data.profile.length > 0) {
                 setImg(`http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/${res.data.data.profile[0].imgUrl}`)
             } else {
@@ -136,7 +157,7 @@ export default function AttendanceDetailPage() {
     useEffect(() => {
         const getAttendances = async () => {
             await apiInstance
-                .get(`attendances/detail`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
+                .get(`attendances/detail`, { params: { limit: 80, rowsPerPage: rowsPerPage, dep: filter.dep, emp: filter.emp, month: month } })
                 .then(res => {
                     setAttendanceList(res.data.data)
                     setPages(res.data._metadata.page_count)
@@ -272,7 +293,7 @@ export default function AttendanceDetailPage() {
                     </Button>
                 </div>
                 <div className='flex gap-2 mb-3 flex-row'>
-                    <Button color='primary'>
+                    <Button color='primary' isDisabled={isSearched} onClick={handleCalculate}>
                         Calculate
                     </Button>
                     <Button endContent={<PlusIcon />} color='primary'>
@@ -332,37 +353,36 @@ export default function AttendanceDetailPage() {
                             <span className='m-auto w-1/2'>Paid Leaves</span>
                             <Input
                                 isDisabled={disabled}
-                                size='sm'
+                                size='lg'
                                 type="email"
-                                label="2"
+                                value={payRoll?.paid}
                             />
                         </div>
                         <div className='flex-row flex gap-2 mb-2'>
                             <span className='m-auto w-1/2'>Entitled Salary</span>
                             <Input
                                 isDisabled={disabled}
-                                size='sm'
+                                size='lg'
                                 type="email"
-                                label="$ $ $ $"
+                                value={payRoll && payRoll.entitledSalary ? Math.round(payRoll?.entitledSalary) : ''}
                             />
                         </div>
                         <div className='flex-row flex gap-2 mb-2'>
                             <span className='m-auto w-1/2'>Total Attendances</span>
                             <Input
                                 isDisabled={disabled}
-                                size='sm'
+                                size='lg'
                                 type="email"
-                                label="Total Attendance"
-                                value={attendanceList?.length}
+                                value={payRoll?.totalAttendance}
                             />
                         </div>
                         <div className='flex-row flex gap-2 mb-2'>
                             <span className='m-auto w-1/2'>Unpaid Leaves</span>
                             <Input
                                 isDisabled={disabled}
-                                size='sm'
+                                size='lg'
                                 type="email"
-                                label="0"
+                                value={payRoll?.unpaid}
                             />
                         </div>
                     </div>
@@ -408,15 +428,16 @@ export default function AttendanceDetailPage() {
                 }
             >
                 <TableHeader>
-                    <TableColumn key='no'>No</TableColumn>
-                    <TableColumn key='date'>Date</TableColumn>
-                    <TableColumn key='time'>Clock In</TableColumn>
-                    <TableColumn key='time'>Clock Out</TableColumn>
-                    <TableColumn key='relatedUser'>Name</TableColumn>
-                    <TableColumn key='relatedDepartment'>Department</TableColumn>
-                    <TableColumn key='type'>Attend Type</TableColumn>
-                    <TableColumn key='source'>Source</TableColumn>
-                    <TableColumn key='source' className='text-center'>
+                    <TableColumn>No</TableColumn>
+                    <TableColumn>Date</TableColumn>
+                    <TableColumn>Day</TableColumn>
+                    <TableColumn>Clock In</TableColumn>
+                    <TableColumn>Clock Out</TableColumn>
+                    <TableColumn>Name</TableColumn>
+                    <TableColumn>Department</TableColumn>
+                    <TableColumn>Attend Type</TableColumn>
+                    <TableColumn>Source</TableColumn>
+                    <TableColumn className='text-center'>
                         Check
                     </TableColumn>
 
@@ -427,6 +448,7 @@ export default function AttendanceDetailPage() {
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item.date ? convertAndDisplayTZ(item.date) : 'Not Set'}</TableCell>
+                            <TableCell>{item.date ? convertToWeekDayNames(item.date) : 'Not Set'}</TableCell>
                             <TableCell>{item.clockIn}</TableCell>
                             <TableCell>{item.clockOut}</TableCell>
                             <TableCell>

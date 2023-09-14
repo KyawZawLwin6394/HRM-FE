@@ -38,7 +38,7 @@ import { FileUploader } from 'react-drag-drop-files'
 import { TfiImport } from 'react-icons/tfi'
 import { BsCloudArrowUpFill } from 'react-icons/bs'
 import { PlusIcon } from '../../assets/Icons/PlusIcon';
-import { convertAndDisplayTZ } from '../../util/Util';
+import { convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util';
 
 export default function AttendanceTable() {
 
@@ -320,15 +320,16 @@ export default function AttendanceTable() {
         }
       >
         <TableHeader>
-          <TableColumn key='no'>No</TableColumn>
-          <TableColumn key='date'>Date</TableColumn>
-          <TableColumn key='time'>Clock In</TableColumn>
-          <TableColumn key='time'>Clock Out</TableColumn>
-          <TableColumn key='relatedUser'>Name</TableColumn>
-          <TableColumn key='relatedDepartment'>Department</TableColumn>
-          <TableColumn key='type'>Type</TableColumn>
-          <TableColumn key='source'>Source</TableColumn>
-          <TableColumn key='source' className='text-center'>
+          <TableColumn >No</TableColumn>
+          <TableColumn >Date</TableColumn>
+          <TableColumn >Day</TableColumn>
+          <TableColumn >Clock In</TableColumn>
+          <TableColumn >Clock Out</TableColumn>
+          <TableColumn >Name</TableColumn>
+          <TableColumn >Department</TableColumn>
+          <TableColumn >Type</TableColumn>
+          <TableColumn >Source</TableColumn>
+          <TableColumn className='text-center'>
             Check
           </TableColumn>
 
@@ -338,7 +339,8 @@ export default function AttendanceTable() {
           {items.map((item, index) => (
             <TableRow key={item._id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.date? convertAndDisplayTZ(item.date) : 'Not Set'}</TableCell>
+              <TableCell>{item.date ? convertAndDisplayTZ(item.date) : 'Not Set'}</TableCell>
+              <TableCell>{item.date ? convertToWeekDayNames(item.date) : 'Not Set'}</TableCell>
               <TableCell>{item.clockIn}</TableCell>
               <TableCell>{item.clockOut}</TableCell>
               <TableCell>
