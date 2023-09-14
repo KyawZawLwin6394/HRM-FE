@@ -354,7 +354,7 @@ export default function AttendanceDetailPage() {
                             <Input
                                 isDisabled={disabled}
                                 size='lg'
-                                type="email"
+                                type="text"
                                 value={payRoll?.paid}
                             />
                         </div>
@@ -363,7 +363,7 @@ export default function AttendanceDetailPage() {
                             <Input
                                 isDisabled={disabled}
                                 size='lg'
-                                type="email"
+                                type="text"
                                 value={payRoll && payRoll.entitledSalary ? Math.round(payRoll?.entitledSalary) : ''}
                             />
                         </div>
@@ -372,7 +372,7 @@ export default function AttendanceDetailPage() {
                             <Input
                                 isDisabled={disabled}
                                 size='lg'
-                                type="email"
+                                type="text"
                                 value={payRoll?.totalAttendance}
                             />
                         </div>
@@ -381,7 +381,7 @@ export default function AttendanceDetailPage() {
                             <Input
                                 isDisabled={disabled}
                                 size='lg'
-                                type="email"
+                                type="text"
                                 value={payRoll?.unpaid}
                             />
                         </div>
