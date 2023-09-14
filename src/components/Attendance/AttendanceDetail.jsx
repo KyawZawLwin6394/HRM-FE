@@ -44,6 +44,7 @@ export default function AttendanceDetailPage() {
     const [isDepSelected, setIsDepSelected] = useState(true);
     const [attendanceList, setAttendanceList] = useState([])
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
     const [delID, setDelID] = useState(null)
     const [page, setPage] = React.useState(1)
     const [pages, setPages] = React.useState(1)
@@ -53,6 +54,8 @@ export default function AttendanceDetailPage() {
     const [profile, setProfile] = useState({})
     const [month, setMonth] = useState('')
     const [payRoll, setPayroll] = useState({})
+    const [editList, setEditList] = useState({})
+    const [userList, setUserList] = useState([])
     const [img, setImg] = useState('https://placehold.co/250x250/png?text=User')
     const [filter, setFilter] = useState({
         dep: null,
@@ -69,6 +72,33 @@ export default function AttendanceDetailPage() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Calculation Failed',
+                    text: error.response.data.message,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6'
+                })
+            })
+    }
+
+    const handleEditListChange = (name, value) => {
+        setEditList(prev => ({ ...prev, [name]: value }))
+    }
+
+    const handleEditAttendance = async () => {
+        console.log('here')
+        let data = editList
+        data.id = editList._id
+        await apiInstance.put('attendance', data)
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Successfully Updated'
+                })
+                onClose()
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Attendance Edit Failed',
                     text: error.response.data.message,
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#3085d6'
@@ -169,6 +199,12 @@ export default function AttendanceDetailPage() {
             })
         }
 
+        const getUsers = async () => {
+            await apiInstance.get('users').then(res => {
+                setUserList(res.data.data)
+            })
+        }
+        getUsers()
         getDepartmentList()
         getAttendances()
         document.addEventListener('keydown', handleKeyDown)
@@ -177,6 +213,36 @@ export default function AttendanceDetailPage() {
             document.removeEventListener('keydown', handleKeyDown)
         }
     }, [isOpen, rowsPerPage])
+
+    const handleOpenEdit = async (event) => {
+        onOpenEdit()
+        console.log(event.currentTarget.getAttribute('data-key2'))
+        await apiInstance.get('attendance/' + event.currentTarget.getAttribute('data-key2'))
+            .then(res => {
+                if (res.data.data) {
+                    setEditList(res.data.data[0])
+                    console.log(editList)
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Attendance Update Failed',
+                        text: 'Something Went Wrong',
+                        confirmButtonText: 'OK',
+                        confirmButtonColor: '#3085d6'
+                    })
+                }
+            })
+            .catch(error => {
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Attendance Update Failed',
+                    text: error.response.data.message,
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#3085d6'
+                })
+            })
+    }
 
     const handleOpen = event => {
         onOpen()
@@ -187,6 +253,10 @@ export default function AttendanceDetailPage() {
     const handleClose = () => {
         onClose()
         setDelID(null)
+    }
+
+    const handleEditClose = () => {
+        onCloseEdit()
     }
 
     const handleDelete = async () => {
@@ -473,13 +543,14 @@ export default function AttendanceDetailPage() {
                             </TableCell>
 
                             <TableCell>
-                                <div className='relative flex items-center gap-2'>
+                                <div className='relative flex items-center gap-2' >
                                     <Tooltip content='Edit Position'>
-                                        <Link to={'/att-update/' + item._id}>
-                                            <span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
-                                                <EditIcon />
-                                            </span>
-                                        </Link>
+                                        <span
+                                            data-key2={item._id}
+                                            className='text-lg text-default-400 cursor-pointer active:opacity-50'
+                                            onClick={e => handleOpenEdit(e)}>
+                                            <EditIcon />
+                                        </span>
                                     </Tooltip>
                                     <Tooltip color='danger' content='Delete user'>
                                         <span
@@ -501,10 +572,10 @@ export default function AttendanceDetailPage() {
                     {handleClose => (
                         <>
                             <ModalHeader className='flex flex-col gap-1'>
-                                Delete Position
+                                Delete Attendance
                             </ModalHeader>
                             <ModalBody>
-                                <p>Are you sure you want to delete this position?</p>
+                                <p>Are you sure you want to delete this attendance?</p>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color='default' variant='light' onClick={handleClose}>
@@ -517,6 +588,166 @@ export default function AttendanceDetailPage() {
                                 >
                                     Yes, I am sure
                                     <Kbd className='bg-danger-500' keys={['enter']}></Kbd>
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+
+            <Modal backdrop='blur' isOpen={isOpenEdit} onClose={handleEditClose} size='2xl'>
+                <ModalContent>
+                    {handleEditClose => (
+                        <>
+                            <ModalHeader className='flex flex-col gap-1'>
+                                Attendance Update
+                            </ModalHeader>
+                            <ModalBody>
+                                <section>
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
+                                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                                            <label className='text-sm font-semibold'>Name</label>
+                                            <select
+                                                onChange={e => handleEditListChange('relatedUser', e.target.value)}
+                                                className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                                            >
+                                                <option hidden value={editList.relatedUser?._id}>
+                                                    {editList.relatedUser?.givenName}
+                                                </option>
+
+                                                {userList.map(option => (
+                                                    <option key={option._id} value={option._id}>
+                                                        {option.givenName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
+                                            <label className='text-sm font-semibold'>Date</label>
+                                            <Input
+                                                type='date'
+                                                defaultValue={editList.date?.split('T')[0]}
+                                                variant='faded'
+                                                onChange={e => handleEditListChange('date', e.target.value)}
+                                            />
+                                        </div>
+
+                                    </div>
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
+                                        <Input
+                                            type='time'
+                                            label='ClockIn Time'
+                                            placeholder='Time'
+                                            value={editList?.clockIn}
+                                            variant='faded'
+                                            onChange={e => handleEditListChange('clockIn', e.target.value)}
+                                            labelPlacement='outside'
+                                        />
+                                        <Input
+                                            type='time'
+                                            label='ClockOut Time'
+                                            placeholder='Time'
+                                            value={editList?.clockOut}
+                                            variant='faded'
+                                            onChange={e => handleEditListChange('clockOut', e.target.value)}
+                                            labelPlacement='outside'
+                                        />
+
+                                    </div>
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
+                                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                                            <label className='text-sm font-semibold'>Source</label>
+                                            <select
+                                                onChange={e => handleEditListChange('source', e.target.value)}
+                                                className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                                            >
+                                                <option hidden value={editList?.source}>
+                                                    {editList?.source}
+                                                </option>
+
+                                                <option value='Excel'>Excel</option>
+                                                <option value='Manual'>Manual</option>
+                                            </select>
+                                        </div>
+
+                                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                                            <label className='text-sm font-semibold'>Department</label>
+                                            <select
+                                                onChange={e =>
+                                                    handleEditListChange('relatedDepartment', e.target.value)
+                                                }
+                                                className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                                            >
+                                                <option hidden value={editList.relatedDepartment?._id}>
+                                                    {editList.relatedDepartment?.name}
+                                                </option>
+                                                {departmentList.map(option => (
+                                                    <option key={option} value={option._id}>
+                                                        {option.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
+                                        <>
+                                            <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                                                <label className='text-sm font-semibold'>Type</label>
+                                                <select
+                                                    onChange={e => { handleEditListChange('type', e.target.value) }}
+                                                    className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                                                >
+                                                    <option hidden value={editList?.type}>
+                                                        {editList?.type}
+                                                    </option>
+
+                                                    <option value='Attend'>Attend</option>
+                                                    <option value='Dismiss'>Dismiss</option>
+                                                </select>
+                                            </div>
+                                            <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+
+                                                <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                                                    <label className='text-sm font-semibold'>AttendType</label>
+                                                    <select
+                                                        onChange={e => handleEditListChange('attendType', e.target.value)}
+                                                        className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                                                    >
+                                                        <option hidden value={editList?.attendType}>{editList?.attendType}</option>
+
+                                                        <option value='Week Day'>Week Day</option>
+                                                        <option value='Day Off'>Day Off</option>
+                                                        <option value='Holiday'>Holiday</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                        </>
+                                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                                            <Input
+                                                type='text'
+                                                label='Dismiss Reason'
+                                                placeholder='Dismiss reason ...'
+                                                variant='faded'
+                                                defaultValue={editList?.dismissReason}
+                                                onChange={e => handleEditListChange('dismissReason', e.target.value)}
+                                                labelPlacement='outside'
+                                            />
+                                        </div>
+                                    </div>
+
+                                </section>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button color='danger' variant='light' onClick={handleEditClose}>
+                                    No, Cancel
+                                </Button>
+                                <Button
+                                    color='primary'
+                                    onClick={handleEditAttendance}
+                                >
+                                    Edit Attendance
                                 </Button>
                             </ModalFooter>
                         </>
