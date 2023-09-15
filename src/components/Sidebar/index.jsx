@@ -1,6 +1,6 @@
 import { Accordion, AccordionItem } from '@nextui-org/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBriefcase, faBuildingUser, faCalendarDays, faCalendarXmark, faMoneyCheckDollar, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faBriefcase, faBuildingUser, faCalendarDays, faCalendarXmark, faHandHoldingDollar, faMoneyCheckDollar, faUsers } from '@fortawesome/free-solid-svg-icons'
 import {
   Card,
   CardBody,
@@ -140,7 +140,7 @@ export default function Sidebar() {
                   <Divider></Divider>
                   <Link to='/att-detail'>
                     <div className='hover:bg-default-100 px-4 py-2'>
-                      <BadgeIcon />
+                    <FontAwesomeIcon icon={faHandHoldingDollar} size='xl' />
                       &nbsp;&nbsp;
                       <span className='m-auto'>Payroll Detail</span>
                     </div>
