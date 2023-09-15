@@ -12,3 +12,7 @@ export function convertAndDisplayTZ(utcDate) {
 export function convertToWeekDayNames(utcDate) {
   return moment.utc(utcDate).tz(config.timeZone).format('ddd');
 }
+
+export function attendanceInputDate(utcDate) {
+  return moment.utc(utcDate).tz(config.timeZone).format('YYYY-MM-DD');
+}

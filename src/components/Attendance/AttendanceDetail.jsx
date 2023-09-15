@@ -34,10 +34,10 @@ import { DeleteIcon } from '../Table/deleteicon'
 import { Link } from 'react-router-dom'
 import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
 import { SearchIcon } from '../Navbar/search'
-import { convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util'
+import { attendanceInputDate, convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util'
 import { PlusIcon } from '../../assets/Icons/PlusIcon'
 
-export default function AttendanceDetailPage () {
+export default function AttendanceDetailPage() {
   const months = [
     'Jan',
     'Feb',
@@ -706,7 +706,7 @@ export default function AttendanceDetailPage () {
                       <label className='text-sm font-semibold'>Date</label>
                       <Input
                         type='date'
-                        defaultValue={editList.date?.split('T')[0]}
+                        value={editList.date ? attendanceInputDate(editList.date) : ''}
                         variant='faded'
                         onChange={e =>
                           handleEditListChange('date', e.target.value)
