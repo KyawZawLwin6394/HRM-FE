@@ -1,4 +1,6 @@
 import { Accordion, AccordionItem } from '@nextui-org/react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBriefcase, faBuildingUser, faCalendarDays, faCalendarXmark, faMoneyCheckDollar, faUsers } from '@fortawesome/free-solid-svg-icons'
 import {
   Card,
   CardBody,
@@ -8,7 +10,6 @@ import {
 } from '@nextui-org/react'
 import BadgeIcon from '@mui/icons-material/Badge'
 import { Link } from 'react-router-dom'
-import { FaUsers } from "react-icons/fa";
 
 
 export default function Sidebar() {
@@ -37,18 +38,18 @@ export default function Sidebar() {
               >
 
                 {/* Employee */}
-                <AccordionItem key='1' aria-label='Employee' title='Master'>
+                <AccordionItem key='1' title='Master'>
                   <Link to='/emp'>
-                    <div className='flex hover:bg-default-100 px-4 py-2'>
-                      <FaUsers className='w-6 h-6 mt-1' />
-
-                      <span className='m-2 font-medium'>Employee</span>
+                    <div className='hover:bg-default-100 px-4 py-3 m-auto'>
+                      <FontAwesomeIcon icon={faUsers} size='xl' />
+                      &nbsp;&nbsp;
+                      <span className='m-auto'>Employee</span>
                     </div>
                   </Link>
-
+                  <Divider></Divider>
                   <Link to='/attendance'>
-                    <div className='hover:bg-default-100 px-4 py-2'>
-                      <BadgeIcon />
+                    <div className='hover:bg-default-100 px-4 py-3'>
+                      <FontAwesomeIcon icon={faCalendarDays} size='xl' />
                       &nbsp;&nbsp;
                       <span className='m-auto'>Attendance</span>
                     </div>
@@ -56,32 +57,34 @@ export default function Sidebar() {
 
                   <Divider></Divider>
                   <Link to='/position'>
-                    <div className='hover:bg-default-100 px-4 py-2'>
-                      <BadgeIcon />
+                    <div className='hover:bg-default-100 px-4 py-3'>
+                      <FontAwesomeIcon icon={faBriefcase} size='xl' />
                       &nbsp;&nbsp;
                       <span className='m-auto'>Position</span>
                     </div>
                   </Link>
                   <Divider></Divider>
                   <Link to='/department'>
-                    <div className='hover:bg-default-100 px-4 py-2'>
-                      <BadgeIcon />
+                    <div className='hover:bg-default-100 px-4 py-3'>
+                      <FontAwesomeIcon icon={faBuildingUser} size='xl' />
                       &nbsp;&nbsp;
                       <span className='m-auto'>Department</span>
                     </div>
                   </Link>
-                   <Link to='/leave'>
-                    <div className='hover:bg-default-100 px-4 py-2'>
-                      <BadgeIcon />
+                  <Divider></Divider>
+                  <Link to='/leave'>
+                    <div className='hover:bg-default-100 px-4 py-3'>
+                      <FontAwesomeIcon icon={faCalendarXmark} size='xl' />
                       &nbsp;&nbsp;
                       <span className='m-auto'>Leave</span>
                     </div>
                   </Link>
-                   <Link to='/payroll'>
-                    <div className='hover:bg-default-100 px-4 py-2'>
-                      <BadgeIcon />
+                  <Divider></Divider>
+                  <Link to='/payroll'>
+                    <div className='hover:bg-default-100 px-4 py-3'>
+                      <FontAwesomeIcon icon={faMoneyCheckDollar} size='xl' />
                       &nbsp;&nbsp;
-                      <span className='m-auto'>Payrole</span>
+                      <span className='m-auto'>Pay Roll</span>
                     </div>
                   </Link>
                 </AccordionItem>
