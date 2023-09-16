@@ -33,6 +33,7 @@ import { EditIcon } from '../Table/editicon'
 import { DeleteIcon } from '../Table/deleteicon'
 import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
 import { SearchIcon } from '../Navbar/search'
+import { useForm } from 'react-hook-form'
 import { attendanceInputDate, convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util'
 import { PlusIcon } from '../../assets/Icons/PlusIcon'
 
@@ -78,11 +79,20 @@ export default function AttendanceDetailPage() {
   const [payRoll, setPayroll] = useState({})
   const [editList, setEditList] = useState({})
   const [userList, setUserList] = useState([])
+  const [department, setDepartment] = useState({})
+  const { form, register, handleSubmit, formState: { errors } } = useForm();
   const [img, setImg] = useState('https://placehold.co/250x250/png?text=User')
   const [filter, setFilter] = useState({
     dep: null,
     emp: null
   })
+
+  const handleRelatedUserChange = async (e) => {
+    const keyName = e.target.options[e.target.options.selectedIndex].getAttribute('data-keyName');
+    const keyID = e.target.options[e.target.options.selectedIndex].getAttribute('data-key');
+    console.log(keyName, keyID, 'keyName')
+    setDepartment({ _id: keyID, name: keyName })
+  }
 
   const handleCalculate = async () => {
     await apiInstance
@@ -113,6 +123,7 @@ export default function AttendanceDetailPage() {
 
   const handleAddAttendance = async () => {
     onCloseAdd()
+    console.log('clicked', form)
   }
 
   const handleEditAttendance = async () => {
@@ -882,179 +893,182 @@ export default function AttendanceDetailPage() {
         <ModalContent>
           {handleAddClose => (
             <>
-              <ModalHeader className='flex flex-col gap-1'>
-                Attendance Update
-              </ModalHeader>
-              <ModalBody>
-                <section>
-                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
-                    <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                      <label className='text-sm font-semibold'>Name</label>
-                      <select
-                        onChange={e =>
-                          handleEditListChange('relatedUser', e.target.value)
-                        }
-                        className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-                      >
-                        <option hidden value={editList.relatedUser?._id}>
-                          {editList.relatedUser?.givenName}
-                        </option>
+              <form onSubmit={handleSubmit(handleAddAttendance)}>
+                <ModalHeader className='flex flex-col gap-1'>
+                  Attendance Registration
+                </ModalHeader>
+                <ModalBody>
 
-                        {userList.map(option => (
-                          <option key={option._id} value={option._id}>
-                            {option.givenName}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
-                      <label className='text-sm font-semibold'>Date</label>
-                      <Input
-                        type='date'
-                        value={editList.date ? attendanceInputDate(editList.date) : ''}
-                        variant='faded'
-                        onChange={e =>
-                          handleEditListChange('date', e.target.value)
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
-                    <Input
-                      type='time'
-                      label='ClockIn Time'
-                      placeholder='Time'
-                      value={editList?.clockIn}
-                      variant='faded'
-                      onChange={e =>
-                        handleEditListChange('clockIn', e.target.value)
-                      }
-                      labelPlacement='outside'
-                    />
-                    <Input
-                      type='time'
-                      label='ClockOut Time'
-                      placeholder='Time'
-                      value={editList?.clockOut}
-                      variant='faded'
-                      onChange={e =>
-                        handleEditListChange('clockOut', e.target.value)
-                      }
-                      labelPlacement='outside'
-                    />
-                  </div>
-                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
-                    <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                      <label className='text-sm font-semibold'>Source</label>
-                      <select
-                        onChange={e =>
-                          handleEditListChange('source', e.target.value)
-                        }
-                        className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-                      >
-                        <option hidden value={editList?.source}>
-                          {editList?.source}
-                        </option>
-
-                        <option value='Excel'>Excel</option>
-                        <option value='Manual'>Manual</option>
-                      </select>
-                    </div>
-
-                    <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                      <label className='text-sm font-semibold'>
-                        Department
-                      </label>
-                      <select
-                        onChange={e =>
-                          handleEditListChange(
-                            'relatedDepartment',
-                            e.target.value
-                          )
-                        }
-                        className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-                        disabled
-                      >
-                        <option hidden value={editList.relatedDepartment?._id}>
-                          {editList.relatedDepartment?.name}
-                        </option>
-                        {departmentList.map(option => (
-                          <option key={option} value={option._id}>
-                            {option.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
-                    <>
+                  <section>
+                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
                       <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                        <label className='text-sm font-semibold'>Type</label>
+                        <label className={`text-sm font-semibold ${errors.relatedUser && errors.relatedUser.type === 'required' ? 'text-[#f31260]' : ''}`}>Name</label>
                         <select
-                          onChange={e => {
-                            handleEditListChange('type', e.target.value)
-                          }}
+                          {...register('relatedUser', { required: true, onChange: (e) => handleRelatedUserChange(e) })}
                           className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
                         >
-                          <option hidden value={editList?.type}>
-                            {editList?.type}
+                          <option hidden value=''>
+                            Choose User
                           </option>
 
-                          <option value='Attend'>Attend</option>
-                          <option value='Dismiss'>Dismiss</option>
+                          {userList.map(option => (
+                            <option key={option._id} data-key={option.relatedDepartment._id} data-keyName={option.relatedDepartment.name} value={option._id}>
+                              {option.givenName}
+                            </option>
+                          ))}
                         </select>
                       </div>
-                      <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                          <label className='text-sm font-semibold'>
-                            AttendType
-                          </label>
-                          <select
-                            onChange={e =>
-                              handleEditListChange('attendType', e.target.value)
-                            }
-                            className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
-                          >
-                            <option hidden value={editList?.attendType}>
-                              {editList?.attendType}
-                            </option>
-
-                            <option value='Week Day'>Week Day</option>
-                            <option value='Day Off'>Day Off</option>
-                            <option value='Holiday'>Holiday</option>
-                          </select>
-                        </div>
+                      <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
+                        <label className={`text-sm font-semibold ${errors.date && errors.date.type === 'required' ? 'text-[#f31260]' : ''}`}>Date</label>
+                        <Input
+                          type='date'
+                          {...register('date', { required: true })}
+                          variant='faded'
+                        // onChange={e =>
+                        //   handleEditListChange('date', e.target.value)
+                        // }
+                        />
                       </div>
-                    </>
-                    <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                    </div>
+                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
                       <Input
-                        type='text'
-                        label='Dismiss Reason'
-                        placeholder='Dismiss reason ...'
+                        type='time'
+                        label='ClockIn Time'
+                        placeholder='Time'
+                        validationState={errors.clockIn && errors.clockIn.type === 'required' ? 'invalid' : 'valid'}
                         variant='faded'
-                        defaultValue={editList?.dismissReason}
-                        onChange={e =>
-                          handleEditListChange('dismissReason', e.target.value)
-                        }
+                        {...register('clockIn', { required: true })}
+                        // onChange={e =>
+                        //   handleEditListChange('clockIn', e.target.value)
+                        // }
+                        labelPlacement='outside'
+                      />
+                      <Input
+                        type='time'
+                        label='ClockOut Time'
+                        placeholder='Time'
+                        validationState={errors.clockOut && errors.clockOut.type === 'required' ? 'invalid' : 'valid'}
+                        {...register('clockOut', { required: true })}
+                        variant='faded'
+                        // onChange={e =>
+                        //   handleEditListChange('clockOut', e.target.value)
+                        // }
                         labelPlacement='outside'
                       />
                     </div>
-                  </div>
-                </section>
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  color='danger'
-                  variant='light'
-                  onClick={handleAddClose}
-                >
-                  No, Cancel
-                </Button>
-                <Button color='primary' onClick={handleAddAttendance}>
-                  Edit Attendance
-                </Button>
-              </ModalFooter>
+                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
+                      <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                        <label className={`text-sm font-semibold ${errors.source && errors.source.type === 'required' ? 'text-[#f31260]' : ''}`}>Source</label>
+                        <select
+                          // onChange={e =>
+                          //   handleEditListChange('source', e.target.value)
+                          // }
+                          {...register('source', { required: true })}
+                          className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                        >
+                          <option hidden value=''>
+                            Choose Source
+                          </option>
+
+                          <option value='Excel'>Excel</option>
+                          <option value='Manual'>Manual</option>
+                        </select>
+                      </div>
+
+                      <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                        <label className={`text-sm font-semibold ${errors.relatedDepartment && errors.relatedDepartment.type === 'required' ? 'text-[#f31260]' : ''}`}>Deparment</label>
+                        <select
+                          // onChange={e =>
+                          //   handleEditListChange(
+                          //     'relatedDepartment',
+                          //     e.target.value
+                          //   )
+                          // }
+                          {...register('relatedDepartment',)}
+                          className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                          disabled
+                        >
+                          <option hidden value=''>
+                            Choose Department
+                          </option>
+                          <option key={department ? department._id : ''}></option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-3'>
+                      <>
+                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                          <label className={`text-sm font-semibold ${errors.type && errors.type.type === 'required' ? 'text-[#f31260]' : ''}`}>Type</label>
+                          <select
+                            // onChange={e => {
+                            //   handleEditListChange('type', e.target.value)
+                            // }}
+                            {...register('type', { required: true })}
+                            className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                          >
+                            <option hidden value=''>
+                              Choose Type
+                            </option>
+
+                            <option value='Attend'>Attend</option>
+                            <option value='Dismiss'>Dismiss</option>
+                          </select>
+                        </div>
+                        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                          <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                            <label className='text-sm font-semibold'>
+                              AttendType
+                            </label>
+                            <select
+                              // onChange={e =>
+                              //   handleEditListChange('attendType', e.target.value)
+                              // }
+                              {...register('attendType')}
+                              className='bg-gray-100 border mt-2 border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
+                            >
+                              <option hidden value=''>
+                                Choose Attend Type
+                              </option>
+
+                              <option value='Week Day'>Week Day</option>
+                              <option value='Day Off'>Day Off</option>
+                              <option value='Holiday'>Holiday</option>
+                            </select>
+                          </div>
+                        </div>
+                      </>
+                      <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                        <Input
+                          type='text'
+                          label='Dismiss Reason'
+                          placeholder='Dismiss reason ...'
+                          variant='faded'
+                          // onChange={e =>
+                          //   handleEditListChange('dismissReason', e.target.value)
+                          // }
+                          {...register('dismissReason')}
+                          labelPlacement='outside'
+                        />
+                      </div>
+                    </div>
+                  </section>
+
+
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color='danger'
+                    variant='light'
+                    onClick={handleAddClose}
+                  >
+                    No, Cancel
+                  </Button>
+                  <Button color='primary' type='submit' >
+                    Edit Attendance
+                  </Button>
+                </ModalFooter>
+              </form >
             </>
           )}
         </ModalContent>
