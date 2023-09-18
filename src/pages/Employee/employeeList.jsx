@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom'
 import { useEffect } from 'react'
 import apiInstance from '../../util/api'
 
-export default function Employee() {
+export default function Employee () {
   useEffect(() => {
     const getEmployeeLists = async () => {
       await apiInstance.get('users').then(response => {
@@ -45,15 +45,15 @@ export default function Employee() {
               <CardHeader className='justify-between'>
                 <div></div>
                 <div className='font-semibold'>Employee List</div>
-
-                <Button
-                  endContent={<PlusIcon />}
-                  color='primary'
-                  className='text-sm '
-                ><Link to='/emp-add'>
-                    Add</Link>
-                </Button>
-
+                <Link to='/emp-add'>
+                  <Button
+                    endContent={<PlusIcon />}
+                    color='primary'
+                    className='text-sm '
+                  >
+                    Add
+                  </Button>
+                </Link>
               </CardHeader>
               <CardBody className=''>
                 <Table />

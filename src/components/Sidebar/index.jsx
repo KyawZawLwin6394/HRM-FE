@@ -1,18 +1,11 @@
 import { Accordion, AccordionItem } from '@nextui-org/react'
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-
-} from '@nextui-org/react'
+import { Card, CardBody, CardFooter, Divider } from '@nextui-org/react'
 import BadgeIcon from '@mui/icons-material/Badge'
 import { Link } from 'react-router-dom'
-import { FaUsers } from "react-icons/fa";
+import { FaUsers } from 'react-icons/fa'
 
 
-export default function Sidebar() {
-
+export default function Sidebar () {
   const itemClasses = {
     base: ' px-2 w-full',
     title: 'font-normal text-medium text-left',
@@ -27,15 +20,13 @@ export default function Sidebar() {
           <Card className='w-[250px] max-h rounded-sm'>
             <Divider />
             <CardBody className='px-0 py-0 m-0'>
-
               <Accordion
                 isCompact={true}
                 selectionMode='multiple'
                 variant='splited'
                 itemClasses={itemClasses}
-                defaultExpandedKeys={["1", "2", "3", "4", "5", "6"]}
+                defaultExpandedKeys={['1', '2', '3', '4', '5', '6']}
               >
-
                 {/* Employee */}
                 <AccordionItem key='1' aria-label='Employee' title='Master'>
                   <Link to='/emp'>
@@ -47,10 +38,11 @@ export default function Sidebar() {
                   </Link>
 
                   <Link to='/attendance'>
-                    <div className='hover:bg-default-100 px-4 py-2'>
+                    <div className='hover:bg-default-100 px-4 py-2 flex'>
+                      {/* <img src={Attend} className='w-5 h-5 mt-2' /> */}
                       <BadgeIcon />
                       &nbsp;&nbsp;
-                      <span className='m-auto'>Attendance</span>
+                      <span className='m-2 font-medium'>Attendance</span>
                     </div>
                   </Link>
 
@@ -70,14 +62,14 @@ export default function Sidebar() {
                       <span className='m-auto'>Department</span>
                     </div>
                   </Link>
-                   <Link to='/leave'>
+                  <Link to='/leave'>
                     <div className='hover:bg-default-100 px-4 py-2'>
                       <BadgeIcon />
                       &nbsp;&nbsp;
                       <span className='m-auto'>Leave</span>
                     </div>
                   </Link>
-                   <Link to='/payroll'>
+                  <Link to='/payroll'>
                     <div className='hover:bg-default-100 px-4 py-2'>
                       <BadgeIcon />
                       &nbsp;&nbsp;
@@ -106,7 +98,11 @@ export default function Sidebar() {
                 </AccordionItem>
 
                 {/* Department */}
-                <AccordionItem key='3' aria-label='Department' title='Department'>
+                <AccordionItem
+                  key='3'
+                  aria-label='Department'
+                  title='Department'
+                >
                   <Link>
                     <div className='hover:bg-default-100 px-4 py-2'>
                       <BadgeIcon />
@@ -122,11 +118,14 @@ export default function Sidebar() {
                       <span className='m-auto'>Department Update</span>
                     </div>
                   </Link>
-
                 </AccordionItem>
 
                 {/* Attendance */}
-                <AccordionItem key='4' aria-label='Attendance' title='Attendance' >
+                <AccordionItem
+                  key='4'
+                  aria-label='Attendance'
+                  title='Attendance'
+                >
                   <Link to='/attendance'>
                     <div className='hover:bg-default-100 px-4 py-2'>
                       <BadgeIcon />
