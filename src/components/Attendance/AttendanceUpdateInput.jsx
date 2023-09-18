@@ -3,6 +3,7 @@ import apiInstance from '../../util/api'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import { Link, useLocation } from 'react-router-dom'
+import { attendanceInputDate } from '../../util/Util'
 
 export default function DepartmentInputForm() {
   const location = useLocation()
@@ -98,7 +99,7 @@ export default function DepartmentInputForm() {
           <label className='text-sm font-semibold'>Date</label>
           <Input
             type='date'
-            defaultValue={attendance.date?.split('T')[0]}
+            value={attendance.date ? attendanceInputDate(attendance.date) : ''}
             variant={variant}
             onChange={e => handleInputChange('date', e.target.value)}
           />

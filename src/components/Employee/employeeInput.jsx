@@ -1,4 +1,4 @@
-import { Input } from '@nextui-org/react'
+import { Checkbox, Input } from '@nextui-org/react'
 import { RadioGroup, Radio } from '@nextui-org/react'
 import {
   Modal,
@@ -744,60 +744,10 @@ export default function EmployeeInput() {
           >
             +
           </Button>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-            <ModalContent>
-              {onClose => (
-                <>
-                  <ModalHeader className='flex flex-col gap-1'>
-                    Other Document
-                  </ModalHeader>
-                  <ModalBody>
-                    <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                      <FileUploader
-                        multiple={true}
-                        handleChange={handleChange}
-                        name='file'
-                        types={fileTypes}
-                      />
-                      {/* <p>
-                  {otherDoc
-                    ? `File name: ${otherDoc[0].name}`
-                    : ""}
-                </p> */}
-
-                      <Input
-                        type='text'
-                        label='Description'
-                        placeholder=''
-                        onChange={e => setDescription(e.target.value)}
-                        variant='faded'
-                        className='mt-5'
-                      />
-                    </div>
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button color='danger' variant='light' onClick={onClose}>
-                      Close
-                    </Button>
-                    <Button color='primary' onPress={onClose}>
-                      Save
-                    </Button>
-                  </ModalFooter>
-                </>
-              )}
-            </ModalContent>
-          </Modal>
-          <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7'>
-            {/* <p>{img[0]}</p>
-          <img
-            src={
-              "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/employee/other/OTH-" +
-              img[0]
-            }
-            
-          /> */}
-          </div>
+          &nbsp; &nbsp;
+          <Checkbox>CRM Account</Checkbox>
         </div>
+
         <div className='flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
           <Button
             size='sm'
@@ -818,6 +768,49 @@ export default function EmployeeInput() {
           </Button>
         </div>
       </form>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {onClose => (
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                Other Document
+              </ModalHeader>
+              <ModalBody>
+                <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                  <FileUploader
+                    multiple={true}
+                    handleChange={handleChange}
+                    name='file'
+                    types={fileTypes}
+                  />
+                  {/* <p>
+                  {otherDoc
+                    ? `File name: ${otherDoc[0].name}`
+                    : ""}
+                </p> */}
+
+                  <Input
+                    type='text'
+                    label='Description'
+                    placeholder=''
+                    onChange={e => setDescription(e.target.value)}
+                    variant='faded'
+                    className='mt-5'
+                  />
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color='danger' variant='light' onClick={onClose}>
+                  Close
+                </Button>
+                <Button color='primary' onPress={onClose}>
+                  Save
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   )
 }
