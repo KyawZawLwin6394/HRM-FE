@@ -37,11 +37,10 @@ import { SearchIcon } from '../Navbar/search'
 import { FileUploader } from 'react-drag-drop-files'
 import { TfiImport } from 'react-icons/tfi'
 import { BsCloudArrowUpFill } from 'react-icons/bs'
-import { PlusIcon } from '../../assets/Icons/PlusIcon';
-import { convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util';
+import { PlusIcon } from '../../assets/Icons/PlusIcon'
+import { convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util'
 
-export default function AttendanceTable() {
-
+export default function AttendanceTable () {
   const [attendanceList, setAttendanceList] = useState([])
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [delID, setDelID] = useState(null)
@@ -82,11 +81,11 @@ export default function AttendanceTable() {
   const handleCheck = async (val, id) => {
     const updatedItems = items.map(item => {
       if (item._id === id) {
-        return { ...item, type: val };
+        return { ...item, type: val }
       }
-      return item;
-    });
-    setAttendanceList(updatedItems);
+      return item
+    })
+    setAttendanceList(updatedItems)
     await apiInstance
       .put('attendance', { type: val, id: id })
       .then(() => {
@@ -98,26 +97,24 @@ export default function AttendanceTable() {
       .catch(err => {
         console.log(err)
       })
-
   }
   const handleExcelImport = async () => {
     setPopOverOpen(false)
     const formData = new FormData()
     if (otherDoc) {
-      otherDoc.forEach((item) => {
-        formData.append("attendanceImport", item); // Assuming 'item' is a File object
-      });
+      otherDoc.forEach(item => {
+        formData.append('attendanceImport', item) // Assuming 'item' is a File object
+      })
       Swal.showLoading()
     }
-    await apiInstance.post('attendances/excel ', formData)
-      .then(() => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Successfully Imported'
-        }).then(() => {
-          window.location.reload()
-        })
+    await apiInstance.post('attendances/excel ', formData).then(() => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Successfully Imported'
+      }).then(() => {
+        window.location.reload()
       })
+    })
   }
 
   useEffect(() => {
@@ -275,11 +272,11 @@ export default function AttendanceTable() {
               </div>
             </PopoverContent>
           </Popover>
-
-          <Button endContent={<PlusIcon />} color='primary'>
-            <Link to='/att-add'>Add</Link>
-          </Button>
-
+          <Link to='/att-add'>
+            <Button endContent={<PlusIcon />} color='primary'>
+              Add
+            </Button>
+          </Link>
         </div>
       </div>
       <div className='flex justify-between items-center mb-3'>
@@ -320,18 +317,16 @@ export default function AttendanceTable() {
         }
       >
         <TableHeader>
-          <TableColumn >No</TableColumn>
-          <TableColumn >Date</TableColumn>
-          <TableColumn >Day</TableColumn>
-          <TableColumn >Clock In</TableColumn>
-          <TableColumn >Clock Out</TableColumn>
-          <TableColumn >Name</TableColumn>
-          <TableColumn >Department</TableColumn>
-          <TableColumn >Type</TableColumn>
-          <TableColumn >Source</TableColumn>
-          <TableColumn className='text-center'>
-            Check
-          </TableColumn>
+          <TableColumn>No</TableColumn>
+          <TableColumn>Date</TableColumn>
+          <TableColumn>Day</TableColumn>
+          <TableColumn>Clock In</TableColumn>
+          <TableColumn>Clock Out</TableColumn>
+          <TableColumn>Name</TableColumn>
+          <TableColumn>Department</TableColumn>
+          <TableColumn>Type</TableColumn>
+          <TableColumn>Source</TableColumn>
+          <TableColumn className='text-center'>Check</TableColumn>
 
           <TableColumn key='action'>Action</TableColumn>
         </TableHeader>
@@ -339,8 +334,12 @@ export default function AttendanceTable() {
           {items.map((item, index) => (
             <TableRow key={item._id}>
               <TableCell>{index + 1}</TableCell>
-              <TableCell>{item.date ? convertAndDisplayTZ(item.date) : 'Not Set'}</TableCell>
-              <TableCell>{item.date ? convertToWeekDayNames(item.date) : 'Not Set'}</TableCell>
+              <TableCell>
+                {item.date ? convertAndDisplayTZ(item.date) : 'Not Set'}
+              </TableCell>
+              <TableCell>
+                {item.date ? convertToWeekDayNames(item.date) : 'Not Set'}
+              </TableCell>
               <TableCell>{item.clockIn}</TableCell>
               <TableCell>{item.clockOut}</TableCell>
               <TableCell>
@@ -359,7 +358,7 @@ export default function AttendanceTable() {
                   orientation='horizontal'
                   defaultValue={item.type}
                 >
-                  <Radio value='Attend' >Attend</Radio>
+                  <Radio value='Attend'>Attend</Radio>
                   <Radio value='Dismiss'>Dismiss</Radio>
                 </RadioGroup>
               </TableCell>
