@@ -1,20 +1,27 @@
 import Sidebar from "../../components/Sidebar";
 import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/react";
 import Payslip from "../../components/PayRoll/payslip";
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleChevronLeft} from '@fortawesome/free-solid-svg-icons'
+import { Button } from "@nextui-org/react";
+import { Link } from "react-router-dom";
 export default function PaySlip() {
 
     return (
         <div className='flex'>
             <div className="sidebar  w-full md:w-32 lg:w-48"><Sidebar /></div>
             <div className="flex-grow  w-full md:w-32 lg:w-48">
-                <div className="body">
+                <div className="body ml-16">
                     <Card className="rounded-sm shadow-md py-3 min-h-[490px]" >
-                        <CardHeader className="flex justify-center">
-                            {/* <label className="font-semibold font-nunito">
-                                Payslip For Aug
-                            </label> */}
-                        </CardHeader>
+                     <CardHeader className="justify-between">
+              <Button
+                variant="light"
+                className="rounded-none px-4 py-0 text-left">
+                <Link to="/payroll" className='mr-5'><FontAwesomeIcon icon={faCircleChevronLeft} size="2xl" /></Link>
+              </Button>
+              <div className="font-semibold"></div>
+              <div></div>
+            </CardHeader>
                         <CardBody>
                             < Payslip />
                         </CardBody>

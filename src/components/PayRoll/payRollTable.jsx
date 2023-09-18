@@ -1,8 +1,6 @@
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Tooltip, Table, TableHeader, Kbd, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Table, TableHeader, Kbd, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
-import { EditIcon } from "../Table/editicon";
-import { DeleteIcon } from "../Table/deleteicon";
 import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import React from "react";
 import { SearchIcon } from "../Navbar/search";
@@ -13,7 +11,7 @@ import ExtraPay from './extrapay'
 export default function PayrollTable() {
     const functions = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const [payrollList, setPayrollList] = useState([])
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen, onClose } = useDisclosure();
       const { isOpen:isOpenExtra, onOpen:onOpenExtra, onClose:onCloseExtra } = useDisclosure();
     const [departmentList, setDepartmentList] = useState([]);
     const [delID, setDelID] = useState(null);
@@ -79,11 +77,11 @@ export default function PayrollTable() {
         };
     }, [isOpen, rowsPerPage])
 
-    const handleOpen = (event) => {
-onOpen()
-        console.log(event.currentTarget.getAttribute('data-key'))
-        setDelID(event.currentTarget.getAttribute('data-key'))
-    }
+//     const handleOpen = (event) => {
+// onOpen()
+//         console.log(event.currentTarget.getAttribute('data-key'))
+//         setDelID(event.currentTarget.getAttribute('data-key'))
+//     }
     const handleExtraOpen=()=>{
     onOpenExtra()   
     }

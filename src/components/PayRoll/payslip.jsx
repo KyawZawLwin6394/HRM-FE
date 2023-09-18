@@ -9,8 +9,12 @@ import {
 import apiInstance from "../../util/api";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { useLocation } from 'react-router-dom';
 
 export default function LeaveInputForm() {
+
+    const PayroleID = useLocation().pathname.split('/')[2]
+    console.log(PayroleID,'id')
   const print = () => {
     // document.getElementById('printtop').style({ marginTop: '100px' })
 
@@ -23,13 +27,17 @@ export default function LeaveInputForm() {
     document.body.innerHTML = originalContents;
     window.location.reload();
   };
-  const [employeeList, setEmployeeList] = useState([]);
+  const [payrollData, setPayrollData] = useState([]);
 
   useEffect(() => {
     const getEmployeeList = async () => {
       await apiInstance
-        .get("users")
-        .then((res) => setEmployeeList(res.data.data));
+        .get("payroll/"+PayroleID)
+        .then((res) => {
+          setPayrollData(res.data.data[0])
+          console.log(res.data.data)
+        }
+        );
     };
     getEmployeeList();
   }, []);
@@ -133,7 +141,7 @@ export default function LeaveInputForm() {
 
   <thead style={{ border:'1px solid'}} className='justify-center text-2xl'>
     <tr>
-      <th className='py-3 px-3 '>Name : Kaung Set Hein</th>
+      <th className='py-3 px-3 '>Name : {payrollData.relatedUser?.givenName}</th>
       <th className='py-3 px-3 text-end'> ID : 107</th>
       <th></th>
     </tr>
@@ -142,31 +150,41 @@ export default function LeaveInputForm() {
     <tr>
       <td className='py-3 px-3'>Position</td>
       <td style={{ borderLeft:'1px solid'}} className='px-3'></td>
-      <td style={{ borderBottom:'1px solid'}} className='px-3'>React Developer</td>
+      <td style={{ borderBottom:'1px solid'}} className='px-3'>{payrollData.relatedUser?.relatedPosition?.name}</td>
     </tr>
     <tr>
       <td className='py-3 px-3'>Total Attendance Days</td>
-      <td style={{ border:'1px solid'}} className='px-3'>22 Days</td>
-      <td style={{ border:'1px solid'}} className='px-3'>180000 MMK</td>
+      <td style={{ border:'1px solid'}} className='px-3'>{payrollData?.totalAttendance} Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>{payrollData?.entitledSalary} MMK</td>
     </tr>
     <tr>
       <td className='py-3 px-3'>Paid Leave Days</td>
-      <td style={{ border:'1px solid'}} className='px-3'>3 Days</td>
-      <td style={{ border:'1px solid'}} className='px-3'>25000 MMK</td>
+      <td style={{ border:'1px solid'}} className='px-3'>{payrollData?.paidLeaves} Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>0 MMK</td>
+    </tr>
+        <tr>
+      <td className='py-3 px-3'>UnPaid Leave Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>{payrollData?.unPaidLeaves} Days</td>
+      <td style={{ border:'1px solid'}} className='px-3'>0 MMK</td>
+    </tr>
+        <tr>
+      <td className='py-3 px-3'></td>
+      <td style={{ borderTop:'1px solid'}} className='px-3'></td>
+      <td style={{ borderTop:'1px solid'}} className='px-3'></td>
     </tr>
       <tr>
       <td className=''></td>
       <td style={{ borderBottom:'1px solid'}} className='px-3'></td>
-      <td style={{ borderBottom:'1px solid'}} className='px-3 text-center sm:text-left'>Net Salary : 155000 MMK</td>
+      <td style={{ borderBottom:'1px solid'}} className='px-3 py-3 text-center sm:text-left'>Net Salary : {payrollData?.entitledSalary} MMK</td>
     </tr>
   </tbody>
 </table>
 <div className='flex gap-4 mt-3'>
   <p>
-    Month : Aug
+    Month : {payrollData?.month}
   </p>
   <p>
-    Year : 2023
+    Year : {payrollData?.createdAt?.split('T')[0]}
   </p>
 </div>
            {/* <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
