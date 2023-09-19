@@ -12,9 +12,6 @@ export default function LeaveInputForm(props) {
     // const fileTypes = ["JPG", "PNG", "GIF"];
     // const [attachFile, setAttachFile] = useState(null);
 
-    const scroll={
-        display:'none'
-    }
     const handleInputChange = (fieldName, value) => {
         setData(prevValues => ({
             ...prevValues,
