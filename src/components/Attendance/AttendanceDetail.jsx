@@ -165,6 +165,15 @@ export default function AttendanceDetailPage() {
 
   const handleSearch = async () => {
     setIsSearched(false)
+    console.log('search')
+    setPayroll({
+      attendedSalary: 0,
+      dismissedSalary: 0,
+      entitledSalary: 0,
+      totalAttendance: 0,
+      paid: 0,
+      unpaid: 0
+    })
     await apiInstance.get('user/' + filter.emp).then(res => {
       setProfile(res.data.data)
       console.log(res.data.data, 'user')
@@ -189,6 +198,7 @@ export default function AttendanceDetailPage() {
       .then(res => {
         setAttendanceList(res.data.data)
         setPages(res.data._metadata.page_count)
+
       })
   }
 
@@ -514,7 +524,7 @@ export default function AttendanceDetailPage() {
           </div>
           <div className='flex-column flex-grow mt-4'>
             <div className='flex-row flex gap-2 mb-2'>
-              <span className='m-auto w-1/2'>Paid Leaves</span>
+              <span className='m-auto w-1/2'>Paid Days</span>
               <Input
                 isDisabled={disabled}
                 size='lg'
@@ -545,7 +555,7 @@ export default function AttendanceDetailPage() {
               />
             </div>
             <div className='flex-row flex gap-2 mb-2'>
-              <span className='m-auto w-1/2'>Unpaid Leaves</span>
+              <span className='m-auto w-1/2'>Unpaid Days</span>
               <Input
                 isDisabled={disabled}
                 size='lg'
