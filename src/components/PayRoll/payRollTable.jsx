@@ -1,4 +1,4 @@
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Table, TableHeader, Kbd, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell } from "@nextui-org/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Table, TableHeader, Kbd, Modal, Pagination, ModalContent, Button, ModalFooter, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell, Tooltip } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
 import { PlusIcon } from "../../assets/Icons/PlusIcon";
@@ -7,12 +7,14 @@ import { SearchIcon } from "../Navbar/search";
 import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
 import { Link } from "react-router-dom";
 import ExtraPay from './extrapay'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileInvoice, faHandHoldingDollar } from '@fortawesome/free-solid-svg-icons'
 
 export default function PayrollTable() {
     const functions = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const [payrollList, setPayrollList] = useState([])
     const { isOpen, onClose } = useDisclosure();
-      const { isOpen:isOpenExtra, onOpen:onOpenExtra, onClose:onCloseExtra } = useDisclosure();
+    const { isOpen: isOpenExtra, onOpen: onOpenExtra, onClose: onCloseExtra } = useDisclosure();
     const [departmentList, setDepartmentList] = useState([]);
     const [delID, setDelID] = useState(null);
     const [page, setPage] = React.useState(1);
@@ -77,13 +79,13 @@ export default function PayrollTable() {
         };
     }, [isOpen, rowsPerPage])
 
-//     const handleOpen = (event) => {
-// onOpen()
-//         console.log(event.currentTarget.getAttribute('data-key'))
-//         setDelID(event.currentTarget.getAttribute('data-key'))
-//     }
-    const handleExtraOpen=()=>{
-    onOpenExtra()   
+    //     const handleOpen = (event) => {
+    // onOpen()
+    //         console.log(event.currentTarget.getAttribute('data-key'))
+    //         setDelID(event.currentTarget.getAttribute('data-key'))
+    //     }
+    const handleExtraOpen = () => {
+        onOpenExtra()
     }
 
     const handleClose = () => {
@@ -222,16 +224,18 @@ export default function PayrollTable() {
                             <TableCell className="text-center">{item.unpaidLeaves}</TableCell>
                             <TableCell className="text-center">{item.entitledSalary}</TableCell>
                             <TableCell>  <div className="flex gap-1">
-                                <Button color="primary" size='sm'>
-                                    <Link to={'/payslip/' + item._id}>
-                                        Pay Slip
-                                    </Link>
-                                </Button>
-                                <Button color="primary" size='sm' onClick={handleExtraOpen} >
-                                   
-                                        Extra
-                                    
-                                </Button>
+                                <Tooltip content="Payslip">
+                                    <Button variant='light' size='sm' isIconOnly onClick={handleExtraOpen} >
+                                        <Link to={'/payslip/' + item._id} className="m-auto">
+                                            <FontAwesomeIcon icon={faFileInvoice} size="xl" />
+                                        </Link>
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip content='Extra'>
+                                    <Button variant='light' size='sm' isIconOnly startContent={<FontAwesomeIcon icon={faHandHoldingDollar} size="xl" />} onClick={handleExtraOpen} >
+                                    </Button>
+                                </Tooltip>
+
                             </div></TableCell>
                             {/* <TableCell>
                                 <div className="relative flex items-center gap-2">
@@ -252,7 +256,7 @@ export default function PayrollTable() {
                         </TableRow>
                     ))}
                 </TableBody>
-            </Table>
+            </Table >
             <Modal backdrop='blur' isOpen={isOpen} onClose={handleClose} >
                 <ModalContent >
                     {(handleClose) => (
@@ -277,15 +281,15 @@ export default function PayrollTable() {
                 </ModalContent>
             </Modal>
 
-   <Modal backdrop='blur' isOpen={isOpenExtra} onClose={onCloseExtra} size='lg' >
+            <Modal backdrop='blur' isOpen={isOpenExtra} onClose={onCloseExtra} size='lg' >
                 <ModalContent >
                     {() => (
                         <>
                             <ModalHeader className="flex flex-col gap-1 text-center">Extra Pay</ModalHeader>
                             <ModalBody>
-                              <ExtraPay/>
+                                <ExtraPay />
                             </ModalBody>
-                           
+
                         </>
                     )}
                 </ModalContent>
