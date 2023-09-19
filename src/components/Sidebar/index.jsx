@@ -23,7 +23,7 @@ export default function Sidebar () {
   }
   return (
     <>
-      <div className='sidebar w-full grid grid-cols-1 grid-flow-col px-1 '>
+      <div className='sidebar w-full px-1 '>
         <div className='nav-bar flex-grow'>
           <Card className='w-[250px] max-h rounded-sm'>
             <Divider />
@@ -91,6 +91,7 @@ export default function Sidebar () {
                       <span className='ml-3 font-medium'>Pay Roll</span>
                     </div>
                   </Link>
+                         <Divider></Divider>
                    <Link to='/att-detail'>
                     <div className='hover:bg-default-100 px-4 py-2'>
                     <FontAwesomeIcon icon={faHandHoldingDollar} size='xl' />
@@ -102,7 +103,7 @@ export default function Sidebar () {
 
              
               </Accordion>
-              <Divider></Divider>
+       
             </CardBody>
             <Divider />
             <CardFooter>

@@ -3,7 +3,6 @@ import { Card, CardHeader, CardBody, CardFooter, Divider } from "@nextui-org/rea
 import Payslip from "../../components/PayRoll/payslip";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleChevronLeft} from '@fortawesome/free-solid-svg-icons'
-import { Button } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 export default function PaySlip() {
 
@@ -14,11 +13,11 @@ export default function PaySlip() {
                 <div className="body ml-16">
                     <Card className="rounded-sm shadow-md py-3 min-h-[490px]" >
                      <CardHeader className="justify-between">
-              <Button
-                variant="light"
+              <div
+             
                 className="rounded-none px-4 py-0 text-left">
                 <Link to="/payroll" className='mr-5'><FontAwesomeIcon icon={faCircleChevronLeft} size="2xl" /></Link>
-              </Button>
+              </div>
               <div className="font-semibold"></div>
               <div></div>
             </CardHeader>

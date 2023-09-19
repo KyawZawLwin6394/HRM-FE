@@ -9,7 +9,6 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleChevronLeft} from '@fortawesome/free-solid-svg-icons'
-import { Button } from "@nextui-org/react";
 // import {Button} from "@nextui-org/react";
 import { Link } from "react-router-dom";
 import Input from "../../components/Employee/employeeInput";
@@ -20,15 +19,15 @@ export default function employeeAdd() {
         <Sidebar />
       </div>
       <div className="flex-grow">
-        <div className="body ml-16">
+        <div className="body">
           <Card className="rounded-md">
             <CardHeader className="justify-between">
-              <Button
-                variant="light"
+              <div
+               
                 className="rounded-none px-4 py-0 text-left">
                 <Link to="/emp" className='mr-5'><FontAwesomeIcon icon={faCircleChevronLeft} size="2xl" /></Link>
-              </Button>
-              <div className="font-semibold">Employee List</div>
+              </div>
+              <div className="font-semibold text-2xl">Employee List</div>
               <div></div>
             </CardHeader>
             <CardBody>

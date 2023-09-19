@@ -44,7 +44,7 @@ export default function NavBar () {
   return (
     <>
       {location.pathname !== '/' && (
-        <Navbar maxWidth='full' isBordered isBlurred={false}>
+        <Navbar maxWidth='full' isBordered isBlurred={false} className='py-4 sticky-top'>
           {/* <h3>Hello</h3> */}
 
           <NavbarBrand>

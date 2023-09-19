@@ -132,7 +132,6 @@ export default function EmployeeTable() {
           <TableColumn key="casualLeaves">Phone</TableColumn>
           <TableColumn key="medicalLeaves">Department</TableColumn>
           <TableColumn key="vacationLeaves">Position</TableColumn>
-          <TableColumn key="basicSalary">Attendance</TableColumn>
           <TableColumn key="actions">Actions</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No Positions to display."}>
@@ -166,7 +165,7 @@ export default function EmployeeTable() {
                   {item.relatedPosition?.name}
                 </p>
               </div></TableCell>
-              <TableCell>{item.basicSalary}</TableCell>
+          
               <TableCell>
                 <div className="relative flex items-center gap-2">
                   <Tooltip content="Details">

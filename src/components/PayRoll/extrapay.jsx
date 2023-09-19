@@ -1,19 +1,17 @@
 
 import { Button, Input } from "@nextui-org/react";
 import apiInstance from "../../util/api";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Swal from "sweetalert2";
-import { Link } from "react-router-dom";
 // import { FileUploader } from "react-drag-drop-files";
 
 
 export default function LeaveInputForm(props) {
        const functions = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const variant = 'faded';
-    const [employeeList, setEmployeeList] = useState([])
     // const fileTypes = ["JPG", "PNG", "GIF"];
     // const [attachFile, setAttachFile] = useState(null);
-const [open,setOpen]=useState(false)
+
     const scroll={
         height:'550px',
         overflowY:'scroll'
@@ -75,14 +73,14 @@ const [open,setOpen]=useState(false)
             })
     }
 
-    useEffect(() => {
-        const getEmployeeList = async () => {
-            await apiInstance.get('users')
-                .then(res => setEmployeeList(res.data.data))
-        }
-        getEmployeeList()
+    // useEffect(() => {
+    //     const getEmployeeList = async () => {
+    //         await apiInstance.get('users')
+    //             .then(res => setEmployeeList(res.data.data))
+    //     }
+    //     getEmployeeList()
 
-    }, [])
+    // }, [])
 const handleClose=()=>{
 props.onClose(!props.isOpen)
 }

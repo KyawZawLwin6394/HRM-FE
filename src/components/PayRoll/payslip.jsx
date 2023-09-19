@@ -4,11 +4,9 @@ import {
   CardFooter,
   CardHeader,
   Button,
-  Input
 } from "@nextui-org/react";
 import apiInstance from "../../util/api";
 import { useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import { useLocation } from 'react-router-dom';
 
 export default function LeaveInputForm() {

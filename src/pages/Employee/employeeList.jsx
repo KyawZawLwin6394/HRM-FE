@@ -34,17 +34,17 @@ export default function Employee () {
   }, [])
 
   return (
-    <>
-      <div className='flex'>
-        <div className='sidebar'>
+    <div className=''>
+      <div className='flex '>
+        <div className='sidebar sticky-top'>
           <Sidebar />
         </div>
-        <div className='flex-grow'>
-          <div className=''>
+        <div className='flex-grow '>
+          <div className='sticky-top'>
             <Card className='rounded-sm shadow-md py-3 min-h-[890px]'>
               <CardHeader className='justify-between'>
                 <div></div>
-                <div className='font-semibold'>Employee List</div>
+                <div className='font-semibold text-2xl'>Employee List</div>
                 <Link to='/emp-add'>
                   <Button
                     endContent={<PlusIcon />}
@@ -68,6 +68,6 @@ export default function Employee () {
           </div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
