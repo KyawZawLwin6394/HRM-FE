@@ -132,7 +132,6 @@ export default function EmployeeTable() {
           <TableColumn key="casualLeaves">Phone</TableColumn>
           <TableColumn key="medicalLeaves">Department</TableColumn>
           <TableColumn key="vacationLeaves">Position</TableColumn>
-          <TableColumn key="basicSalary">Attendance</TableColumn>
           <TableColumn key="actions">Actions</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No Positions to display."}>
@@ -161,12 +160,12 @@ export default function EmployeeTable() {
               <TableCell>{item.phone}</TableCell>
               <TableCell>{item.relatedDepartment?.name}</TableCell>
               <TableCell> <div className="flex flex-col">
-                <p className="text-bold text-sm capitalize">Position</p>
-                <p className="text-bold text-sm capitalize text-default-400">
+                
+                <p className="text-bold text-sm capitalize ">
                   {item.relatedPosition?.name}
                 </p>
               </div></TableCell>
-              <TableCell>{item.basicSalary}</TableCell>
+          
               <TableCell>
                 <div className="relative flex items-center gap-2">
                   <Tooltip content="Details">

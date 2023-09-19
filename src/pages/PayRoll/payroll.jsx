@@ -10,8 +10,8 @@ export default function Payroll() {
                 <div className="">
                     <Card className="rounded-md shadow-md py-3 min-h-[890px]">
                         <CardHeader className="flex justify-center">
-                            <div className="font-semibold font-nunito">
-                                Payrole
+                            <div className="font-semibold font-nunito text-2xl">
+                                Payroll
                             </div>
                         </CardHeader>
                         <CardBody >

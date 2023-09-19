@@ -25,13 +25,14 @@ import ExtraPay from './pages/PayRoll/extrapay'
 import AttendanceDetail from './pages/Attendance/AttendanceDetail'
 
 export default function RouteFile() {
+ 
   return (
-    <>
+    <div >
       <BrowserRouter>
-        <div className='flex-grow'>
-          <Nav></Nav>
+        <div className='flex-grow' >
+          <Nav/>
         </div>
-        <Routes>
+        <Routes >
           <Route path='/' element={<Login />}></Route>
 
           <Route element={<AuthContainer />}>
@@ -83,6 +84,6 @@ export default function RouteFile() {
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   )
 }
