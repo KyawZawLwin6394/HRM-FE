@@ -13,8 +13,7 @@ export default function LeaveInputForm(props) {
     // const [attachFile, setAttachFile] = useState(null);
 
     const scroll={
-        height:'550px',
-        overflowY:'scroll'
+        display:'none'
     }
     const handleInputChange = (fieldName, value) => {
         setData(prevValues => ({
@@ -85,7 +84,7 @@ const handleClose=()=>{
 props.onClose(!props.isOpen)
 }
     return (
-        <div className="gap-4" style={scroll}>
+        <div className="gap-4 h-[550px] overflow-y-auto">
             <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                 <Input
                     type="text"
