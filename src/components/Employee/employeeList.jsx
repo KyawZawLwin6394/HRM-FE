@@ -161,8 +161,8 @@ export default function EmployeeTable() {
               <TableCell>{item.phone}</TableCell>
               <TableCell>{item.relatedDepartment?.name}</TableCell>
               <TableCell> <div className="flex flex-col">
-                <p className="text-bold text-sm capitalize">Position</p>
-                <p className="text-bold text-sm capitalize text-default-400">
+                
+                <p className="text-bold text-sm capitalize ">
                   {item.relatedPosition?.name}
                 </p>
               </div></TableCell>

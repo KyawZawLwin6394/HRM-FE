@@ -277,13 +277,13 @@ export default function PayrollTable() {
                 </ModalContent>
             </Modal>
 
-   <Modal backdrop='blur' isOpen={isOpenExtra} onClose={onCloseExtra} size='lg' >
+   <Modal backdrop='blur' isOpen={isOpenExtra} onClose={onCloseExtra} size='2xl' >
                 <ModalContent >
                     {() => (
                         <>
                             <ModalHeader className="flex flex-col gap-1 text-center">Extra Pay</ModalHeader>
                             <ModalBody>
-                              <ExtraPay/>
+                              <ExtraPay isOpen={isOpen} onClose={onCloseExtra}/>
                             </ModalBody>
                            
                         </>
