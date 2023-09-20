@@ -24,6 +24,24 @@ export default function PayrollTable() {
     const [month, setMonth] = useState('')
     const [departmentID, setDepartmentID] = useState('')
 
+    //extra
+    const [name,setName]=useState('')
+    const [monthExtra,setMonthExtra]=useState('')
+    const [salary,setSalary]=useState('')
+    const [attendSalary,setAttendSalary]=useState('')
+
+    //input exta and save in database
+    const [maPerDay,setMaPerDay]=useState('')
+    const [maTotalDays,setMaTotalDays]=useState('')
+    const [maTotalAmount,setMaTotalAmount]=useState('')
+       const [travelPerDay,setTravelPerDay]=useState('')
+    const [travelTotalDays,setTravelTotalDays]=useState('')
+    const [travelTotalAmount,setTravelTotalAmount]=useState('')
+       const [otPerDay,setOtPerDay]=useState('')
+    const [otTotalDays,setOtTotalDays]=useState('')
+    const [otTotalAmount,setOtTotalAmount]=useState('')
+
+
     const filterPayrollList = async () => {
         await apiInstance.get('payrolls', { params: { month: month, relatedDepartment: departmentID } })
             .then(res => {
@@ -85,8 +103,15 @@ export default function PayrollTable() {
     //         console.log(event.currentTarget.getAttribute('data-key'))
     //         setDelID(event.currentTarget.getAttribute('data-key'))
     //     }
-    const handleExtraOpen = () => {
-        onOpenExtra()
+
+    const handleExtraOpen = (item) => {
+        console.log(item,'item')
+        setName(item.relatedUser?.givenName)
+        setSalary(item.relatedUser.relatedPosition?.basicSalary)
+        setMonthExtra(item.month)
+        setAttendSalary(item?.attendedSalary)
+                onOpenExtra()
+
     }
 
     const handleClose = () => {
@@ -102,6 +127,19 @@ export default function PayrollTable() {
                 onClose()
             })
     }
+
+ // const handleInputChange = (fieldName, value) => {
+    //     setData(prevValues => ({
+    //         ...prevValues,
+    //         [fieldName]: value,
+    //     }));
+    // };
+
+    //     const [data, setData] = useState({
+    //     maPerDay:null,
+    //     maTotalDays:null,
+    //     maTotalAmount:null
+    // });
 
     return (
         <>
@@ -200,7 +238,7 @@ export default function PayrollTable() {
 
                 <TableHeader>
                     <TableColumn>No</TableColumn>
-                    <TableColumn>Month</TableColumn>
+<TableColumn>Month</TableColumn>
                     <TableColumn>Name</TableColumn>
                     <TableColumn>Position</TableColumn>
                     <TableColumn>Payroll</TableColumn>
@@ -217,7 +255,7 @@ export default function PayrollTable() {
                     {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
-                            <TableCell>{item?.month}</TableCell>
+<TableCell>{item?.month}</TableCell>
                             <TableCell>{item?.relatedUser?.givenName}</TableCell>
                             <TableCell>{item?.relatedUser?.relatedPosition?.name}</TableCell>
                             <TableCell>{item?.relatedUser?.relatedDepartment?.name}</TableCell>
@@ -313,28 +351,26 @@ export default function PayrollTable() {
 
                                     <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                            <label className="text-sm font-semibold">Month</label>
-                                            <select
-                                                //onChange={(e) => handleInputChange('month', e.target.value)}
-                                                className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 mt-1">
-                                                <option hidden>Choose Month</option>
-                                                {functions.map(item => (
-                                                    <option key={item} value={item} className="capitalize">
-                                                        {item}
-                                                    </option>
-                                                ))}
 
-                                                {/* <option value="Male">Department 1</option>
-                <option value="Female">Department 2</option> */}
-
-                                            </select>
-                                        </div>
-                                        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                            <Input
+                                             <Input
                                                 type="text"
-                                                label="Base Salary"
-                                                placeholder="Enter salary"
+                                                label="Month"
+                                                placeholder="..."
                                                 variant={variant}
+                                                value={monthExtra}
+                                              
+                                                labelPlacement="outside"
+                                            />
+                                            
+
+                                        </div>
+                                        <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4" > 
+                                        <label>Base Salary</label>
+                                            <Input
+                                                type="number"
+                                                placeholder=""
+                                                variant={variant}
+                                                value={salary}
                                                 //onChange={(e) => handleInputChange('base', e.target.value)}
                                                 labelPlacement="outside"
                                             />
@@ -349,6 +385,7 @@ export default function PayrollTable() {
                                             placeholder="..."
                                             //onChange={(e) => handleInputChange('salary', e.target.value)}
                                             variant={variant}
+                                            value={attendSalary?.toFixed(2)}
                                             labelPlacement="outside"
                                         />
 
@@ -362,25 +399,32 @@ export default function PayrollTable() {
                                                 <div>
                                                     <label>Per Day</label>
                                                     <Input
+                                                    type='number'
                                                         //   isDisabled={true}
                                                         //   value={positionID?.casualLeaves}
                                                         className='py-1'
+                                                        onChange={(e)=>setMaPerDay(e.target.value)}
                                                     />
                                                 </div>
                                                 <div>
                                                     <label>Total Days</label>
                                                     <Input
+                                                    type='number'
                                                         //   isDisabled={true}
                                                         //   value={positionID?.medicalLeaves}
                                                         className='py-1'
+                                                         onChange={(e)=>setMaTotalDays(e.target.value)}
                                                     />
                                                 </div>
                                                 <div>
                                                     <label>Total Amount</label>
                                                     <Input
+                                                    type='number'
                                                         //   isDisabled={true}
                                                         //   value={positionID?.vacationLeaves}
                                                         className='py-1'
+                                                       value={maPerDay*maTotalDays}
+                                                         onChange={(e)=>setMaTotalAmount(e.target.value)}
                                                     />
                                                 </div>
 
@@ -397,24 +441,25 @@ export default function PayrollTable() {
                                                 <div>
                                                     <label>Per Day</label>
                                                     <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.casualLeaves}
+                                                    type='number'
+                                                     onChange={(e)=>setTravelPerDay(e.target.value)}
                                                         className='py-1'
                                                     />
                                                 </div>
                                                 <div>
                                                     <label>Total Days</label>
                                                     <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.medicalLeaves}
+                                                    type='number'
+                                                    onChange={(e)=>setTravelTotalDays(e.target.value)}
                                                         className='py-1'
                                                     />
                                                 </div>
                                                 <div>
                                                     <label>Total Amount</label>
                                                     <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.vacationLeaves}
+                                                     type='number'
+                                                     value={travelPerDay*travelTotalDays}
+                                                     onChange={(e)=>setTravelTotalAmount(e.target.value)}
                                                         className='py-1'
                                                     />
                                                 </div>
