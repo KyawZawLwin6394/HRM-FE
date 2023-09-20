@@ -64,6 +64,12 @@ export default function AttendanceDetailPage() {
   } = useDisclosure()
 
   const {
+    isOpen: isOpenCalculate,
+    onOpen: onOpenCalculate,
+    onClose: onCloseCalculate
+  } = useDisclosure()
+
+  const {
     isOpen: isOpenAdd,
     onOpen: onOpenAdd,
     onClose: onCloseAdd
@@ -94,14 +100,14 @@ export default function AttendanceDetailPage() {
     setDepartment({ _id: keyID, name: keyName })
   }
 
-  const handleCalculate = async () => {
+  const handleCalculate = async (saveStatus) => {
     await apiInstance
       .post('attendances/calculate', {
         dep: filter.dep,
         emp: filter.emp,
         month: month,
         basicSalary: profile.relatedPosition.basicSalary,
-        saveStatus: true
+        saveStatus: saveStatus
       })
       .then(res => {
         setPayroll(res.data.data)
@@ -302,6 +308,9 @@ export default function AttendanceDetailPage() {
   const handleOpenAdd = async () => {
     onOpenAdd()
   }
+  const handleOpenCalculate = async () => {
+    onOpenCalculate()
+  }
 
   const handleOpenEdit = async event => {
     onOpenEdit()
@@ -461,7 +470,7 @@ export default function AttendanceDetailPage() {
           <Button
             color='primary'
             isDisabled={isSearched}
-            onClick={handleCalculate}
+            onClick={handleOpenCalculate}
           >
             Calculate
           </Button>
@@ -679,6 +688,39 @@ export default function AttendanceDetailPage() {
           ))}
         </TableBody>
       </Table>
+
+      <Modal backdrop='blur' isOpen={isOpenCalculate} onClose={onCloseCalculate}>
+        <ModalContent>
+          {onCloseCalculate => (
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                Save Payroll
+              </ModalHeader>
+              <ModalBody>
+                <p>Are you sure you want to save this payroll?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color='default' variant='light' onClick={() => {
+                  handleCalculate(false)
+                  onCloseCalculate()
+                }}>
+                  No, Cancel
+                </Button>
+                <Button
+                  color='success'
+                  onPress={() => {
+                    handleCalculate(true)
+                    onCloseCalculate()
+                  }}
+                >
+                  Yes, I am sure
+                  {/* <Kbd className='bg-danger-500' keys={['enter']}></Kbd> */}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
       <Modal backdrop='blur' isOpen={isOpen} onClose={handleClose}>
         <ModalContent>
           {handleClose => (

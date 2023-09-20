@@ -41,6 +41,7 @@ export default function PayrollTable() {
     const [otTotalDays,setOtTotalDays]=useState('')
     const [otTotalAmount,setOtTotalAmount]=useState('')
 
+
     const filterPayrollList = async () => {
         await apiInstance.get('payrolls', { params: { month: month, relatedDepartment: departmentID } })
             .then(res => {
@@ -102,6 +103,7 @@ export default function PayrollTable() {
     //         console.log(event.currentTarget.getAttribute('data-key'))
     //         setDelID(event.currentTarget.getAttribute('data-key'))
     //     }
+
     const handleExtraOpen = (item) => {
         console.log(item,'item')
         setName(item.relatedUser?.givenName)
@@ -109,6 +111,7 @@ export default function PayrollTable() {
         setMonthExtra(item.month)
         setAttendSalary(item?.attendedSalary)
                 onOpenExtra()
+
     }
 
     const handleClose = () => {
@@ -125,9 +128,7 @@ export default function PayrollTable() {
             })
     }
 
-
-
-    // const handleInputChange = (fieldName, value) => {
+ // const handleInputChange = (fieldName, value) => {
     //     setData(prevValues => ({
     //         ...prevValues,
     //         [fieldName]: value,
@@ -265,14 +266,15 @@ export default function PayrollTable() {
                             <TableCell className="text-center">{item.entitledSalary}</TableCell>
                             <TableCell>  <div className="flex gap-1">
                                 <Tooltip content="Payslip">
-                                    <Button variant='light' size='sm' isIconOnly onClick={handleExtraOpen} >
+                                    <Button variant='light' size='sm' isIconOnly >
                                         <Link to={'/payslip/' + item._id} className="m-auto">
                                             <FontAwesomeIcon icon={faFileInvoice} size="xl" />
                                         </Link>
                                     </Button>
                                 </Tooltip>
+                                &nbsp;
                                 <Tooltip content='Extra'>
-                                    <Button variant='light' size='sm' isIconOnly startContent={<FontAwesomeIcon icon={faHandHoldingDollar} size="xl" />} onClick={()=>handleExtraOpen(item)} >
+                                    <Button variant='light' size='sm' isIconOnly startContent={<FontAwesomeIcon icon={faHandHoldingDollar} size="xl" />} onClick={handleExtraOpen} >
                                     </Button>
                                 </Tooltip>
 
@@ -342,7 +344,6 @@ export default function PayrollTable() {
                                             label="Name"
                                             placeholder="Enter name"
                                             variant={variant}
-                                            value={name}
                                             //onChange={(e) => handleInputChange('name', e.target.value)}
                                             labelPlacement="outside"
                                         />
@@ -350,6 +351,7 @@ export default function PayrollTable() {
 
                                     <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
+
                                              <Input
                                                 type="text"
                                                 label="Month"
@@ -360,6 +362,7 @@ export default function PayrollTable() {
                                                 labelPlacement="outside"
                                             />
                                             
+
                                         </div>
                                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4" > 
                                         <label>Base Salary</label>
@@ -615,7 +618,7 @@ export default function PayrollTable() {
                                             Cancel
 
                                         </Button>
-                                        <Button color="primary">Register</Button>
+                                        <Button color="primary" >Register</Button>
                                     </div>
                                 </div >
                             </ModalBody>
