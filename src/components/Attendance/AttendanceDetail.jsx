@@ -100,7 +100,8 @@ export default function AttendanceDetailPage() {
         dep: filter.dep,
         emp: filter.emp,
         month: month,
-        basicSalary: profile.relatedPosition.basicSalary
+        basicSalary: profile.relatedPosition.basicSalary,
+        saveStatus: true
       })
       .then(res => {
         setPayroll(res.data.data)

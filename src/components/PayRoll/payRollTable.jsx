@@ -155,7 +155,7 @@ export default function PayrollTable() {
                 </div>
                 <div className="flex gap-3">
 
-                    <Button color="primary" endContent={<PlusIcon />} onClick={handlePayrollCalculation}>
+                    <Button color="primary" isDisabled endContent={<PlusIcon />} onClick={handlePayrollCalculation}>
                         Calculate
 
                     </Button>
@@ -200,6 +200,7 @@ export default function PayrollTable() {
 
                 <TableHeader>
                     <TableColumn>No</TableColumn>
+                    <TableColumn>Month</TableColumn>
                     <TableColumn>Name</TableColumn>
                     <TableColumn>Position</TableColumn>
                     <TableColumn>Payroll</TableColumn>
@@ -216,13 +217,14 @@ export default function PayrollTable() {
                     {items.map((item, index) => (
                         <TableRow key={item._id}>
                             <TableCell>{index + 1}</TableCell>
+                            <TableCell>{item?.month}</TableCell>
                             <TableCell>{item?.relatedUser?.givenName}</TableCell>
                             <TableCell>{item?.relatedUser?.relatedPosition?.name}</TableCell>
                             <TableCell>{item?.relatedUser?.relatedDepartment?.name}</TableCell>
                             <TableCell>{item?.relatedUser?.relatedPosition?.basicSalary}</TableCell>
                             <TableCell className="text-center">{item.totalAttendance}</TableCell>
-                            <TableCell className="text-center">{item.paidLeaves}</TableCell>
-                            <TableCell className="text-center">{item.unpaidLeaves}</TableCell>
+                            <TableCell className="text-center">{item?.paidDays}</TableCell>
+                            <TableCell className="text-center">{item?.unpaidDays}</TableCell>
                             <TableCell className="text-center">{item.entitledSalary}</TableCell>
                             <TableCell>  <div className="flex gap-1">
                                 <Tooltip content="Payslip">
