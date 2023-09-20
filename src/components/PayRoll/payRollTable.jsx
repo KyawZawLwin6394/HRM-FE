@@ -24,6 +24,11 @@ export default function PayrollTable() {
     const [month, setMonth] = useState('')
     const [departmentID, setDepartmentID] = useState('')
 
+    //extra
+    const [name,setName]=useState('')
+    const [monthExtra,setMonthExtra]=useState('')
+    const [salary,setSalary]=useState('')
+
     const filterPayrollList = async () => {
         await apiInstance.get('payrolls', { params: { month: month, relatedDepartment: departmentID } })
             .then(res => {
@@ -85,7 +90,9 @@ export default function PayrollTable() {
     //         console.log(event.currentTarget.getAttribute('data-key'))
     //         setDelID(event.currentTarget.getAttribute('data-key'))
     //     }
-    const handleExtraOpen = () => {
+    const handleExtraOpen = (item) => {
+        console.log(item,'item')
+        setName(item.relatedUser?.givenName)
         onOpenExtra()
     }
 
@@ -102,6 +109,25 @@ export default function PayrollTable() {
                 onClose()
             })
     }
+
+
+
+    const handleInputChange = (fieldName, value) => {
+        setData(prevValues => ({
+            ...prevValues,
+            [fieldName]: value,
+        }));
+    };
+
+        const [data, setData] = useState({
+        startDate: null,
+        endDate: null,
+        relatedUser: null,
+        relatedPosition: null,
+        reason: null,
+        leaveType: null,
+        status: null
+    });
 
     return (
         <>
@@ -233,7 +259,7 @@ export default function PayrollTable() {
                                     </Button>
                                 </Tooltip>
                                 <Tooltip content='Extra'>
-                                    <Button variant='light' size='sm' isIconOnly startContent={<FontAwesomeIcon icon={faHandHoldingDollar} size="xl" />} onClick={handleExtraOpen} >
+                                    <Button variant='light' size='sm' isIconOnly startContent={<FontAwesomeIcon icon={faHandHoldingDollar} size="xl" />} onClick={()=>handleExtraOpen(item)} >
                                     </Button>
                                 </Tooltip>
 
@@ -303,6 +329,7 @@ export default function PayrollTable() {
                                             label="Name"
                                             placeholder="Enter name"
                                             variant={variant}
+                                            value={name}
                                             //onChange={(e) => handleInputChange('name', e.target.value)}
                                             labelPlacement="outside"
                                         />
@@ -310,21 +337,15 @@ export default function PayrollTable() {
 
                                     <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1">
                                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                                            <label className="text-sm font-semibold">Month</label>
-                                            <select
-                                                //onChange={(e) => handleInputChange('month', e.target.value)}
-                                                className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 mt-1">
-                                                <option hidden>Choose Month</option>
-                                                {functions.map(item => (
-                                                    <option key={item} value={item} className="capitalize">
-                                                        {item}
-                                                    </option>
-                                                ))}
-
-                                                {/* <option value="Male">Department 1</option>
-                <option value="Female">Department 2</option> */}
-
-                                            </select>
+                                             <Input
+                                                type="text"
+                                                label="Base Salary"
+                                                placeholder="Enter salary"
+                                                variant={variant}
+                                                onChange={(e) => handleInputChange('month', e.target.value)}
+                                                labelPlacement="outside"
+                                            />
+                                            
                                         </div>
                                         <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
                                             <Input
@@ -570,7 +591,7 @@ export default function PayrollTable() {
                                             Cancel
 
                                         </Button>
-                                        <Button color="primary" >Register</Button>
+                                        <Button color="primary">Register</Button>
                                     </div>
                                 </div >
                             </ModalBody>
