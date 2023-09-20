@@ -454,120 +454,117 @@ export default function PayrollTable() {
                                         </div>
 
                                     </div>
-                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                                        <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 '>
+                                        <div className='w-full gap-4 flex flex-row flex-grow mt-3'>
+                                            <label className='text-sm font-semibold mt-8'>Incentive</label>
+                                            <div className='ml-7 flex-grow'>
+                                                <Input
+                                                    type="text"
+                                                    label="Reason"
+                                                    placeholder="Enter reason"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
+                                            </div>
 
-                                            <div className='flex flex-row text-sm mt-1 gap-2'>
-                                                <label className='text-sm font-semibold mt-8'>Incentive</label>
-                                                <div className='ml-5'>
-                                                    <label>Reason</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.casualLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-
-                                                <div>
-                                                    <label>Total Amount</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.vacationLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-
+                                            <div className="flex-grow">
+                                                <Input
+                                                    type="text"
+                                                    label="Total Amount"
+                                                    placeholder="Enter Total Amount"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
                                             </div>
                                         </div>
 
                                     </div>
 
-                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                                        <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
-
-                                            <div className='flex flex-row text-sm mt-1 gap-2'>
-                                                <label className='text-sm font-semibold mt-8'>Bonus</label>
-                                                <div className='ml-10'>
-                                                    <label>Reason</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.casualLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-
-                                                <div>
-                                                    <label>Total Amount</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.vacationLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 '>
+                                        <div className='w-full gap-4 flex flex-row flex-grow mt-3'>
+                                            <label className='text-sm font-semibold mt-8'>Bonus</label>
+                                            <div className='ml-11 flex-grow'>
+                                                <Input
+                                                    type="text"
+                                                    label="Reason"
+                                                    placeholder="Enter reason"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
                                             </div>
-                                        </div>
 
-
-                                    </div>
-
-
-                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                                        <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
-
-                                            <div className='flex flex-row text-sm mt-1 gap-2'>
-                                                <label className='text-sm font-semibold mt-8'>Income Tax</label>
-                                                <div className='ml-2'>
-                                                    <label>Percent %</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.casualLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-
-                                                <div>
-                                                    <label>Total Amount</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.vacationLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-
-                                            </div>
-                                        </div>
-
-
-                                    </div>
-                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                                        <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
-
-                                            <div className='flex flex-row text-sm mt-1 gap-2'>
-                                                <label className='text-sm font-semibold mt-5'>Total</label>
-                                                <div className='ml-12'>
-                                                    <label>Sub Total</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.casualLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label>Net Salary</label>
-                                                    <Input
-                                                        //   isDisabled={true}
-                                                        //   value={positionID?.medicalLeaves}
-                                                        className='py-1'
-                                                    />
-                                                </div>
-
-
+                                            <div className="flex-grow">
+                                                <Input
+                                                    type="text"
+                                                    label="Total Amount"
+                                                    placeholder="Enter Total Amount"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
                                             </div>
                                         </div>
 
                                     </div>
-                                    <div className="flex justify-center gap-10 py-4">
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 '>
+                                        <div className='w-full gap-4 flex flex-row flex-grow mt-3'>
+                                            <label className='text-sm font-semibold mt-8'>Income Tax</label>
+                                            <div className='ml-3 flex-grow'>
+                                                <Input
+                                                    type="text"
+                                                    label="Percent %"
+                                                    placeholder="Enter Percentage"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
+                                            </div>
+
+                                            <div className="flex-grow">
+                                                <Input
+                                                    type="text"
+                                                    label="Total Amount"
+                                                    placeholder="Enter Total Amount"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 '>
+                                        <div className='w-full gap-4 flex flex-row flex-grow mt-3'>
+                                            <label className='text-sm font-semibold mt-8'>Total</label>
+                                            <div className='ml-12 flex-grow'>
+                                                <Input
+                                                    type="text"
+                                                    label="Sub Total"
+                                                    placeholder="Sub Total"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
+                                            </div>
+
+                                            <div className="flex-grow">
+                                                <Input
+                                                    type="text"
+                                                    label="Net Salary"
+                                                    placeholder="Net Salary"
+                                                    variant={variant}
+                                                    //onChange={(e) => handleInputChange('name', e.target.value)}
+                                                    labelPlacement="outside"
+                                                />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div className="flex justify-center gap-10 py-6">
                                         <Button color="danger" onClick={onCloseExtra}>
 
                                             Cancel
