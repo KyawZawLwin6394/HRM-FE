@@ -228,12 +228,13 @@ export default function PayrollTable() {
                             <TableCell className="text-center">{item.entitledSalary}</TableCell>
                             <TableCell>  <div className="flex gap-1">
                                 <Tooltip content="Payslip">
-                                    <Button variant='light' size='sm' isIconOnly onClick={handleExtraOpen} >
+                                    <Button variant='light' size='sm' isIconOnly >
                                         <Link to={'/payslip/' + item._id} className="m-auto">
                                             <FontAwesomeIcon icon={faFileInvoice} size="xl" />
                                         </Link>
                                     </Button>
                                 </Tooltip>
+                                &nbsp;
                                 <Tooltip content='Extra'>
                                     <Button variant='light' size='sm' isIconOnly startContent={<FontAwesomeIcon icon={faHandHoldingDollar} size="xl" />} onClick={handleExtraOpen} >
                                     </Button>
