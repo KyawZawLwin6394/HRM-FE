@@ -166,6 +166,9 @@ export default function PayrollTable() {
     setMonthExtra(item.month);
     setAttendSalary(item?.attendedSalary);
     setID(item._id);
+    setMaPerDay(item.relatedUser?.relatedPosition?.mealAllowance)
+        setTravelPerDay(item.relatedUser?.relatedPosition?.travelAllowance)
+      
     onOpenExtra();
   };
 
@@ -526,9 +529,10 @@ export default function PayrollTable() {
                           <Input
                             type="number"
                             //   isDisabled={true}
-                            //   value={positionID?.casualLeaves}
+                              value={maPerDay}
                             className="py-1"
-                            onChange={(e) => setMaPerDay(e.target.value)}
+
+                            // onChange={(e) => setMaPerDay(e.target.value)}
                           />
                         </div>
                         <div>
@@ -566,7 +570,7 @@ export default function PayrollTable() {
                           <label>Per Day</label>
                           <Input
                             type="number"
-                            onChange={(e) => setTravelPerDay(e.target.value)}
+                            value={travelPerDay}
                             className="py-1"
                           />
                         </div>
