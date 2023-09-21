@@ -172,24 +172,29 @@ export default function PayrollTable() {
     onOpenExtra();
   };
 
-  const handlePercent = (val) => {
-    console.log(val);
-    setPercent(val);
-    const res = (parseInt(val) / 100) * attendSalary;
-    setTaxAmount(res);
-  };
-
-  //sub total
+   //gross salary
   const AllTotal =
     parseInt(mealTotal) +
     parseInt(travelTotal) +
     parseInt(otTotal) +
     parseInt(inAmount) +
     parseInt(boAmount) +
-    parseInt(taxAmount);
+    parseInt(attendSalary) 
+
+    //Tax
+  const handlePercent = (val) => {
+    console.log(val);
+    setPercent(val);
+    const res = (parseInt(val) / 100) * AllTotal;
+    setTaxAmount(res);
+  };
+
+ 
+    
+  
 
   //net salary
-  const NetSalary = AllTotal + attendSalary;
+  const NetSalary = AllTotal - taxAmount;
   const handleClose = () => {
     onClose();
     setDelID(null);
