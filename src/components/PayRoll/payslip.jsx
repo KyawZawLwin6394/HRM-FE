@@ -44,7 +44,7 @@ export default function LeaveInputForm() {
     <div className="gap-4">
       <Card className="shadow-lg" id="print">
         <CardHeader className="text-3xl font-semibold justify-center">
-          Payslip For Month
+          Payslip For {payrollData?.month}
         </CardHeader>
         <CardBody className='justify-center' >
           {/* <table className="table-fixed">
@@ -140,7 +140,7 @@ export default function LeaveInputForm() {
             <thead style={{ border: '1px solid' }} className='justify-center text-2xl'>
               <tr>
                 <th className='py-3 px-3 '>Name : {payrollData.relatedUser?.givenName}</th>
-                <th className='py-3 px-3 text-end'> ID : 107</th>
+                <th className='py-3 px-3 text-end'></th>
                 <th></th>
               </tr>
             </thead>
@@ -164,6 +164,21 @@ export default function LeaveInputForm() {
                 <td className='py-3 px-3'>Dismissed Days</td>
                 <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.unpaidDays} Days</td>
                 <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.dismissedSalary} MMK</td>
+              </tr>
+                <tr>
+                <td className='py-3 px-3'>Meal Allowance</td>
+                <td style={{ borderLeft: '1px solid',borderBottom:'1px solid' }} className='px-3'></td>
+                <td style={{ borderBottom: '1px solid' }} className='px-3'>{payrollData?.relatedUser?.relatedPosition?.mealAllowance} MMK</td>
+              </tr>
+                 <tr>
+                <td className='py-3 px-3'>Travel Allowance</td>
+                <td style={{ borderLeft: '1px solid',borderBottom:'1px solid' }} className='px-3'></td>
+                <td style={{ borderBottom: '1px solid' }} className='px-3'>{payrollData?.relatedUser?.relatedPosition?.travelAllowance} MMK</td>
+              </tr>
+                   <tr>
+                <td className='py-3 px-3'>Bonus</td>
+                <td style={{ borderLeft: '1px solid' }} className='px-3'></td>
+                <td style={{ borderBottom: '1px solid' }} className='px-3'>{payrollData?.relatedUser?.relatedPosition?.bonus} MMK</td>
               </tr>
               <tr>
                 <td className='py-3 px-3'></td>
