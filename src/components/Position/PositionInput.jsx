@@ -1,22 +1,25 @@
 
-import { Button, Input, Radio, RadioGroup } from "@nextui-org/react";
+import { Button, Input, Radio, RadioGroup, CheckboxGroup } from "@nextui-org/react";
 import apiInstance from "../../util/api";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useForm } from 'react-hook-form';
+import { CustomCheckbox } from "../Checkbox/CustomCheckbox";
+
 
 export default function PositionInputForm() {
     const variant = 'faded';
+
     const [departmentList, setDepartmentList] = useState([])
     const { form, register, handleSubmit, formState: { errors } } = useForm();
+    const [groupSelected, setGroupSelected] = useState([]);
     const handleInputChange = (fieldName, value) => {
         setData(prevValues => ({
             ...prevValues,
             [fieldName]: value,
         }));
     };
-
     const [data, setData] = useState({
         name: null,
         description: null,
@@ -25,7 +28,7 @@ export default function PositionInputForm() {
         basicSalary: null,
         relatedDepartment: null,
         casualLeaves: null,
-        workingDay: null,
+        // workingDay: null,
         medicalLeaves: null,
         vacationLeaves: null,
         maternityLeaveMale: null,
@@ -44,7 +47,9 @@ export default function PositionInputForm() {
 
     const handleRegister = async () => {
         // alert(JSON.stringify(data))
-        await apiInstance.post('position', data)
+        let payload = data
+        if (groupSelected) payload.workingDay = groupSelected
+        await apiInstance.post('position', payload)
             .then(() => {
                 Swal.fire({
                     icon: 'success',
@@ -145,20 +150,21 @@ export default function PositionInputForm() {
                         {...register('casualLeaves', { required: true, onChange: (e) => handleInputChange('casualLeaves', e.target.value) })}
                     />
                     <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                        <label className={`text-sm font-semibold $ ${errors.workingDay && errors.workingDay.type === 'required' ? 'text-[#f31260]' : ''}`}>Working Days</label>
-                        <select
-                            {...register('workingDay', { required: true, onChange: (e) => handleInputChange('workingDay', e.target.value) })}
-                            className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-                            <option hidden value=''>Choose Working Days</option>
-
-                            <option value='M-F'>Mon-Fri</option>
-                            <option value='M-S'>Mon-Sat</option>
-                            <option value='All Day'>Every Day</option>
-
-                            {/* <option value="Male">Department 1</option>
-                <option value="Female">Department 2</option> */}
-
-                        </select>
+                        <CheckboxGroup
+                            className="gap-1"
+                            label="Select Working Days"
+                            orientation="horizontal"
+                            value={groupSelected}
+                            onChange={setGroupSelected}
+                        >
+                            <CustomCheckbox value="Sat">Sat</CustomCheckbox>
+                            <CustomCheckbox value="Sun">Sun</CustomCheckbox>
+                            <CustomCheckbox value="Mon">Mon</CustomCheckbox>
+                            <CustomCheckbox value="Tue">Tue</CustomCheckbox>
+                            <CustomCheckbox value="Wed">Wed</CustomCheckbox>
+                            <CustomCheckbox value="Thu">Thu</CustomCheckbox>
+                            <CustomCheckbox value="Fri">Fri</CustomCheckbox>
+                        </CheckboxGroup>
                     </div>
                 </div>
 

@@ -1,16 +1,18 @@
 
-import { Button, Input, Radio, RadioGroup } from "@nextui-org/react";
+import { Button, Input, Radio, RadioGroup, CheckboxGroup } from "@nextui-org/react";
 import apiInstance from "../../util/api";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
+import { CustomCheckbox } from "../Checkbox/CustomCheckbox";
 
 export default function PositionUpdateInputForm() {
     const variant = 'faded';
     const id = useLocation().pathname.split('/')[3]
     const [positionList, setPositionList] = useState(null)
     const [departmentList, setDepartmentList] = useState([])
+    const [groupSelected, setGroupSelected] = useState([]);
     useEffect(() => {
         const getPositionByID = async () => {
             console.log(id)
@@ -18,6 +20,7 @@ export default function PositionUpdateInputForm() {
                 .then(res => {
                     console.log(res.data.data[0])
                     setPositionList(res.data.data[0])
+                    setGroupSelected(res.data.data[0].workingDay)
                 })
         }
         const getDepartmentList = async () => {
@@ -40,6 +43,7 @@ export default function PositionUpdateInputForm() {
         console.log(positionList)
         let data = positionList
         data.id = id
+        if (groupSelected) data.workingDay = groupSelected
         console.log(data)
         await apiInstance.put(`position`, data)
             .then(() => {
@@ -139,20 +143,23 @@ export default function PositionUpdateInputForm() {
                     labelPlacement="outside"
                 />
                 <div className="block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <label className="text-sm font-semibold">Working Days</label>
-                    <select
-                        onChange={(e) => handleInputChange('workingDay', e.target.value)}
-                        className="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500">
-                        <option value={positionList ? positionList.workingDay : ''} hidden >{positionList ? positionList.workingDay : ''}</option>
+                    <CheckboxGroup
+                        className="gap-1"
+                        label="Select Working Days"
+                        orientation="horizontal"
+                        value={groupSelected}
+                        onChange={setGroupSelected}
 
-                        <option value='M-F'>Mon-Fri</option>
-                        <option value='M-S'>Mon-Sat</option>
-                        <option value='All Day'>Every Day</option>
-
-                        {/* <option value="Male">Department 1</option>
-                <option value="Female">Department 2</option> */}
-
-                    </select>
+                    >
+                        {console.log(groupSelected, 'groupSelected')}
+                        <CustomCheckbox value="Sat">Sat</CustomCheckbox>
+                        <CustomCheckbox value="Sun">Sun</CustomCheckbox>
+                        <CustomCheckbox value="Mon">Mon</CustomCheckbox>
+                        <CustomCheckbox value="Tue">Tue</CustomCheckbox>
+                        <CustomCheckbox value="Wed">Wed</CustomCheckbox>
+                        <CustomCheckbox value="Thu">Thu</CustomCheckbox>
+                        <CustomCheckbox value="Fri">Fri</CustomCheckbox>
+                    </CheckboxGroup>
                 </div>
             </div>
 

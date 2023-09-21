@@ -23,7 +23,8 @@ import {
   TableRow,
   TableCell,
   Image,
-  Divider
+  Divider,
+  Chip
 } from '@nextui-org/react'
 import Swal from 'sweetalert2'
 import React, { useState } from 'react'
@@ -34,7 +35,7 @@ import { DeleteIcon } from '../Table/deleteicon'
 import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
 import { SearchIcon } from '../Navbar/search'
 import { useForm } from 'react-hook-form'
-import { attendanceInputDate, convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util'
+import { attendanceInputDate, convertAndDisplayTZ, convertToWeekDayNames, getDatesByMonth } from '../../util/Util'
 import { PlusIcon } from '../../assets/Icons/PlusIcon'
 
 export default function AttendanceDetailPage() {
@@ -86,6 +87,8 @@ export default function AttendanceDetailPage() {
   const [editList, setEditList] = useState({})
   const [userList, setUserList] = useState([])
   const [department, setDepartment] = useState({})
+  const [totalDays, setTotalDays] = useState('')
+  const [workingDay, setWorkingDay] = useState([])
   const { form, register, handleSubmit, formState: { errors } } = useForm();
   const [img, setImg] = useState('https://placehold.co/250x250/png?text=User')
   const [filter, setFilter] = useState({
@@ -98,6 +101,7 @@ export default function AttendanceDetailPage() {
     const keyID = e.target.options[e.target.options.selectedIndex].getAttribute('data-key');
     console.log(keyName, keyID, 'keyName')
     setDepartment({ _id: keyID, name: keyName })
+
   }
 
   const handleCalculate = async (saveStatus) => {
@@ -183,7 +187,7 @@ export default function AttendanceDetailPage() {
     })
     await apiInstance.get('user/' + filter.emp).then(res => {
       setProfile(res.data.data)
-      console.log(res.data.data, 'user')
+      setWorkingDay(res.data.data.relatedPosition.workingDay)
       if (res.data.data.profile.length > 0) {
         setImg(
           `http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/${res.data.data.profile[0].imgUrl}`
@@ -209,8 +213,9 @@ export default function AttendanceDetailPage() {
       })
   }
 
-  const handleFilterInput = (value, name) => {
+  const handleFilterInput = async (value, name) => {
     setFilter(prev => ({ ...prev, [name]: value }))
+
   }
 
   const getEmployeeList = async param => {
@@ -369,6 +374,13 @@ export default function AttendanceDetailPage() {
     })
   }
 
+  const handleTotalDays = async (month) => {
+    console.log(month)
+    const datePayload = getDatesByMonth(month)
+    const totalDays = new Date(datePayload.$lte).getUTCDate();
+    if (totalDays) setTotalDays(totalDays)
+  }
+
   //
   return (
     <>
@@ -444,7 +456,10 @@ export default function AttendanceDetailPage() {
               </Button>
             </DropdownTrigger>
             <DropdownMenu
-              onAction={value => setMonth(value)}
+              onAction={(value) => {
+                setMonth(value)
+                handleTotalDays(value)
+              }}
               disallowEmptySelection
               aria-label='Table Columns'
               closeOnSelect={false}
@@ -582,6 +597,9 @@ export default function AttendanceDetailPage() {
         <span className='text-default-400 text-small'>
           Total {attendanceList.length} Attendances
         </span>
+        <span className={`text-default-400 text-small `}>
+          Total Days of The Month : <span className={`text-small ${totalDays <= attendanceList.length ? 'text-[#18c964]' : 'text-[#f31260]'}`}>{totalDays ? totalDays : 'Unset'}</span>
+        </span>
         <label className='flex items-center text-default-400 text-small'>
           Rows per page:
           <select
@@ -637,7 +655,7 @@ export default function AttendanceDetailPage() {
                 {item.date ? convertAndDisplayTZ(item.date) : 'Not Set'}
               </TableCell>
               <TableCell>
-                {item.date ? convertToWeekDayNames(item.date) : 'Not Set'}
+                <Chip variant="light" size='sm' color={workingDay.includes(convertToWeekDayNames(item.date)) ? 'primary' : 'danger'}>{convertToWeekDayNames(item.date)}</Chip>
               </TableCell>
               <TableCell>{item.clockIn}</TableCell>
               <TableCell>{item.clockOut}</TableCell>

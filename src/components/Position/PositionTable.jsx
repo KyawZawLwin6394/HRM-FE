@@ -1,5 +1,5 @@
 import {
-    Tooltip, Table, TableHeader, Modal, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell
+    Tooltip, Table, TableHeader, Modal, Chip, DropdownItem, ModalContent, Dropdown, DropdownTrigger, DropdownMenu, Kbd, Button, ModalFooter, Pagination, ModalHeader, ModalBody, useDisclosure, TableColumn, TableBody, TableRow, TableCell
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import apiInstance from "../../util/api";
@@ -82,7 +82,7 @@ export default function PositionTable() {
                 </Button>
                 <Dropdown>
                     <DropdownTrigger className="hidden sm:flex">
-                        <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+                        <Button endContent={<ChevronDownIcon className="text-small" />} variant="faded">
                             Working Days
                         </Button>
                     </DropdownTrigger>
@@ -106,7 +106,7 @@ export default function PositionTable() {
                 </Dropdown>
                 {/* <Dropdown>
             <DropdownTrigger className="hidden sm:flex">
-              <Button endContent={<ChevronDownIcon className="text-small" />} variant="flat">
+              <Button endContent={<ChevronDownIcon className="text-small" />} variant="faded">
                 Columns
               </Button>
             </DropdownTrigger>
@@ -166,12 +166,12 @@ export default function PositionTable() {
                     <TableColumn key="no">No</TableColumn>
                     <TableColumn key="name">Name</TableColumn>
                     <TableColumn key="description">Description</TableColumn>
-                    <TableColumn key="workingDay">Working Days</TableColumn>
+                    <TableColumn key="workingDay" className="text-center">Working Days</TableColumn>
                     <TableColumn key="workingFrom">From</TableColumn>
                     <TableColumn key="workingUntil">To</TableColumn>
-                    <TableColumn key="casualLeaves">Casual Leave</TableColumn>
-                    <TableColumn key="medicalLeaves">Medical Leave</TableColumn>
-                    <TableColumn key="vacationLeaves">Vacation Leave</TableColumn>
+                    <TableColumn key="casualLeaves">Casual</TableColumn>
+                    <TableColumn key="medicalLeaves">Medical</TableColumn>
+                    <TableColumn key="vacationLeaves">Vacation</TableColumn>
                     <TableColumn key="basicSalary">Salary</TableColumn>
                     <TableColumn key="actions">Actions</TableColumn>
                 </TableHeader>
@@ -183,7 +183,17 @@ export default function PositionTable() {
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{item.name}</TableCell>
                             <TableCell>{item.description}</TableCell>
-                            <TableCell>{item.workingDay}</TableCell>
+                            <TableCell>
+                                <div className="relative flex items-center gap-2">
+                                    <Chip variant="faded" color={item.workingDay.includes('Mon') ? 'primary' : 'danger'}>Mon</Chip>
+                                    <Chip variant="faded" color={item.workingDay.includes('Tue') ? 'primary' : 'danger'}>Tue</Chip>
+                                    <Chip variant="faded" color={item.workingDay.includes('Wed') ? 'primary' : 'danger'}>Wed</Chip>
+                                    <Chip variant="faded" color={item.workingDay.includes('Thu') ? 'primary' : 'danger'}>Thu</Chip>
+                                    <Chip variant="faded" color={item.workingDay.includes('Fri') ? 'primary' : 'danger'}>Fri</Chip>
+                                    <Chip variant="faded" color={item.workingDay.includes('Sat') ? 'primary' : 'danger'}>Sat</Chip>
+                                    <Chip variant="faded" color={item.workingDay.includes('Sun') ? 'primary' : 'danger'}>Sun</Chip>
+                                </div>
+                            </TableCell>
                             <TableCell>{item.workingFrom}</TableCell>
                             <TableCell>{item.workingUntil}</TableCell>
                             <TableCell>{item.casualLeaves}</TableCell>
