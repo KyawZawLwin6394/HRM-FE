@@ -208,7 +208,7 @@ export default function AttendanceDetailPage() {
       })
       .then(res => {
         setAttendanceList(res.data.data)
-        setPages(res.data._metadata.page_count)
+        setPages(res.data._metadata.page_count) 
 
       })
   }
@@ -252,13 +252,11 @@ export default function AttendanceDetailPage() {
   }
 
   const handleCheck = async (val, id) => {
-    const updatedItems = items.map(item => {
-      if (item._id === id) {
-        return { ...item, type: val }
-      }
-      return item
-    })
-    setAttendanceList(updatedItems)
+    setAttendanceList(prevValues => ({
+      ...prevValues,
+      ['type']: val
+    }))
+
     await apiInstance
       .put('attendance', { type: val, id: id })
       .then(() => {
