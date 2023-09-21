@@ -50,6 +50,7 @@ export default function EmployeeInput() {
   const [father, setFather] = useState('')
   const [empDate, setEmpDate] = useState('')
   const [gender, setGender] = useState('')
+  const [isSelectedCRM, setIsSelectedCRM] = useState(false);
 
   // const addressRef = useRef()
   // const DOBRef = useRef()
@@ -200,6 +201,7 @@ export default function EmployeeInput() {
     formData.append('vacationLeaves', positionID?.vacationLeaves)
     formData.append('maternityLeaveMale', positionID?.maternityLeaveMale)
     formData.append('maternityLeaveFemale', positionID?.maternityLeaveFemale)
+    formData.append('isCRM', isSelectedCRM)
     otherDoc.forEach(item => {
       formData.append('other', item) // Assuming 'item' is a File object
     })
@@ -733,7 +735,9 @@ export default function EmployeeInput() {
         </div>
 
         <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7'>
-          <label className='text-sm font-semibold'>Other Document</label> &nbsp;
+          <Checkbox className='' isSelected={isSelectedCRM} onValueChange={setIsSelectedCRM}>CRM Account</Checkbox>
+          &nbsp;
+          &nbsp;
           <Button
             isIconOnly
             size='sm'
@@ -744,8 +748,8 @@ export default function EmployeeInput() {
           >
             +
           </Button>
-          &nbsp; &nbsp;
-          <Checkbox>CRM Account</Checkbox>
+          &nbsp;
+          <label className='text-sm font-semibold'>Other Document</label>
         </div>
 
         <div className='flex justify-center w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>

@@ -596,7 +596,7 @@ export default function AttendanceDetailPage() {
           Total {attendanceList.length} Attendances
         </span>
         <span className={`text-default-400 text-small `}>
-          Total Days of The Month : <span className={`text-small ${totalDays <= attendanceList.length ? 'text-[#18c964]' : 'text-[#f31260]'}`}>{totalDays ? totalDays : 'Unset'}</span>
+          Total Days of {month ? month : 'The Month'} : <span className={`text-small ${totalDays <= attendanceList.length ? 'text-[#18c964]' : 'text-[#f31260]'}`}>{totalDays ? totalDays : 'Unset'}</span>
         </span>
         <label className='flex items-center text-default-400 text-small'>
           Rows per page:

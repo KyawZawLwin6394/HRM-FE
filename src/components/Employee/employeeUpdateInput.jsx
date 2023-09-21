@@ -7,12 +7,13 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
+  Checkbox
 } from '@nextui-org/react'
 import { Link } from '@nextui-org/react'
 import { AnchorIcon } from '../../assets/Icons/AnchorIcon.jsx'
 import { Image } from '@nextui-org/react'
-import {  useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import apiInstance from '../../util/api.js'
 import Swal from 'sweetalert2'
 import { FileUploader } from 'react-drag-drop-files'
@@ -25,7 +26,6 @@ export default function EmployeeInput() {
   const variant = ['faded']
 
   const [other, setOther] = useState([])
-  const [address,setAddress]=useState('')
   const [showOther, setShowOther] = useState([])
   const [euCer, setEuCer] = useState(null)
   const [recLetter, setRecLetter] = useState(null)
@@ -41,6 +41,7 @@ export default function EmployeeInput() {
   const [showMarried, setShowMarried] = useState(false)
   const [employee, setEmployee] = useState([])
   const [department, setDepartment] = useState(null)
+  const [isSelectedCRM, setIsSelectedCRM] = useState(false);
 
   const [profileAnchor, setProfileAnchor] = useState('')
   const [marriedAnchor, setMarriedAnchor] = useState('')
@@ -74,6 +75,7 @@ export default function EmployeeInput() {
           setDirectManager(
             res.data.data.relatedDepartment.directManager?.givenName
           )
+          setIsSelectedCRM(res.data.data.isCRM)
           setDirectManagerID(res.data.data.relatedDepartment.directManager?._id)
           setPositionID(res.data.data.relatedPosition)
           handleInputChange(
@@ -191,6 +193,7 @@ export default function EmployeeInput() {
     employee.emergencyContact
       ? formData.append('emergencyContact', employee.emergencyContact)
       : undefined
+    isSelectedCRM !== undefined ? formData.append('isCRM', isSelectedCRM) : undefined
     employee.phone ? formData.append('phone', employee.phone) : undefined
     employee.passportNo
       ? formData.append('passportNo', employee.passportNo)
@@ -367,7 +370,7 @@ export default function EmployeeInput() {
             label='Address'
             placeholder='Address..'
             value={employee.address}
-            onChange={e => handleInputChange('address', setAddress(e.target.value))}
+            onChange={e => handleInputChange('address', e.target.value)}
             labelPlacement='outside'
             variant={variant}
           />
@@ -491,8 +494,8 @@ export default function EmployeeInput() {
             onChange={e => handleDirectManager(e.target.value)}
             className='bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-xl m-0 px-0 py-2 focus:ring-gray-500 focus:border-gray-500 block w-full p-3 dark:bg-default-100 dark:border-gray-600 dark:placeholder-gray-100 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500'
           >
-          
-          {console.log(department,'de')}
+
+            {console.log(department, 'de')}
             <option hidden>{department}</option>
 
             {departmentList.map(option => (
@@ -689,7 +692,7 @@ export default function EmployeeInput() {
                 className='mt-7'
                 type='file'
                 onChange={handleMarriedFile}
-             
+
                 placeholder='Married Date'
                 variant={variant}
                 labelPlacement='outside'
@@ -825,8 +828,10 @@ export default function EmployeeInput() {
         <div></div>
       </div>
 
-      <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7'>
-        <label className='text-sm font-semibold'>Other Document</label> &nbsp;
+      <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7 '>
+        <Checkbox className='' isSelected={isSelectedCRM} onValueChange={setIsSelectedCRM}>CRM Account</Checkbox>
+        &nbsp;
+        &nbsp;
         <Button
           isIconOnly
           size='sm'
@@ -837,51 +842,10 @@ export default function EmployeeInput() {
         >
           +
         </Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-          <ModalContent>
-            {onClose => (
-              <>
-                <ModalHeader className='flex flex-col gap-1'>
-                  Other Document
-                </ModalHeader>
-                <ModalBody>
-                  <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-                    <FileUploader
-                      multiple={true}
-                      handleChange={handleChange}
-                      name='file'
-                      types={fileTypes}
-                    />
-                    {/* <p>
-                  {otherDoc
-                    ? `File name: ${otherDoc[0].name}`
-                    : ""}
-                </p> */}
+        &nbsp;
+        <label className='text-sm font-semibold'>Other Document</label>
 
-                    <Input
-                      type='text'
-                      label='Description'
-                      placeholder=''
-                      onChange={e =>
-                        handleInputChange('description', e.target.value)
-                      }
-                      variant='faded'
-                      className='mt-5'
-                    />
-                  </div>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color='danger' variant='light' onClick={onClose}>
-                    Close
-                  </Button>
-                  <Button color='primary' onPress={onClose}>
-                    Save
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
+
         <div className='flex mt-5'>
           {showOther.map(item => (
             <>
@@ -921,6 +885,51 @@ export default function EmployeeInput() {
         </Button>
 
       </div>
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {onClose => (
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                Other Document
+              </ModalHeader>
+              <ModalBody>
+                <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                  <FileUploader
+                    multiple={true}
+                    handleChange={handleChange}
+                    name='file'
+                    types={fileTypes}
+                  />
+                  {/* <p>
+                  {otherDoc
+                    ? `File name: ${otherDoc[0].name}`
+                    : ""}
+                </p> */}
+
+                  <Input
+                    type='text'
+                    label='Description'
+                    placeholder=''
+                    onChange={e =>
+                      handleInputChange('description', e.target.value)
+                    }
+                    variant='faded'
+                    className='mt-5'
+                  />
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color='danger' variant='light' onClick={onClose}>
+                  Close
+                </Button>
+                <Button color='primary' onPress={onClose}>
+                  Save
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   )
 }
