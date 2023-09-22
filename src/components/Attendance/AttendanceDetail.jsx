@@ -208,7 +208,7 @@ export default function AttendanceDetailPage() {
       })
       .then(res => {
         setAttendanceList(res.data.data)
-        setPages(res.data._metadata.page_count) 
+        setPages(res.data._metadata.page_count)
 
       })
   }
@@ -252,13 +252,17 @@ export default function AttendanceDetailPage() {
   }
 
   const handleCheck = async (val, id) => {
-    setAttendanceList(prevValues => ({
-      ...prevValues,
-      ['type']: val
-    }))
-
+    const changed = attendanceList.map(item => {
+      if (item._id === id) {
+        return { ...item, type: val };
+      }
+      return item; // Return the original item for elements that don't match the condition.
+    });
+    setAttendanceList(changed)
+    let isPaid;
+    val === 'Attend' ? isPaid = true : isPaid = false;
     await apiInstance
-      .put('attendance', { type: val, id: id })
+      .put('attendance', { type: val, isPaid: isPaid, id: id })
       .then(() => {
         Swal.fire({
           icon: 'success',
@@ -647,31 +651,29 @@ export default function AttendanceDetailPage() {
         </TableHeader>
         <TableBody emptyContent={'No Positions to display.'}>
           {items.map((item, index) => (
-            <TableRow key={item._id}>
+            <TableRow key={item?._id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                {item.date ? convertAndDisplayTZ(item.date) : 'Not Set'}
+                {item?.date ? convertAndDisplayTZ(item?.date) : 'Not Set'}
               </TableCell>
               <TableCell>
-                <Chip variant="light" size='sm' color={workingDay.includes(convertToWeekDayNames(item.date)) ? 'primary' : 'danger'}>{convertToWeekDayNames(item.date)}</Chip>
+                <Chip variant="light" size='sm' color={workingDay.includes(convertToWeekDayNames(item?.date)) ? 'primary' : 'danger'}>{convertToWeekDayNames(item?.date)}</Chip>
               </TableCell>
-              <TableCell>{item.clockIn}</TableCell>
-              <TableCell>{item.clockOut}</TableCell>
+              <TableCell>{item?.clockIn}</TableCell>
+              <TableCell>{item?.clockOut}</TableCell>
               <TableCell>
-                {item.relatedUser ? item.relatedUser.givenName : 'Not Set'}
+                {item?.relatedUser?.givenName}
               </TableCell>
               <TableCell>
-                {item.relatedDepartment && item.relatedDepartment.name
-                  ? item.relatedDepartment.name
-                  : 'Not Set'}
+                {item?.relatedDepartment?.name}
               </TableCell>
-              <TableCell>{item.attendType}</TableCell>
-              <TableCell>{item.source}</TableCell>
+              <TableCell>{item?.attendType}</TableCell>
+              <TableCell>{item?.source}</TableCell>
               <TableCell>
                 <RadioGroup
                   onValueChange={e => handleCheck(e, item._id)}
                   orientation='horizontal'
-                  defaultValue={item.type}
+                  defaultValue={item?.type}
                 >
                   <Radio value='Attend'>Attend</Radio>
                   <Radio value='Dismiss'>Dismiss</Radio>
@@ -682,7 +684,7 @@ export default function AttendanceDetailPage() {
                 <div className='relative flex items-center gap-2'>
                   <Tooltip content='Edit Position'>
                     <span
-                      data-key2={item._id}
+                      data-key2={item?._id}
                       className='text-lg text-default-400 cursor-pointer active:opacity-50'
                       onClick={e => handleOpenEdit(e)}
                     >
@@ -691,7 +693,7 @@ export default function AttendanceDetailPage() {
                   </Tooltip>
                   <Tooltip color='danger' content='Delete user'>
                     <span
-                      data-key={item._id}
+                      data-key={item?._id}
                       className='text-lg text-danger cursor-pointer active:opacity-50'
                       onClick={e => handleOpen(e)}
                     >

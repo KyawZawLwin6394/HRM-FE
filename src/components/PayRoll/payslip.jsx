@@ -165,29 +165,39 @@ export default function LeaveInputForm() {
                 <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.unpaidDays} Days</td>
                 <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.dismissedSalary} MMK</td>
               </tr>
-                <tr>
+              <tr>
                 <td className='py-3 px-3'>Meal Allowance</td>
-                <td style={{ borderLeft: '1px solid',borderBottom:'1px solid' }} className='px-3'></td>
-                <td style={{ borderBottom: '1px solid' }} className='px-3'>{payrollData?.relatedUser?.relatedPosition?.mealAllowance} MMK</td>
-              </tr>
-                 <tr>
-                <td className='py-3 px-3'>Travel Allowance</td>
-                <td style={{ borderLeft: '1px solid',borderBottom:'1px solid' }} className='px-3'></td>
-                <td style={{ borderBottom: '1px solid' }} className='px-3'>{payrollData?.relatedUser?.relatedPosition?.travelAllowance} MMK</td>
-              </tr>
-                   <tr>
-                <td className='py-3 px-3'>Bonus</td>
-                <td style={{ borderLeft: '1px solid' }} className='px-3'></td>
-                <td style={{ borderBottom: '1px solid' }} className='px-3'>{payrollData?.relatedUser?.relatedPosition?.bonus} MMK</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.maTotalDays} Days</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.maTotalAmount} MMK</td>
               </tr>
               <tr>
-                <td className='py-3 px-3'></td>
-                <td style={{ borderTop: '1px solid' }} className='px-3'></td>
-                <td style={{ borderTop: '1px solid' }} className='px-3'></td>
+                <td className='py-3 px-3'>Travel Allowance</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.travelTotalDays} Days</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.travelTotalAmount} MMK</td>
+              </tr>
+              <tr>
+                <td className='py-3 px-3'>OverTime</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.otTotalDays} Days</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.otTotalAmount} MMK</td>
+              </tr>
+              <tr>
+                <td className='py-3 px-3'>Incentive</td>
+                <td style={{ border: '1px solid' }} className='px-3'>Reason: {payrollData?.incentiveReason}</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.incentiveAmount} MMK</td>
+              </tr>
+              <tr>
+                <td className='py-3 px-3'>Bonus</td>
+                <td style={{ border: '1px solid' }} className='px-3'>Reason: {payrollData?.bonusReason}</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.bonusAmount} MMK</td>
+              </tr>
+              <tr>
+                <td className='py-3 px-3'>Income Tax</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.incomeTaxPercent} %</td>
+                <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.incomeTaxAmount} MMK</td>
               </tr>
               <tr>
                 <td className=''></td>
-                <td style={{ borderBottom: '1px solid' }} className='px-3'></td>
+                <td style={{ borderBottom: '1px solid' }} className='px-3'>Sub Total: {payrollData?.subTotal} MMK</td>
                 <td style={{ borderBottom: '1px solid' }} className='px-3 py-3 text-center sm:text-left'>Net Salary : {payrollData?.entitledSalary} MMK</td>
               </tr>
             </tbody>
