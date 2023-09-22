@@ -151,7 +151,7 @@ export default function LeaveInputForm() {
                 <td style={{ borderBottom: '1px solid' }} className='px-3'>{payrollData.relatedUser?.relatedPosition?.name}</td>
               </tr>
               <tr>
-                <td className='py-3 px-3'>Total Attendance Days</td>
+                <td className='py-3 px-3'>Entitled Salary</td>
                 <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.totalAttendance} Days</td>
                 <td style={{ border: '1px solid' }} className='px-3'>{payrollData?.entitledSalary} MMK</td>
               </tr>
@@ -198,7 +198,7 @@ export default function LeaveInputForm() {
               <tr>
                 <td className=''></td>
                 <td style={{ borderBottom: '1px solid' }} className='px-3'>Sub Total: {payrollData?.subTotal} MMK</td>
-                <td style={{ borderBottom: '1px solid' }} className='px-3 py-3 text-center sm:text-left'>Net Salary : {payrollData?.entitledSalary} MMK</td>
+                <td style={{ borderBottom: '1px solid' }} className='px-3 py-3 text-center sm:text-left'>Net Salary : {payrollData?.netSalary} MMK</td>
               </tr>
             </tbody>
           </table>
