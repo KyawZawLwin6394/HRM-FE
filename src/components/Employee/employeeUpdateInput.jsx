@@ -145,6 +145,7 @@ export default function EmployeeInput() {
     setPositionID(positionList.filter(el => el._id === val)[0])
     handleInputChange('relatedPosition', val)
   }
+
   const handleDirectManager = id => {
     console.log('id',id,'handleDepartment')
     handleInputChange('relatedDepartment', id)
@@ -154,7 +155,6 @@ export default function EmployeeInput() {
     setDirectManagerID(
       departmentList.filter(el => el._id == id)[0].directManager._id
     )
-    
   }
 
   const handleCer = e => {

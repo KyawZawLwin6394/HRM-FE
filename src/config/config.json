@@ -1,4 +1,5 @@
 {
     "url": "http://localhost:9000/api/",
-    "timeZone":"Asia/Yangon"
+    "timeZone":"Asia/Yangon",
+    "settingID":"651a509cf4fb8a5371913a55"
 }
