@@ -1,7 +1,7 @@
 import { Accordion, AccordionItem } from '@nextui-org/react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBriefcase, faBuildingUser, faCalendarDays, faCalendarXmark, faHandHoldingDollar, faMoneyCheckDollar, faUsers } from '@fortawesome/free-solid-svg-icons'
+import { faBriefcase, faBuildingUser, faCalendarDays, faCalendarXmark, faHandHoldingDollar, faMoneyCheckDollar, faUsers, faBullhorn } from '@fortawesome/free-solid-svg-icons'
 import {
   Card,
   CardBody,
@@ -61,6 +61,15 @@ export default function Sidebar () {
                       <FontAwesomeIcon icon={faBriefcase} size='xl' />
                       &nbsp;&nbsp;
                       <span className='ml-3 font-medium'>Position</span>
+                    </div>
+                  </Link>
+                  <Divider></Divider>
+                  <Link to='/promote'>
+                    <div className='hover:bg-default-100 px-4 py-3'>
+                      <FontAwesomeIcon icon={faBullhorn} size='xl' />
+
+                      &nbsp;&nbsp;
+                      <span className='ml-3 font-medium'>Promotion Record</span>
                     </div>
                   </Link>
                   <Divider></Divider>

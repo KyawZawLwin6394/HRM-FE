@@ -63,6 +63,13 @@ export default function AttendanceDetailPage() {
     onOpen: onOpenEdit,
     onClose: onCloseEdit
   } = useDisclosure()
+  
+  //save to open modal box 
+  const {
+    isOpen: isOpenSave,
+    onOpen: onOpenSave,
+    onClose: onCloseSave
+  } = useDisclosure()
 
   const {
     isOpen: isOpenCalculate,
@@ -103,6 +110,44 @@ export default function AttendanceDetailPage() {
     setDepartment({ _id: keyID, name: keyName })
 
   }
+   
+  const handleOpenSave = async () => {
+    onOpenSave()
+  }
+
+  //save payroll api
+  const handleSavePayroll = async saveStatus => {
+    await apiInstance
+      .post('payroll', {
+        relatedDepartment: filter.dep,
+        relatedUser: filter.emp,
+        month: month,
+        entitledSalary: payRoll?.entitledSalary,
+        totalAttendance: attendanceList.length,
+        attendedSalary: payRoll?.attendedSalary,
+        dismissedSalary: payRoll?.dismissedSalary,
+        paidDays: payRoll?.totalAttendance,
+        unpaidDays: payRoll?.unpaid,
+        basicSalary: profile.relatedPosition.basicSalary
+      })
+      .then(res => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Successfully Saved'
+        })
+      })
+      .catch(error => {
+        setPayroll(error.response.data.data)
+        Swal.fire({
+          icon: 'error',
+          title: 'Save Failed',
+          text: error.response.data.message,
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6'
+        })
+      })
+  }
+
 
   const handleCalculate = async (saveStatus) => {
     await apiInstance
@@ -491,6 +536,13 @@ export default function AttendanceDetailPage() {
           >
             Calculate
           </Button>
+          <Button
+            className='text-white bg-green-600'
+            isDisabled={isSearched}
+            onClick={handleOpenSave}
+          >
+            Save
+          </Button>
           <Button endContent={<PlusIcon />} color='primary' onClick={handleOpenAdd}>
             Add
           </Button>
@@ -706,6 +758,43 @@ export default function AttendanceDetailPage() {
           ))}
         </TableBody>
       </Table>
+      
+      <Modal backdrop='blur' isOpen={isOpenSave} onClose={onCloseSave}>
+        <ModalContent>
+          {onCloseSave => (
+            <>
+              <ModalHeader className='flex flex-col gap-1'>
+                Save Payroll
+              </ModalHeader>
+              <ModalBody>
+                <p>Do you want to save this payroll?</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color='default'
+                  variant='light'
+                  onClick={() => {
+                    // handleSavePayroll(false)
+                    onCloseSave()
+                  }}
+                >
+                  No, Cancel
+                </Button>
+                <Button
+                  color='success'
+                  onPress={() => {
+                    handleSavePayroll(true)
+                    onCloseSave()
+                  }}
+                >
+                  Yes, I am sure
+                  {/* <Kbd className='bg-danger-500' keys={['enter']}></Kbd> */}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
 
       <Modal backdrop='blur' isOpen={isOpenCalculate} onClose={onCloseCalculate}>
         <ModalContent>

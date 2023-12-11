@@ -23,7 +23,8 @@ import {
   TableColumn,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
+  Input
 } from '@nextui-org/react'
 import Swal from 'sweetalert2'
 import React, { useState } from 'react'
@@ -49,13 +50,63 @@ export default function AttendanceTable () {
   const [page, setPage] = React.useState(1)
   const [pages, setPages] = React.useState(1)
   const [rowsPerPage, setRowsPerPage] = React.useState(15)
+  const [isDepSelected, setIsDepSelected] = useState(true)
   const [departmentList, setDepartmentList] = React.useState([])
+  const [filter,setFilter] = useState({
+    relatedDepartment: null,
+    type: null,
+    fromDate: null,
+    toDate: null,
+    relatedUser:null
+  })
+  const [employeeList, setEmployeeList] = useState([])
 
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage
     const end = start + rowsPerPage
     return attendanceList.slice(start, end)
   }, [page, attendanceList])
+  
+  //filter result
+  const handleFilterInput = (value,name) => {
+    setFilter(prev=>({...prev,[name]:value}))
+ }
+ 
+ //get employee list 
+
+ const getEmployeeList = async param => {
+  // console.log(param,'para')
+await apiInstance
+  .get('users')
+  .then(res => {
+    console.log(res.data.data,'res')
+    setEmployeeList(res.data.data.filter(el=>el?.relatedDepartment?._id === param))
+    // console.log(res.data.data.filter(el=>el?.relatedDepartment?._id === param),'same?')
+ 
+  })
+}
+
+ const handleDepartmentDropDown = value => {
+  handleFilterInput(value, 'relatedDepartment')
+  setIsDepSelected(false)
+  getEmployeeList(value)
+}
+
+ //handle search button
+ const handleSearch = async () =>{
+  // console.log(filter,'fil')
+  filter.rowsPerPage = rowsPerPage 
+  await apiInstance.get("attendances",
+  {
+    params:filter
+  }
+  ).then(res=>{
+    // console.log("success")
+    setAttendanceList(res.data.data)
+    // console.log(res.data.data, 'att')
+    setPages(res.data._metadata.page_count)
+  })
+}
 
   const handleChange = e => {
     let array = []
@@ -174,6 +225,7 @@ export default function AttendanceTable () {
               </Button>
             </DropdownTrigger>
             <DropdownMenu
+              onAction={value => handleDepartmentDropDown(value)}
               disallowEmptySelection
               aria-label='Table Columns'
               closeOnSelect={false}
@@ -186,6 +238,36 @@ export default function AttendanceTable () {
                   className='capitalize'
                 >
                   {item.name}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+          <Dropdown>
+            <DropdownTrigger
+              isDisabled={isDepSelected}
+              className='hidden sm:flex'
+            >
+              <Button
+                endContent={<ChevronDownIcon className='text-small' />}
+                variant='flat'
+              >
+                Employee
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              onAction={value => handleFilterInput(value, 'relatedUser')}
+              disallowEmptySelection
+              aria-label='Table Columns'
+              closeOnSelect={false}
+              selectionMode='single'
+            >
+              {employeeList.map(item => (
+                <DropdownItem
+                  key={item._id}
+                  value={item._id}
+                  className='capitalize'
+                >
+                  {item.givenName}
                 </DropdownItem>
               ))}
             </DropdownMenu>
@@ -220,12 +302,21 @@ export default function AttendanceTable () {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
+          <div className='w-60 flex gap-2'>
+          <Input type= "date" 
+                 startContent= "From: " 
+                 onChange = {event => handleFilterInput(event.target.value,"fromDate")} />
+          <Input type="date" 
+                 startContent="To: "
+                 onChange = {event => handleFilterInput(event.target.value,"toDate")} />
           <Button
             color='primary'
             endContent={<SearchIcon className='w-5 h-4' />}
+            onClick={handleSearch}
           >
             Search
           </Button>
+          </div>
         </div>
         <div className='flex gap-2 mb-3 flex-row'>
           <Popover

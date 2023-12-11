@@ -57,6 +57,7 @@ export default function PayrollTable() {
     onOpen: onOpenExtra,
     onClose: onCloseExtra,
   } = useDisclosure();
+  const [totalPaidAmount, setTotalPaidAmount] = useState(0)
   const [departmentList, setDepartmentList] = useState([]);
   const [delID, setDelID] = useState(null);
   const [page, setPage] = React.useState(1);
@@ -137,6 +138,7 @@ export default function PayrollTable() {
         .then((res) => {
           setPayrollList(res.data.data);
           setPages(res.data._metadata.page_count);
+          setTotalPaidAmount(res.data._metadata.totalPaidAmount)
         });
     };
     const getDepartments = async () => {
@@ -300,12 +302,17 @@ export default function PayrollTable() {
             Search
           </Button>
         </div>
-        <div className="flex gap-3">
+        <div className='flex items-center gap-3'>
+          <p className='text-md'>
+            Total Paid Amount:
+            <span className='text-red-600 font-bold'>{totalPaidAmount}</span>
+          </p>
           <Button
-            color="primary"
+            color='primary'
             isDisabled
             endContent={<PlusIcon />}
-            onClick={handlePayrollCalculation}>
+            onClick={handlePayrollCalculation}
+          >
             Calculate
           </Button>
         </div>

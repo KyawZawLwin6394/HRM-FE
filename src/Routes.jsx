@@ -23,6 +23,9 @@ import PayRoll from './pages/PayRoll/payroll'
 import Payslip from './pages/PayRoll/payslip'
 import ExtraPay from './pages/PayRoll/extrapay'
 import AttendanceDetail from './pages/Attendance/AttendanceDetail'
+import PromotionRecord from './pages/PromotionRecord/PromotioinRecord'
+import AddPromotionRecord from './pages/PromotionRecord/AddPromotionRecord'
+import PromoteUpdate from './pages/PromotionRecord/PromotionUpdate'
 
 export default function RouteFile() {
  
@@ -79,7 +82,15 @@ export default function RouteFile() {
             <Route path='/att-add' element={<AttendanceAdd />}></Route>
             <Route path='/att-update/:id' element={<AttendanceUpdate />} ></Route>
             <Route path='/att-detail' element={<AttendanceDetail />} ></Route>
+
+            {/* Promotion Record*/}
+            <Route path= '/promote' element= {<PromotionRecord />}></Route>
+            <Route path= '/promote-add' element= {<AddPromotionRecord />}></Route>
+            <Route path= '/promote/update/:id' element= {<PromoteUpdate />}></Route>
+            
           </Route>
+
+          
 
           {/* <AuthContainer component={<Dashboard />} path='/home'></AuthContainer> */}
         </Routes>
