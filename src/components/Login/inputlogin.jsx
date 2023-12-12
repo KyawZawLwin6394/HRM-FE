@@ -27,6 +27,9 @@ export default function Login() {
       .then(res => {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('id', res.data.id)
+      
+        
+        navigate('/emp')
         Swal.fire({
           icon: 'success',
           title: 'Login Successful',
@@ -34,7 +37,8 @@ export default function Login() {
           confirmButtonText: 'OK',
           confirmButtonColor: '#3085d6'
         })
-        navigate('/home')
+        window.location.reload()
+         
       })
       .catch((error) => {
         console.log(error)
