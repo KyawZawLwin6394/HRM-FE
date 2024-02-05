@@ -24,192 +24,194 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Input
-} from '@nextui-org/react'
-import Swal from 'sweetalert2'
-import React, { useState } from 'react'
-import { useEffect } from 'react'
-import apiInstance from '../../util/api'
-import { EditIcon } from '../Table/editicon'
-import { DeleteIcon } from '../Table/deleteicon'
-import { Link } from 'react-router-dom'
-import { ChevronDownIcon } from '../../assets/Icons/ChevronDownIcon'
-import { SearchIcon } from '../Navbar/search'
-import { FileUploader } from 'react-drag-drop-files'
-import { TfiImport } from 'react-icons/tfi'
-import { BsCloudArrowUpFill } from 'react-icons/bs'
-import { PlusIcon } from '../../assets/Icons/PlusIcon'
-import { convertAndDisplayTZ, convertToWeekDayNames } from '../../util/Util'
+  Input,
+} from "@nextui-org/react";
+import Swal from "sweetalert2";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import apiInstance from "../../util/api";
+import { EditIcon } from "../Table/editicon";
+import { DeleteIcon } from "../Table/deleteicon";
+import { Link } from "react-router-dom";
+import { ChevronDownIcon } from "../../assets/Icons/ChevronDownIcon";
+import { SearchIcon } from "../Navbar/search";
+import { FileUploader } from "react-drag-drop-files";
+import { TfiImport } from "react-icons/tfi";
+import { BsCloudArrowUpFill } from "react-icons/bs";
+import { PlusIcon } from "../../assets/Icons/PlusIcon";
+import { convertAndDisplayTZ, convertToWeekDayNames } from "../../util/Util";
 
-export default function AttendanceTable () {
-  const [attendanceList, setAttendanceList] = useState([])
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [delID, setDelID] = useState(null)
-  const [popOverOpen, setPopOverOpen] = useState(false)
-  const [otherDoc, setOtherDoc] = useState([])
-  const [page, setPage] = React.useState(1)
-  const [pages, setPages] = React.useState(1)
-  const [rowsPerPage, setRowsPerPage] = React.useState(15)
-  const [isDepSelected, setIsDepSelected] = useState(true)
-  const [departmentList, setDepartmentList] = React.useState([])
-  const [filter,setFilter] = useState({
+export default function AttendanceTable() {
+  const [attendanceList, setAttendanceList] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [delID, setDelID] = useState(null);
+  const [popOverOpen, setPopOverOpen] = useState(false);
+  const [otherDoc, setOtherDoc] = useState([]);
+  const [page, setPage] = React.useState(1);
+  const [pages, setPages] = React.useState(1);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [isDepSelected, setIsDepSelected] = useState(true);
+  const [departmentList, setDepartmentList] = React.useState([]);
+  const [filter, setFilter] = useState({
     relatedDepartment: null,
     type: null,
     fromDate: null,
     toDate: null,
-    relatedUser:null
-  })
-  const [employeeList, setEmployeeList] = useState([])
+    relatedUser: null,
+  });
+  const [employeeList, setEmployeeList] = useState([]);
 
   const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage
-    const end = start + rowsPerPage
-    return attendanceList.slice(start, end)
-  }, [page, attendanceList])
-  
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    return attendanceList.slice(start, end);
+  }, [page, attendanceList]);
+
   //filter result
-  const handleFilterInput = (value,name) => {
-    setFilter(prev=>({...prev,[name]:value}))
- }
- 
- //get employee list 
+  const handleFilterInput = (value, name) => {
+    setFilter((prev) => ({ ...prev, [name]: value }));
+  };
 
- const getEmployeeList = async param => {
-  // console.log(param,'para')
-await apiInstance
-  .get('users')
-  .then(res => {
-    console.log(res.data.data,'res')
-    setEmployeeList(res.data.data.filter(el=>el?.relatedDepartment?._id === param))
-    // console.log(res.data.data.filter(el=>el?.relatedDepartment?._id === param),'same?')
- 
-  })
-}
+  //get employee list
 
- const handleDepartmentDropDown = value => {
-  handleFilterInput(value, 'relatedDepartment')
-  setIsDepSelected(false)
-  getEmployeeList(value)
-}
+  const getEmployeeList = async (param) => {
+    // console.log(param, "para");
+    await apiInstance.get("users/?limit=100").then((res) => {
+      console.log(res.data.data, "res");
+      setEmployeeList(
+        res.data.data.filter((el) => el?.relatedDepartment?._id === param)
+      );
+      // console.log(
+      //   res.data.data.filter((el) => el?.relatedDepartment?._id === param),
+      //   "same?"
+      // );
+    });
+  };
 
- //handle search button
- const handleSearch = async () =>{
-  // console.log(filter,'fil')
-  filter.rowsPerPage = rowsPerPage 
-  await apiInstance.get("attendances",
-  {
-    params:filter
-  }
-  ).then(res=>{
-    // console.log("success")
-    setAttendanceList(res.data.data)
-    // console.log(res.data.data, 'att')
-    setPages(res.data._metadata.page_count)
-  })
-}
+  const handleDepartmentDropDown = (value) => {
+    handleFilterInput(value, "relatedDepartment");
+    setIsDepSelected(false);
+    getEmployeeList(value);
+  };
 
-  const handleChange = e => {
-    let array = []
+  //handle search button
+  const handleSearch = async () => {
+    // console.log(filter,'fil')
+    filter.rowsPerPage = rowsPerPage;
+    await apiInstance
+      .get("attendances", {
+        params: filter,
+      })
+      .then((res) => {
+        // console.log("success")
+        setAttendanceList(res.data.data);
+        // console.log(res.data.data, 'att')
+        setPages(res.data._metadata.page_count);
+      });
+  };
+
+  const handleChange = (e) => {
+    let array = [];
     for (const item of e) {
-      array.push(item)
+      array.push(item);
     }
-    setOtherDoc(array)
-  }
+    setOtherDoc(array);
+  };
 
-  const handleKeyDown = event => {
-    if (event.key === 'Enter' && isOpen) {
-      handleDelete()
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && isOpen) {
+      handleDelete();
     }
-  }
+  };
 
-  const onRowsChange = event => {
-    const newRowsPerPage = parseInt(event.target.value)
-    setRowsPerPage(newRowsPerPage)
-    setPages(Math.ceil(attendanceList.length / newRowsPerPage))
-    setPage(1) // Reset the current page to 1 when rows per page changes
-  }
+  const onRowsChange = (event) => {
+    const newRowsPerPage = parseInt(event.target.value);
+    setRowsPerPage(newRowsPerPage);
+    setPages(Math.ceil(attendanceList.length / newRowsPerPage));
+    setPage(1); // Reset the current page to 1 when rows per page changes
+  };
 
   const handleCheck = async (val, id) => {
-    const updatedItems = items.map(item => {
+    const updatedItems = items.map((item) => {
       if (item._id === id) {
-        return { ...item, type: val }
+        return { ...item, type: val };
       }
-      return item
-    })
-    setAttendanceList(updatedItems)
+      return item;
+    });
+    setAttendanceList(updatedItems);
     await apiInstance
-      .put('attendance', { type: val, id: id })
+      .put("attendance", { type: val, id: id })
       .then(() => {
         Swal.fire({
-          icon: 'success',
-          title: 'Successfully Updated'
-        })
+          icon: "success",
+          title: "Successfully Updated",
+        });
       })
-      .catch(err => {
-        console.log(err)
-      })
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleExcelImport = async () => {
-    setPopOverOpen(false)
-    const formData = new FormData()
+    setPopOverOpen(false);
+    const formData = new FormData();
     if (otherDoc) {
-      otherDoc.forEach(item => {
-        formData.append('attendanceImport', item) // Assuming 'item' is a File object
-      })
-      Swal.showLoading()
+      otherDoc.forEach((item) => {
+        formData.append("attendanceImport", item); // Assuming 'item' is a File object
+      });
+      Swal.showLoading();
     }
-    await apiInstance.post('attendances/excel ', formData).then(() => {
+    await apiInstance.post("attendances/excel ", formData).then(() => {
       Swal.fire({
-        icon: 'success',
-        title: 'Successfully Imported'
+        icon: "success",
+        title: "Successfully Imported",
       }).then(() => {
-        window.location.reload()
-      })
-    })
-  }
+        window.location.reload();
+      });
+    });
+  };
 
   useEffect(() => {
     const getPositions = async () => {
       await apiInstance
         .get(`attendances`, { params: { limit: 80, rowsPerPage: rowsPerPage } })
-        .then(res => {
-          setAttendanceList(res.data.data)
-          console.log(res.data.data, 'att')
-          setPages(res.data._metadata.page_count)
-        })
-    }
+        .then((res) => {
+          setAttendanceList(res.data.data);
+          console.log(res.data.data, "att");
+          setPages(res.data._metadata.page_count);
+        });
+    };
     const getDepartmentList = async () => {
-      await apiInstance.get('departments').then(res => {
-        setDepartmentList(res.data.data)
-      })
-    }
-    getDepartmentList()
-    getPositions()
-    document.addEventListener('keydown', handleKeyDown)
+      await apiInstance.get("departments").then((res) => {
+        setDepartmentList(res.data.data);
+      });
+    };
+    getDepartmentList();
+    getPositions();
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, rowsPerPage])
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, rowsPerPage]);
 
-  const handleOpen = event => {
-    onOpen()
-    console.log(event.currentTarget.getAttribute('data-key'))
-    setDelID(event.currentTarget.getAttribute('data-key'))
-  }
+  const handleOpen = (event) => {
+    onOpen();
+    console.log(event.currentTarget.getAttribute("data-key"));
+    setDelID(event.currentTarget.getAttribute("data-key"));
+  };
 
   const handleClose = () => {
-    onClose()
-    setDelID(null)
-  }
+    onClose();
+    setDelID(null);
+  };
 
   const handleDelete = async () => {
-    console.log(setDelID)
-    await apiInstance.delete('attendance/' + delID).then(() => {
-      setAttendanceList(attendanceList.filter(item => item._id !== delID))
-      onClose()
-    })
-  }
+    console.log(setDelID);
+    await apiInstance.delete("attendance/" + delID).then(() => {
+      setAttendanceList(attendanceList.filter((item) => item._id !== delID));
+      onClose();
+    });
+  };
 
   return (
     <>
@@ -225,13 +227,13 @@ await apiInstance
               </Button>
             </DropdownTrigger>
             <DropdownMenu
-              onAction={value => handleDepartmentDropDown(value)}
+              onAction={(value) => handleDepartmentDropDown(value)}
               disallowEmptySelection
               aria-label='Table Columns'
               closeOnSelect={false}
               selectionMode='single'
             >
-              {departmentList.map(item => (
+              {departmentList.map((item) => (
                 <DropdownItem
                   key={item._id}
                   value={item._id}
@@ -255,13 +257,13 @@ await apiInstance
               </Button>
             </DropdownTrigger>
             <DropdownMenu
-              onAction={value => handleFilterInput(value, 'relatedUser')}
+              onAction={(value) => handleFilterInput(value, "relatedUser")}
               disallowEmptySelection
               aria-label='Table Columns'
               closeOnSelect={false}
               selectionMode='single'
             >
-              {employeeList.map(item => (
+              {employeeList.map((item) => (
                 <DropdownItem
                   key={item._id}
                   value={item._id}
@@ -303,19 +305,27 @@ await apiInstance
             </DropdownMenu>
           </Dropdown>
           <div className='w-60 flex gap-2'>
-          <Input type= "date" 
-                 startContent= "From: " 
-                 onChange = {event => handleFilterInput(event.target.value,"fromDate")} />
-          <Input type="date" 
-                 startContent="To: "
-                 onChange = {event => handleFilterInput(event.target.value,"toDate")} />
-          <Button
-            color='primary'
-            endContent={<SearchIcon className='w-5 h-4' />}
-            onClick={handleSearch}
-          >
-            Search
-          </Button>
+            <Input
+              type='date'
+              startContent='From: '
+              onChange={(event) =>
+                handleFilterInput(event.target.value, "fromDate")
+              }
+            />
+            <Input
+              type='date'
+              startContent='To: '
+              onChange={(event) =>
+                handleFilterInput(event.target.value, "toDate")
+              }
+            />
+            <Button
+              color='primary'
+              endContent={<SearchIcon className='w-5 h-4' />}
+              onClick={handleSearch}
+            >
+              Search
+            </Button>
           </div>
         </div>
         <div className='flex gap-2 mb-3 flex-row'>
@@ -378,7 +388,7 @@ await apiInstance
           Rows per page:
           <select
             className='bg-transparent outline-none text-default-400 text-small'
-            onChange={e => onRowsChange(e)}
+            onChange={(e) => onRowsChange(e)}
           >
             <option value='5'>5</option>
             <option value='10'>10</option>
@@ -390,8 +400,8 @@ await apiInstance
         isHeaderSticky
         aria-label='Example table with client side sorting'
         classNames={{
-          base: 'max-h-[719px] ',
-          table: 'min-h-[100px]'
+          base: "max-h-[719px] ",
+          table: "min-h-[100px]",
         }}
         bottomContent={
           <div className='flex w-full justify-center'>
@@ -402,7 +412,7 @@ await apiInstance
               color='primary'
               page={page}
               total={pages}
-              onChange={page => setPage(page)}
+              onChange={(page) => setPage(page)}
             />
           </div>
         }
@@ -421,31 +431,31 @@ await apiInstance
 
           <TableColumn key='action'>Action</TableColumn>
         </TableHeader>
-        <TableBody emptyContent={'No Positions to display.'}>
+        <TableBody emptyContent={"No Positions to display."}>
           {items.map((item, index) => (
             <TableRow key={item._id}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                {item.date ? convertAndDisplayTZ(item.date) : 'Not Set'}
+                {item.date ? convertAndDisplayTZ(item.date) : "Not Set"}
               </TableCell>
               <TableCell>
-                {item.date ? convertToWeekDayNames(item.date) : 'Not Set'}
+                {item.date ? convertToWeekDayNames(item.date) : "Not Set"}
               </TableCell>
               <TableCell>{item.clockIn}</TableCell>
               <TableCell>{item.clockOut}</TableCell>
               <TableCell>
-                {item.relatedUser ? item.relatedUser.givenName : 'Not Set'}
+                {item.relatedUser ? item.relatedUser.givenName : "Not Set"}
               </TableCell>
               <TableCell>
                 {item.relatedDepartment && item.relatedDepartment.name
                   ? item.relatedDepartment.name
-                  : 'Not Set'}
+                  : "Not Set"}
               </TableCell>
               <TableCell>{item.type}</TableCell>
               <TableCell>{item.source}</TableCell>
               <TableCell>
                 <RadioGroup
-                  onValueChange={e => handleCheck(e, item._id)}
+                  onValueChange={(e) => handleCheck(e, item._id)}
                   orientation='horizontal'
                   defaultValue={item.type}
                 >
@@ -457,7 +467,7 @@ await apiInstance
               <TableCell>
                 <div className='relative flex items-center gap-2'>
                   <Tooltip content='Edit Position'>
-                    <Link to={'/att-update/' + item._id}>
+                    <Link to={"/att-update/" + item._id}>
                       <span className='text-lg text-default-400 cursor-pointer active:opacity-50'>
                         <EditIcon />
                       </span>
@@ -467,7 +477,7 @@ await apiInstance
                     <span
                       data-key={item._id}
                       className='text-lg text-danger cursor-pointer active:opacity-50'
-                      onClick={e => handleOpen(e)}
+                      onClick={(e) => handleOpen(e)}
                     >
                       <DeleteIcon />
                     </span>
@@ -480,7 +490,7 @@ await apiInstance
       </Table>
       <Modal backdrop='blur' isOpen={isOpen} onClose={handleClose}>
         <ModalContent>
-          {handleClose => (
+          {(handleClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 Delete Position
@@ -498,7 +508,7 @@ await apiInstance
                   onKeyDown={handleKeyDown}
                 >
                   Yes, I am sure
-                  <Kbd className='bg-danger-500' keys={['enter']}></Kbd>
+                  <Kbd className='bg-danger-500' keys={["enter"]}></Kbd>
                 </Button>
               </ModalFooter>
             </>
@@ -506,5 +516,5 @@ await apiInstance
         </ModalContent>
       </Modal>
     </>
-  )
+  );
 }
