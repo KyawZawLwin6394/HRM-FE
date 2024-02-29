@@ -169,21 +169,21 @@ export default function PayrollTable() {
     setAttendSalary(item?.attendedSalary);
     setID(item._id);
     setMaPerDay(item.relatedUser?.relatedPosition?.mealAllowance)
-        setTravelPerDay(item.relatedUser?.relatedPosition?.travelAllowance)
-      
+    setTravelPerDay(item.relatedUser?.relatedPosition?.travelAllowance)
+
     onOpenExtra();
   };
 
-   //gross salary
+  //gross salary
   const AllTotal =
     parseInt(mealTotal) +
     parseInt(travelTotal) +
     parseInt(otTotal) +
     parseInt(inAmount) +
     parseInt(boAmount) +
-    parseInt(attendSalary) 
+    parseInt(attendSalary)
 
-    //Tax
+  //Tax
   const handlePercent = (val) => {
     console.log(val);
     setPercent(val);
@@ -191,9 +191,9 @@ export default function PayrollTable() {
     setTaxAmount(res);
   };
 
- 
-    
-  
+
+
+
 
   //net salary
   const NetSalary = AllTotal - taxAmount;
@@ -363,7 +363,7 @@ export default function PayrollTable() {
           <TableColumn>Paid Leaves</TableColumn>
           <TableColumn>Unpaid Leaves</TableColumn>
           <TableColumn>Entitled Salary</TableColumn>
-           <TableColumn>Net Salary</TableColumn>
+          <TableColumn>Net Salary</TableColumn>
           <TableColumn>Actions</TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No Payrolls to display."}>
@@ -387,7 +387,7 @@ export default function PayrollTable() {
               <TableCell className="text-center">
                 {item.entitledSalary}
               </TableCell>
-                <TableCell className="text-center">
+              <TableCell className="text-center">
                 {item?.netSalary}
               </TableCell>
               <TableCell>
@@ -530,140 +530,204 @@ export default function PayrollTable() {
                     />
                   </div>
 
-                  <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-                      <div className="flex flex-row text-sm mt-1 gap-2">
-                        <label className="text-sm font-semibold mt-5">
+                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                    <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
+                      <div className='flex flex-row text-sm mt-1 gap-2'>
+                        <label className='text-sm font-semibold mt-5'>
                           Meals Allowance
                         </label>
                         <div>
                           <label>Per Day</label>
                           <Input
-                            type="number"
+                            type='number'
                             //   isDisabled={true}
-                              value={maPerDay}
-                            className="py-1"
-
-                            // onChange={(e) => setMaPerDay(e.target.value)}
+                            defaultValue={maPerDay ? maPerDay : 0}
+                            className='py-1'
+                            onChange={(e) => setMaPerDay(e.target.value)}
                           />
                         </div>
                         <div>
                           <label>Total Days</label>
                           <Input
-                            type="number"
+                            type='number'
                             //   isDisabled={true}
                             //   value={positionID?.medicalLeaves}
-                            className="py-1"
+                            defaultValue={0}
+                            className='py-1'
                             onChange={(e) => setMaTotalDays(e.target.value)}
                           />
                         </div>
                         <div>
                           <label>Total Amount</label>
                           <Input
-                            type="number"
+                            type='number'
                             //   isDisabled={true}
                             //   value={positionID?.vacationLeaves}
-                            className="py-1"
+                            className='py-1'
                             value={mealTotal}
-                            //  onChange={(e)=>setMaTotalAmount(e.target.value)}
+                          //  onChange={(e)=>setMaTotalAmount(e.target.value)}
                           />
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-                      <div className="flex flex-row text-sm mt-1 gap-2">
-                        <label className="text-sm font-semibold mt-5">
+                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                    <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
+                      <div className='flex flex-row text-sm mt-1 gap-2'>
+                        <label className='text-sm font-semibold mt-5'>
                           Travel Allowance
                         </label>
                         <div>
                           <label>Per Day</label>
                           <Input
-                            type="number"
-                            value={travelPerDay}
-                            className="py-1"
+                            type='number'
+                            defaultValue={travelPerDay ? travelPerDay : 0}
+                            onChange={(e) => setTravelPerDay(e.target.value)}
+                            className='py-1'
                           />
                         </div>
                         <div>
                           <label>Total Days</label>
                           <Input
-                            type="number"
+                            type='number'
+                            defaultValue={0}
                             onChange={(e) => setTravelTotalDays(e.target.value)}
-                            className="py-1"
+                            className='py-1'
                           />
                         </div>
                         <div>
                           <label>Total Amount</label>
                           <Input
-                            type="number"
+                            type='number'
                             value={travelTotal}
                             //  onChange={(e)=>setTravelTotalAmount(e.target.value)}
-                            className="py-1"
+                            className='py-1'
                           />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <div className="block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3">
-                      <div className="flex flex-row text-sm mt-1 gap-2">
-                        <label className="text-sm font-semibold mt-5">
+                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+                    <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
+                      <div className='flex flex-row text-sm mt-1 gap-2'>
+                        <label className='text-sm font-semibold mt-5'>
                           Over Time
                         </label>
-                        <div className="ml-8">
+                        <div className='ml-8'>
                           <label>Per Day</label>
                           <Input
-                            type="number"
-                            className="py-1"
+                            type='number'
+                            className='py-1'
+                            defaultValue={0}
                             onChange={(e) => setOtPerDay(e.target.value)}
                           />
                         </div>
                         <div>
                           <label>Total Days</label>
                           <Input
-                            type="number"
+                            type='number'
+                            defaultValue={0}
                             onChange={(e) => setOtTotalDays(e.target.value)}
-                            className="py-1"
+                            className='py-1'
                           />
                         </div>
                         <div>
                           <label>Total Amount</label>
                           <Input
-                            type="number"
-                            className="py-1"
+                            type='number'
+                            className='py-1'
                             value={otTotal}
-                            // onChange={(e)=>setOtTotalAmount(e.target.value)}
+                          // onChange={(e)=>setOtTotalAmount(e.target.value)}
                           />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 ">
-                    <div className="w-full gap-4 flex flex-row flex-grow mt-3">
-                      <label className="text-sm font-semibold mt-8">
+                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 '>
+                    <div className='w-full gap-4 flex flex-row flex-grow mt-3'>
+                      <label className='text-sm font-semibold mt-8'>
                         Incentive
                       </label>
-                      <div className="ml-7 flex-grow">
+                      <div className='ml-7 flex-grow'>
                         <Input
-                          type="text"
-                          label="Reason"
-                          placeholder="Enter reason"
+                          type='text'
+                          label='Reason'
+                          placeholder='Enter reason'
                           variant={variant}
                           onChange={(e) => setInRe(e.target.value)}
-                          labelPlacement="outside"
+                          labelPlacement='outside'
                         />
                       </div>
 
-                      <div className="flex-grow">
+                      <div className='flex-grow'>
                         <Input
-                          type="number"
-                          label="Total Amount"
-                          placeholder="Enter Total Amount"
+                          type='number'
+                          label='Total Amount'
+                          placeholder='Enter Total Amount'
+                          defaultValue={0}
                           variant={variant}
                           onChange={(e) => setInAmount(e.target.value)}
-                          labelPlacement="outside"
+                          labelPlacement='outside'
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 '>
+                    <div className='w-full gap-4 flex flex-row flex-grow mt-3'>
+                      <label className='text-sm font-semibold mt-8'>
+                        Bonus
+                      </label>
+                      <div className='ml-11 flex-grow'>
+                        <Input
+                          type='text'
+                          label='Reason'
+                          placeholder='Enter reason'
+                          variant={variant}
+                          onChange={(e) => setBoRe(e.target.value)}
+                          labelPlacement='outside'
+                        />
+                      </div>
+
+                      <div className='flex-grow'>
+                        <Input
+                          type='number'
+                          label='Total Amount'
+                          placeholder='Enter Total Amount'
+                          variant={variant}
+                          defaultValue={0}
+                          onChange={(e) => setBoAmount(e.target.value)}
+                          labelPlacement='outside'
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 '>
+                    <div className='w-full gap-4 flex flex-row flex-grow mt-3'>
+                      <label className='text-sm font-semibold mt-8'>
+                        Reduction
+                      </label>
+                      <div className='ml-5 flex-grow'>
+                        <Input
+                          type='text'
+                          label='Reason'
+                          placeholder='Enter reason'
+                          variant={variant}
+                          onChange={(e) => setReduction(e.target.value)}
+                          labelPlacement='outside'
+                        />
+                      </div>
+
+                      <div className='flex-grow'>
+                        <Input
+                          type='number'
+                          label='Total Amount'
+                          placeholder='Enter Total Amount'
+                          variant={variant}
+                          defaultValue={0}
+                          onChange={(e) => setReductionAmount(e.target.value)}
+                          labelPlacement='outside'
                         />
                       </div>
                     </div>
