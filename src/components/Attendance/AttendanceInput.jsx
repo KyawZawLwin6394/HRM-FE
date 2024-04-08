@@ -58,7 +58,10 @@ export default function DepartmentInputForm() {
     }
 
     const getUserList = async () => {
-      await apiInstance.get('users').then(res => setUserList(res.data.data))
+      await apiInstance.get('users?limit=100').then(res => {
+        setUserList(res.data.data)
+        console.log(res.data.data)
+      })
     }
     getUserList()
     getDepartmentList()
