@@ -10,6 +10,7 @@ import {
   ModalFooter,
   Checkbox
 } from '@nextui-org/react'
+import { SelectItem, Select } from "@nextui-org/select";
 import { Link } from '@nextui-org/react'
 import { AnchorIcon } from '../../assets/Icons/AnchorIcon.jsx'
 import { Image } from '@nextui-org/react'
@@ -48,7 +49,9 @@ export default function EmployeeInput() {
   const [recLetAnchor, setRecLetAnchor] = useState('')
   const [cvAnchor, setcvAnchor] = useState('')
   const [eduAnchor, seteduAnchor] = useState('')
-
+  const [holidays, setHolidays] = useState("")
+  const [holidaysArray, setHolidaysArray] = useState([])
+  const holidaysList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
   const handleChange = e => {
     let array = []
     for (const item of e) {
@@ -70,7 +73,8 @@ export default function EmployeeInput() {
       await apiInstance
         .get('user/' + EmpID, { params: { limit: 80 } })
         .then(res => {
-          console.log(res.data.data, 'em lis')
+          // console.log(res.data.data, 'em lis')
+          setHolidaysArray(res.data.data?.holiday)
           setEmployee(res.data.data)
           setDirectManager(
             res.data.data.relatedDepartment.directManager?.givenName
@@ -147,7 +151,7 @@ export default function EmployeeInput() {
   }
 
   const handleDirectManager = id => {
-    console.log('id',id,'handleDepartment')
+    // console.log('id', id, 'handleDepartment')
     handleInputChange('relatedDepartment', id)
     setDirectManager(
       departmentList.filter(el => el._id == id)[0].directManager.givenName
@@ -260,6 +264,9 @@ export default function EmployeeInput() {
         formData.append('other', item) // Assuming 'item' is a File object
       })
       : undefined
+    holidays ? holidays.split(',').forEach(item => {
+      formData.append('holiday', item) // Assuming 'item' is a File object
+    }) : holidaysArray
     await apiInstance
       .put('user', formData, {
         headers: {
@@ -269,11 +276,18 @@ export default function EmployeeInput() {
       .then(() => {
         Swal.fire({
           icon: 'success',
-          title: 'Successfully Edited'
+          title: 'Successfully Edited',
+          showConfirmButton: false,
+          timer: 2000
         })
       })
       .catch(err => {
-        console.log(err)
+        Swal.fire({
+          icon: 'error',
+          title: 'Something Wrong',
+          showConfirmButton: false,
+          timer: 2000
+        })
       })
   }
   return (
@@ -584,6 +598,39 @@ export default function EmployeeInput() {
           labelPlacement='outside'
           variant={variant}
         />
+      </div>
+      <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
+
+        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+          <label
+            className='text-sm font-semibold'
+
+          >
+            Holidays
+          </label>
+          <Select
+            aria-labelledby="holiday"
+            label={!holidays && holidaysArray.map((i) => (<span className='ml-1'>{i}</span>))}
+            // placeholder="Select Instructor"
+            size='sm'
+
+            selectionMode="multiple"
+            className="w-full border-1 border-slate-300 rounded-lg  "
+
+            onChange={(e) => setHolidays(e.target.value)}
+
+          >
+            {/* <SelectItem hidden >
+              Please choose again holidays
+            </SelectItem> */}
+            {holidaysList.map((item) => (
+              <SelectItem key={item} value={item}>
+                {item}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
+        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'></div>
       </div>
       <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
         <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>

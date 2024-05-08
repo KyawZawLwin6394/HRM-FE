@@ -63,7 +63,7 @@ export default function AttendanceDetailPage() {
     onOpen: onOpenEdit,
     onClose: onCloseEdit
   } = useDisclosure()
-  
+
   //save to open modal box 
   const {
     isOpen: isOpenSave,
@@ -106,11 +106,11 @@ export default function AttendanceDetailPage() {
   const handleRelatedUserChange = async (e) => {
     const keyName = e.target.options[e.target.options.selectedIndex].getAttribute('data-keyName');
     const keyID = e.target.options[e.target.options.selectedIndex].getAttribute('data-key');
-    console.log(keyName, keyID, 'keyName')
+    // console.log(keyName, keyID, 'keyName')
     setDepartment({ _id: keyID, name: keyName })
 
   }
-   
+
   const handleOpenSave = async () => {
     onOpenSave()
   }
@@ -133,7 +133,10 @@ export default function AttendanceDetailPage() {
       .then(res => {
         Swal.fire({
           icon: 'success',
-          title: 'Successfully Saved'
+          title: 'Successfully Saved',
+
+          showConfirmButton: false,
+          timer: 2000
         })
       })
       .catch(error => {
@@ -142,8 +145,8 @@ export default function AttendanceDetailPage() {
           icon: 'error',
           title: 'Save Failed',
           text: error.response.data.message,
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#3085d6'
+          showConfirmButton: false,
+          timer: 2000
         })
       })
   }
@@ -167,8 +170,8 @@ export default function AttendanceDetailPage() {
           icon: 'error',
           title: 'Calculation Failed',
           text: error.response.data.message,
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#3085d6'
+          showConfirmButton: false,
+          timer: 2000
         })
       })
   }
@@ -179,11 +182,11 @@ export default function AttendanceDetailPage() {
 
   const handleAddAttendance = async () => {
     onCloseAdd()
-    console.log('clicked', form)
+    // console.log('clicked', form)
   }
 
   const handleEditAttendance = async () => {
-    console.log('here')
+    // console.log('here')
     let data = editList
     data.id = editList._id
     await apiInstance
@@ -191,7 +194,10 @@ export default function AttendanceDetailPage() {
       .then(res => {
         Swal.fire({
           icon: 'success',
-          title: 'Successfully Updated'
+          title: 'Successfully Updated',
+
+          showConfirmButton: false,
+          timer: 2000
         })
 
         //cann't reload and then direct input update data
@@ -213,15 +219,15 @@ export default function AttendanceDetailPage() {
           icon: 'error',
           title: 'Attendance Edit Failed',
           text: error.response.data.message,
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#3085d6'
+          showConfirmButton: false,
+          timer: 2000
         })
       })
   }
 
   const handleSearch = async () => {
     setIsSearched(false)
-    console.log('search')
+    // console.log('search')
     setPayroll({
       attendedSalary: 0,
       dismissedSalary: 0,
@@ -311,7 +317,10 @@ export default function AttendanceDetailPage() {
       .then(() => {
         Swal.fire({
           icon: 'success',
-          title: 'Successfully Updated'
+          title: 'Successfully Updated',
+
+          showConfirmButton: false,
+          timer: 2000
         })
       })
       .catch(err => {
@@ -366,7 +375,7 @@ export default function AttendanceDetailPage() {
 
   const handleOpenEdit = async event => {
     onOpenEdit()
-    console.log(event.currentTarget.getAttribute('data-key2'))
+    // console.log(event.currentTarget.getAttribute('data-key2'))
     await apiInstance
       .get('attendance/' + event.currentTarget.getAttribute('data-key2'))
       .then(res => {
@@ -378,8 +387,8 @@ export default function AttendanceDetailPage() {
             icon: 'error',
             title: 'Attendance Update Failed',
             text: 'Something Went Wrong',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#3085d6'
+            showConfirmButton: false,
+            timer: 2000
           })
         }
       })
@@ -388,15 +397,15 @@ export default function AttendanceDetailPage() {
           icon: 'error',
           title: 'Attendance Update Failed',
           text: error.response.data.message,
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#3085d6'
+          showConfirmButton: false,
+          timer: 2000
         })
       })
   }
 
   const handleOpen = event => {
     onOpen()
-    console.log(event.currentTarget.getAttribute('data-key'))
+    // console.log(event.currentTarget.getAttribute('data-key'))
     setDelID(event.currentTarget.getAttribute('data-key'))
   }
 
@@ -414,7 +423,7 @@ export default function AttendanceDetailPage() {
   }
 
   const handleDelete = async () => {
-    console.log(setDelID)
+    // console.log(setDelID)
     await apiInstance.delete('attendance/' + delID).then(() => {
       setAttendanceList(attendanceList.filter(item => item._id !== delID))
       onClose()
@@ -422,7 +431,7 @@ export default function AttendanceDetailPage() {
   }
 
   const handleTotalDays = async (month) => {
-    console.log(month)
+    // console.log(month)
     const datePayload = getDatesByMonth(month)
     const totalDays = new Date(datePayload.$lte).getUTCDate();
     if (totalDays) setTotalDays(totalDays)
@@ -566,7 +575,7 @@ export default function AttendanceDetailPage() {
                 isDisabled={disabled}
                 size='sm'
                 type='text'
-                label='Name'
+                label={profile.givenName ? '' : 'Name'}
                 value={profile.givenName}
               />
             </div>
@@ -577,7 +586,7 @@ export default function AttendanceDetailPage() {
                 size='sm'
                 type='text'
                 value={profile.phone}
-                label='Phone'
+                label={profile.phone ? '' : 'Phone'}
               />
             </div>
             <div className='flex-row flex gap-2 mb-2'>
@@ -587,7 +596,7 @@ export default function AttendanceDetailPage() {
                 size='sm'
                 type='email'
                 value={profile.email}
-                label='Email'
+                label={profile.email ? '' : 'Email'}
               />
             </div>
             <div className='flex-row flex gap-2 mb-2'>
@@ -596,7 +605,7 @@ export default function AttendanceDetailPage() {
                 isDisabled={disabled}
                 size='sm'
                 type='text'
-                label='Basic Salary'
+                label={profile?.relatedPosition?.basicSalary ? '' : 'Basic Salary'}
                 value={profile?.relatedPosition?.basicSalary}
               />
             </div>
@@ -621,6 +630,32 @@ export default function AttendanceDetailPage() {
                   payRoll && payRoll.entitledSalary
                     ? Math.round(payRoll?.entitledSalary)
                     : ''
+                }
+              />
+            </div>
+            <div className='flex-row flex gap-2 mb-2'>
+              <span className='m-auto w-1/2'>Attend Salary</span>
+              <Input
+                isDisabled={disabled}
+                size='lg'
+                type='text'
+                value={
+                  payRoll && payRoll?.attendedSalary
+                    ? Math.round(payRoll?.attendedSalary)
+                    : ""
+                }
+              />
+            </div>
+            <div className='flex-row flex gap-2 mb-2'>
+              <span className='m-auto w-1/2'>Total Holidays Salary</span>
+              <Input
+                isDisabled={disabled}
+                size='lg'
+                type='text'
+                value={
+                  payRoll && payRoll?.totalSalaryByHoliday
+                    ? Math.round(payRoll?.totalSalaryByHoliday)
+                    : ""
                 }
               />
             </div>
@@ -758,7 +793,7 @@ export default function AttendanceDetailPage() {
           ))}
         </TableBody>
       </Table>
-      
+
       <Modal backdrop='blur' isOpen={isOpenSave} onClose={onCloseSave}>
         <ModalContent>
           {onCloseSave => (

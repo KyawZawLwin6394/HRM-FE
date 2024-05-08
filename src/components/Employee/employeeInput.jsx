@@ -15,12 +15,12 @@ import Swal from 'sweetalert2'
 import { FileUploader } from 'react-drag-drop-files'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-
+import { SelectItem, Select } from "@nextui-org/select";
 const fileTypes = ['JPG', 'PNG', 'GIF']
 
 export default function EmployeeInput() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const variant = ['faded']
+  const variant = ['bordered']
   const {
     register,
     handleSubmit,
@@ -31,6 +31,8 @@ export default function EmployeeInput() {
   // const passRef = useRef()
   // const nrcRef = useRef()
   // const nameRef = useRef()
+  const [holiday, setHoliday] = useState('')
+  // console.log(holiday, 'hol')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -52,6 +54,8 @@ export default function EmployeeInput() {
   const [gender, setGender] = useState('')
   const [isSelectedCRM, setIsSelectedCRM] = useState(false);
 
+  const [holidays, setHolidays] = useState("")
+  const holidaysList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
   // const addressRef = useRef()
   // const DOBRef = useRef()
   // const ECRef = useRef()
@@ -82,7 +86,7 @@ export default function EmployeeInput() {
   const [departmentList, setDepartmentList] = useState([])
   const [showMarried, setShowMarried] = useState(false)
   const [relatedDepartment, setRelatedDepartment] = useState('')
-
+  // console.log(JSON.stringify({ data: holiday?.split(',') }), 'inst')
   const handleChange = e => {
     let array = []
     for (const item of e) {
@@ -104,7 +108,7 @@ export default function EmployeeInput() {
         .get(`departments`, { params: { limit: 80 } })
         .then(res => {
           setDepartmentList(res.data.data)
-          console.log(res.data.data, 'dep')
+          // console.log(res.data.data, 'dep')
         })
     }
     getDeparttment()
@@ -112,7 +116,7 @@ export default function EmployeeInput() {
   }, [])
 
   const handleDirectManager = id => {
-    console.log(id, 'handled')
+    // console.log(id, 'handled')
     setRelatedDepartment(id)
     setDirectManager(
       departmentList.filter(el => el._id == id)[0].directManager.givenName
@@ -124,7 +128,7 @@ export default function EmployeeInput() {
   const handlefile = e => {
     if (e.target.files) {
       setCV(e.target.files[0])
-      console.log(e.target.files, 'file cv')
+      // console.log(e.target.files, 'file cv')
     }
   }
 
@@ -137,36 +141,36 @@ export default function EmployeeInput() {
   const handleCer = e => {
     if (e.target.files) {
       setEuCer(e.target.files[0])
-      console.log(e.target.files, 'file')
+      // console.log(e.target.files, 'file')
     }
   }
 
   const handleRecLetter = e => {
     if (e.target.files) {
       setRecLetter(e.target.files[0])
-      console.log(e.target.files, 'file')
+      // console.log(e.target.files, 'file')
     }
   }
 
   const handleProfile = e => {
     if (e.target.files) {
       setProfile(e.target.files[0])
-      console.log(e.target.files, 'file')
+      // console.log(e.target.files, 'file')
     }
   }
 
   const handlePosition = val => {
-    console.log(positionList.filter(el => el._id === val)[0], 'bas sal')
+    // console.log(positionList.filter(el => el._id === val)[0], 'bas sal')
 
     setPositionID(positionList.filter(el => el._id === val)[0])
 
     setPosition(val)
   }
   const create = () => {
-    console.log(otherDoc, 'doc')
-    console.log(name, 'name')
+    // console.log(otherDoc, 'doc')
+    // console.log(name, 'name')
     const formData = new FormData()
-    console.log(marriedFile, 'marriedFile')
+    // console.log(marriedFile, 'marriedFile')
     formData.append('givenName', name)
     formData.append('email', email)
     formData.append('password', password)
@@ -201,12 +205,15 @@ export default function EmployeeInput() {
     formData.append('vacationLeaves', positionID?.vacationLeaves)
     formData.append('maternityLeaveMale', positionID?.maternityLeaveMale)
     formData.append('maternityLeaveFemale', positionID?.maternityLeaveFemale)
+    holidays.split(',').forEach(item => {
+      formData.append('holiday', item) // Assuming 'item' is a File object
+    })
     formData.append('isCRM', isSelectedCRM)
     otherDoc.forEach(item => {
       formData.append('other', item) // Assuming 'item' is a File object
     })
 
-    console.log(formData, 'formData')
+    // console.log(formData, 'formData')
 
     apiInstance
       .post('user', formData, {
@@ -217,10 +224,10 @@ export default function EmployeeInput() {
       .then(function () {
         Swal.fire({
           icon: 'success',
-          title: 'Login Successful',
-          text: 'Welcome back!',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#3085d6'
+          title: 'Employee Created Successful',
+          text: 'Yayyyyy!!!',
+          showConfirmButton: false,
+          timer: 2000
         })
       })
       .catch(error => {
@@ -344,16 +351,8 @@ export default function EmployeeInput() {
               variant={variant}
             />
           </div>
-          <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-            <Input
-              type='file'
-              label='CV'
-              variant={variant}
-              onChange={handlefile}
-              placeholder=' '
-              labelPlacement='outside'
-            />
-          </div>
+
+
         </div>
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
           <Input
@@ -525,6 +524,38 @@ export default function EmployeeInput() {
             labelPlacement='outside'
             variant={variant}
           />
+        </div>
+        <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
+
+          <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+            <label
+              className={`text-sm font-semibold ${errors.holiday && errors.holiday.type === 'required'
+                ? 'text-[#f31260]'
+                : ''
+                }`}
+            >
+              Holidays
+            </label>
+            <Select
+              aria-labelledby="holiday"
+              // placeholder="Select Instructor"
+              size='sm'
+              selectionMode="multiple"
+              className="w-full border-1 border-slate-300 rounded-lg  "
+              {...register("holidays", {
+                required: true,
+                onChange: (e) => setHolidays(e.target.value),
+              })}
+            >
+
+              {holidaysList.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </Select>
+          </div>
+          <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'></div>
         </div>
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
           <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>
@@ -732,6 +763,19 @@ export default function EmployeeInput() {
             labelPlacement='outside'
             variant={variant}
           />
+        </div>
+        <div className='flex w-[680px] flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+
+          <Input
+            type='file'
+            label='CV'
+            variant={variant}
+            onChange={handlefile}
+            placeholder=' '
+            labelPlacement='outside'
+          />
+
+
         </div>
 
         <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7'>
