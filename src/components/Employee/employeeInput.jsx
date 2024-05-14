@@ -87,6 +87,9 @@ export default function EmployeeInput() {
   const [showMarried, setShowMarried] = useState(false)
   const [relatedDepartment, setRelatedDepartment] = useState('')
   const [empSalary, setEmpSalary] = useState('')
+  const [basicSalary, setBasicSalary] = useState('')
+  const [type, setType] = useState('')
+  const [showType, setShowType] = useState(false)
   // console.log(JSON.stringify({ data: holiday?.split(',') }), 'inst')
   const handleChange = e => {
     let array = []
@@ -162,9 +165,9 @@ export default function EmployeeInput() {
 
   const handlePosition = val => {
     // console.log(positionList.filter(el => el._id === val)[0], 'bas sal')
-
+    setShowType(true)
     setPositionID(positionList.filter(el => el._id === val)[0])
-
+    setBasicSalary(positionList.filter(el => el._id === val)[0].basicSalary)
     setPosition(val)
   }
   const create = () => {
@@ -187,7 +190,7 @@ export default function EmployeeInput() {
     formData.append('cv', cv)
     formData.append('pf', profile)
     formData.append('relatedPosition', position)
-    if (empSalary) {
+    if (type === 'custom') {
       formData.append('employeeSalary', empSalary)
     } else {
       formData.append('basicSalary', positionID.basicSalary)
@@ -522,21 +525,51 @@ export default function EmployeeInput() {
             variant={variant}
           />
 
-          <Input
-            type='number'
-            label='Basic Salary'
-            defaultValue={positionID?.basicSalary}
-            placeholder=' '
-            labelPlacement='outside'
-            variant={variant}
-            onChange={(e) => setEmpSalary(e.target.value)}
-          />
+          {showType && (
+            <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-5'>
+
+              <select
+                className='form-conrol w-full h-[45px] border-1 border-slate-300 rounded-lg'
+                defaultValue={basicSalary}
+
+                variant={variant}
+                onChange={(e) => setType(e.target.value)}
+              >
+                <option hidden>Choose Type</option>
+                <option value='basic'>Basic Salary (From Position)</option>
+                <option value='custom'>Basic Salary (Custom)</option>
+              </select>
+
+
+            </div>
+          )}
+          {type === 'basic' ? (
+            <Input
+              type='number'
+              label='Basic Salary ( By Position )'
+              value={basicSalary}
+              placeholder=' '
+              labelPlacement='outside'
+              variant={variant}
+            // onChange={(e) => setEmpSalary(e.target.value)}
+            />
+          ) : (
+            <Input
+              type='number'
+              label='Basic Salary ( By Custom )'
+              value={empSalary}
+              placeholder=' '
+              labelPlacement='outside'
+              variant={variant}
+              onChange={(e) => setEmpSalary(e.target.value)}
+            />
+          )}
         </div>
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
 
           <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
             <label
-              className={`text-sm font-semibold ${errors.holiday && errors.holiday.type === 'required'
+              className={`text-sm font-semibold ${errors.holidays && errors.holidays.type === 'required'
                 ? 'text-[#f31260]'
                 : ''
                 }`}
@@ -562,7 +595,8 @@ export default function EmployeeInput() {
               ))}
             </Select>
           </div>
-          <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'></div>
+          <div></div>
+
         </div>
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
           <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-3'>

@@ -24,7 +24,7 @@ const fileTypes = ['JPG', 'PNG', 'GIF']
 
 export default function EmployeeInput() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const variant = ['faded']
+  const variant = ['bordered']
 
   const [other, setOther] = useState([])
   const [showOther, setShowOther] = useState([])
@@ -52,6 +52,9 @@ export default function EmployeeInput() {
   const [holidays, setHolidays] = useState("")
   const [empSalary, setEmpSalary] = useState('')
   const [holidaysArray, setHolidaysArray] = useState([])
+  const [basicSalary, setBasicSalary] = useState('')
+  const [type, setType] = useState('')
+  const [showType, setShowType] = useState(false)
   const holidaysList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
   const handleChange = e => {
     let array = []
@@ -81,6 +84,7 @@ export default function EmployeeInput() {
             res.data.data.relatedDepartment.directManager?.givenName
           )
           setIsSelectedCRM(res.data.data.isCRM)
+          setEmpSalary(res.data.data.employeeSalary)
           setDirectManagerID(res.data.data.relatedDepartment.directManager?._id)
           setPositionID(res.data.data.relatedPosition)
           handleInputChange(
@@ -147,6 +151,7 @@ export default function EmployeeInput() {
   }
 
   const handlePosition = val => {
+    setShowType(true)
     setPositionID(positionList.filter(el => el._id === val)[0])
     handleInputChange('relatedPosition', val)
   }
@@ -233,9 +238,9 @@ export default function EmployeeInput() {
     employee.fatherName
       ? formData.append('fatherName', employee.fatherName)
       : undefined
-    empSalary
+    type === 'custom'
       ? formData.append('employeeSalary', empSalary)
-      : employee.employeeSalary
+      : formData.append('employeeSalary', positionID?.basicSalary)
     // Append gender and employedDate using ternary if they exist in the employee object
     employee.gender ? formData.append('gender', employee.gender) : undefined
     employee.employedDate
@@ -593,15 +598,50 @@ export default function EmployeeInput() {
           variant={variant}
         />
 
-        <Input
-          type='number'
-          label='Basic Salary'
-          defaultValue={employee.employeeSalary ? employee.employeeSalary : positionID.basicSalary}
-          placeholder=' '
-          labelPlacement='outside'
-          variant={variant}
-          onChange={(e) => setEmpSalary(e.target.value)}
-        />
+
+        <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-5'>
+
+          <select
+            className='form-conrol w-full h-[45px] border-1 border-slate-300 rounded-lg'
+            defaultValue={basicSalary}
+
+            variant={variant}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option hidden>{employee.employeeSalary !== positionID?.basicSalary ? 'Basic Salary (Custom)' : 'Basic Salary (From Position)'}</option>
+            <option value='basic'>Basic Salary (From Position)</option>
+            <option value='custom'>Basic Salary (Custom)</option>
+          </select>
+
+
+        </div>
+
+
+        {type === 'basic' ? (
+          <Input
+            type='number'
+            // label='Basic Salary ( By Position )'
+            value={positionID?.basicSalary}
+            placeholder=' '
+            labelPlacement='outside'
+            className='mt-5'
+            variant={variant}
+          // onChange={(e) => setEmpSalary(e.target.value)}
+          />
+        ) : (
+          <Input
+            type='number'
+            // label='Basic Salary ( By Custom )'
+            value={empSalary}
+            placeholder=' '
+            className='mt-5'
+            labelPlacement='outside'
+            variant={variant}
+            onChange={(e) => setEmpSalary(e.target.value)}
+          />
+        )}
+
+
       </div>
       <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
 

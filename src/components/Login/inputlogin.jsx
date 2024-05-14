@@ -27,8 +27,8 @@ export default function Login() {
       .then(res => {
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('id', res.data.id)
-      
-        
+
+
         navigate('/emp')
         Swal.fire({
           icon: 'success',
@@ -38,7 +38,7 @@ export default function Login() {
           confirmButtonColor: '#3085d6'
         })
         window.location.reload()
-         
+
       })
       .catch((error) => {
         console.log(error)
@@ -60,10 +60,11 @@ export default function Login() {
   return (
     <form className='' onSubmit={handleSubmit}>
       <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
+
         <Input
           variant={'underlined'}
           type='email'
-          label='Email'
+          placeholder='Email'
           ref={emailRef}
           endContent={
             <MailFilledIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
@@ -73,7 +74,7 @@ export default function Login() {
           variant={'underlined'}
           ref={passRef}
           type={isVisible ? 'text' : 'password'}
-          label='Password'
+          placeholder='Password'
           endContent={
             <button
               className='focus:outline-none'
