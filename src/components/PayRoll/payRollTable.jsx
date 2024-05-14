@@ -377,7 +377,7 @@ export default function PayrollTable() {
                 {item?.relatedUser?.relatedDepartment?.name}
               </TableCell>
               <TableCell>
-                {item?.relatedUser?.relatedPosition?.basicSalary}
+                {item.relatedUser.employeeSalary ? item.relatedUser.employeeSalary : item?.relatedUser?.relatedPosition?.basicSalary}
               </TableCell>
               <TableCell className="text-center">
                 {item.totalAttendance}
@@ -733,7 +733,7 @@ export default function PayrollTable() {
                     </div>
                   </div>
 
-                  <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 ">
+                  {/* <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 ">
                     <div className="w-full gap-4 flex flex-row flex-grow mt-3">
                       <label className="text-sm font-semibold mt-8">
                         Bonus
@@ -760,7 +760,7 @@ export default function PayrollTable() {
                         />
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 ">
                     <div className="w-full gap-4 flex flex-row flex-grow mt-3">
                       <label className="text-sm font-semibold mt-8">

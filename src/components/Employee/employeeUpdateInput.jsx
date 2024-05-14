@@ -50,6 +50,7 @@ export default function EmployeeInput() {
   const [cvAnchor, setcvAnchor] = useState('')
   const [eduAnchor, seteduAnchor] = useState('')
   const [holidays, setHolidays] = useState("")
+  const [empSalary, setEmpSalary] = useState('')
   const [holidaysArray, setHolidaysArray] = useState([])
   const holidaysList = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
   const handleChange = e => {
@@ -232,7 +233,9 @@ export default function EmployeeInput() {
     employee.fatherName
       ? formData.append('fatherName', employee.fatherName)
       : undefined
-
+    empSalary
+      ? formData.append('employeeSalary', empSalary)
+      : employee.employeeSalary
     // Append gender and employedDate using ternary if they exist in the employee object
     employee.gender ? formData.append('gender', employee.gender) : undefined
     employee.employedDate
@@ -593,10 +596,11 @@ export default function EmployeeInput() {
         <Input
           type='number'
           label='Basic Salary'
-          value={positionID ? positionID.basicSalary : ''}
+          defaultValue={employee.employeeSalary ? employee.employeeSalary : positionID.basicSalary}
           placeholder=' '
           labelPlacement='outside'
           variant={variant}
+          onChange={(e) => setEmpSalary(e.target.value)}
         />
       </div>
       <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>

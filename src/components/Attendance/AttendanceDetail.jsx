@@ -606,7 +606,7 @@ export default function AttendanceDetailPage() {
                 size='sm'
                 type='text'
                 label={profile?.relatedPosition?.basicSalary ? '' : 'Basic Salary'}
-                value={profile?.relatedPosition?.basicSalary}
+                value={profile.basicSalary ? profile?.relatedPosition?.basicSalary : profile?.employeeSalary}
               />
             </div>
           </div>

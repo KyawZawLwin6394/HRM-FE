@@ -86,6 +86,7 @@ export default function EmployeeInput() {
   const [departmentList, setDepartmentList] = useState([])
   const [showMarried, setShowMarried] = useState(false)
   const [relatedDepartment, setRelatedDepartment] = useState('')
+  const [empSalary, setEmpSalary] = useState('')
   // console.log(JSON.stringify({ data: holiday?.split(',') }), 'inst')
   const handleChange = e => {
     let array = []
@@ -186,7 +187,12 @@ export default function EmployeeInput() {
     formData.append('cv', cv)
     formData.append('pf', profile)
     formData.append('relatedPosition', position)
-    formData.append('basicSalary', positionID.basicSalary)
+    if (empSalary) {
+      formData.append('employeeSalary', empSalary)
+    } else {
+      formData.append('basicSalary', positionID.basicSalary)
+    }
+
     formData.append('recLet', recLetter)
     formData.append('firstInterviewDate', firstIn)
     formData.append('firstInterviewResult', firstRes)
@@ -235,7 +241,7 @@ export default function EmployeeInput() {
       })
   }
   return (
-    <div className='gap-6'>
+    <div className='gap-6 mx-4'>
       <form onSubmit={handleSubmit(create)}>
 
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
@@ -519,10 +525,11 @@ export default function EmployeeInput() {
           <Input
             type='number'
             label='Basic Salary'
-            value={positionID?.basicSalary}
+            defaultValue={positionID?.basicSalary}
             placeholder=' '
             labelPlacement='outside'
             variant={variant}
+            onChange={(e) => setEmpSalary(e.target.value)}
           />
         </div>
         <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mt-1'>
