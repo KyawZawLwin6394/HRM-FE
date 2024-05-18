@@ -20,12 +20,12 @@ export default function employeeAdd() {
       </div>
       <div className=" flex-grow">
         <div className="body ">
-          <Card className="rounded-md shadow-md ml-20">
+          <Card className="rounded-md shadow-md ml-20 p-5">
             <CardHeader className="justify-between">
               <Button
                 variant="light"
                 className="rounded-none px-4 py-0 text-left">
-                <Link to="/emp" className='text-cyan-600'><img src={Back} width='20px' height='20px'/></Link>
+                <Link to="/emp" className='text-cyan-600'><img src={Back} width='20px' height='20px' /></Link>
               </Button>
               <div className="font-semibold">Employee Update & Detail</div>
               <div></div>
