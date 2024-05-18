@@ -163,6 +163,7 @@ export default function AttendanceDetailPage() {
       })
       .then(res => {
         setPayroll(res.data.data)
+        // console.log(res.data.data, 'pay')
       })
       .catch(error => {
         setPayroll(error.response.data.data)
@@ -381,7 +382,7 @@ export default function AttendanceDetailPage() {
       .then(res => {
         if (res.data.data) {
           setEditList(res.data.data[0])
-          console.log(editList)
+          // console.log(editList)
         } else {
           Swal.fire({
             icon: 'error',
@@ -617,7 +618,7 @@ export default function AttendanceDetailPage() {
                 isDisabled={disabled}
                 size='lg'
                 type='text'
-                value={payRoll?.paid}
+                value={payRoll?.totalAttendance}
               />
             </div>
             <div className='flex-row flex gap-2 mb-2'>
