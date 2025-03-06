@@ -13,12 +13,13 @@ import { useState, useEffect } from 'react'
 import apiInstance from '../../util/api.js'
 import Swal from 'sweetalert2'
 import { FileUploader } from 'react-drag-drop-files'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { SelectItem, Select } from "@nextui-org/select";
 const fileTypes = ['JPG', 'PNG', 'GIF']
 
 export default function EmployeeInput() {
+  const navigate = useNavigate()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const variant = ['bordered']
   const {
@@ -150,16 +151,16 @@ export default function EmployeeInput() {
   }
 
   const handleRecLetter = e => {
-    if (e.target.files) {
-      setRecLetter(e.target.files[0])
+    if (e) {
+      setRecLetter(e)
       // console.log(e.target.files, 'file')
     }
   }
 
   const handleProfile = e => {
-    if (e.target.files) {
-      setProfile(e.target.files[0])
-      // console.log(e.target.files, 'file')
+    if (e) {
+      setProfile(e)
+      console.log(e, 'file')
     }
   }
 
@@ -238,6 +239,7 @@ export default function EmployeeInput() {
           showConfirmButton: false,
           timer: 2000
         })
+        navigate("/emp")
       })
       .catch(error => {
         alert(error)
@@ -787,23 +789,28 @@ export default function EmployeeInput() {
             </div>
           </div>
         </div>
-        <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-          <Input
-            type='file'
-            onChange={handleRecLetter}
-            label='Recommendation Letter'
-            placeholder=' '
-            labelPlacement='outside'
-            variant={variant}
-          />
-          <Input
-            type='file'
-            onChange={handleProfile}
-            label='Profile'
-            placeholder=' '
-            labelPlacement='outside'
-            variant={variant}
-          />
+        <div className='flex justify-between mb-6 md:mb-0 gap-4 py-4'>
+          <div className='w-full'>
+            <label className='font-semibold'>Recommendation Letter</label>
+            <FileUploader
+              // multiple={true}
+              handleChange={handleRecLetter}
+              name='file'
+              className='py-3'
+            />
+          </div>
+
+          <div className='w-[800px]'>
+            <label className='font-semibold'>Profile</label>
+            <FileUploader
+              // multiple={true}
+              handleChange={handleProfile}
+              name='file'
+              className='py-3'
+            />
+          </div>
+
+
         </div>
         <div className='flex w-[680px] flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
 

@@ -242,7 +242,7 @@ export default function AttendanceDetailPage() {
       setWorkingDay(res.data.data.relatedPosition.workingDay)
       if (res.data.data.profile.length > 0) {
         setImg(
-          `http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/${res.data.data.profile[0].imgUrl}`
+          `http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/` + `/employee/pf/${res.data.data.profile[0].imgUrl?.split("pf/")[1]}`
         )
       } else {
         setImg(`https://placehold.co/250x250/png?text=User`)
@@ -563,7 +563,7 @@ export default function AttendanceDetailPage() {
           <div className=''>
             <Image
               className='flex-none'
-              width={250}
+              width={350}
               height={250}
               isZoomed
               src={img}

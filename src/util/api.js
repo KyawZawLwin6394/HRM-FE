@@ -1,25 +1,25 @@
-import axios from 'axios'
-// const url = 'http://localhost:9000/api/'
-const url = 'http://hrmbackend.kwintechnologykw11.com:5000/api/'
-const storeToken = localStorage.getItem('token')
+import axios from "axios";
+// const url = "http://localhost:5000/api/";
+const url = "http://hrmbackend.kwintechnologykw11.com:5000/api/";
+const storeToken = localStorage.getItem("token");
 
 const apiInstance = axios.create({
   baseURL: url,
   headers: {
-    Authorization: `Bearer ${storeToken}`
-  }
-})
+    Authorization: `Bearer ${storeToken}`,
+  },
+});
 
 apiInstance.interceptors.request.use(
-  config => {
+  (config) => {
     if (storeToken) {
-      config.headers['Authorization'] = `Bearer ${storeToken}`
+      config.headers["Authorization"] = `Bearer ${storeToken}`;
     }
-    return config
+    return config;
   },
-  error => {
-    return Promise.reject(error)
+  (error) => {
+    return Promise.reject(error);
   }
-)
+);
 
-export default apiInstance
+export default apiInstance;

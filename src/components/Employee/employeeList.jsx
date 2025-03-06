@@ -144,7 +144,7 @@ export default function EmployeeTable() {
                   avatarProps={{
                     radius: "lg",
                     src:
-                      item.profile.length > 0 ? "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/" + item.profile[0].imgUrl : '',
+                      item.profile.length > 0 ? "http://hrmbackend.kwintechnologykw11.com:5000/static/hrm/" + `/employee/pf/${item.profile[0].imgUrl?.split("pf/")[1]}` : '',
                   }}
                   description={item.email}
                   name={item.givenName}>
@@ -160,12 +160,12 @@ export default function EmployeeTable() {
               <TableCell>{item.phone}</TableCell>
               <TableCell>{item.relatedDepartment?.name}</TableCell>
               <TableCell> <div className="flex flex-col">
-                
+
                 <p className="text-bold text-sm capitalize ">
                   {item.relatedPosition?.name}
                 </p>
               </div></TableCell>
-          
+
               <TableCell>
                 <div className="relative flex items-center gap-2">
                   <Tooltip content="Details">

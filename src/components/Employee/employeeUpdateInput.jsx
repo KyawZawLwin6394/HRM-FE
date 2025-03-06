@@ -18,11 +18,12 @@ import { useState, useEffect } from 'react'
 import apiInstance from '../../util/api.js'
 import Swal from 'sweetalert2'
 import { FileUploader } from 'react-drag-drop-files'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const fileTypes = ['JPG', 'PNG', 'GIF']
 
 export default function EmployeeInput() {
+  const navigate = useNavigate()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const variant = ['bordered']
 
@@ -180,9 +181,10 @@ export default function EmployeeInput() {
   }
 
   const handleProfile = e => {
-    if (e.target.files) {
-      setProfile(e.target.files[0])
+    if (e) {
+      setProfile(e)
     }
+    console.log(e.name, 'img')
   }
 
   const handleInputChange = (fieldName, value) => {
@@ -288,6 +290,7 @@ export default function EmployeeInput() {
           showConfirmButton: false,
           timer: 2000
         })
+        navigate("/emp")
       })
       .catch(err => {
         Swal.fire({
@@ -877,48 +880,31 @@ export default function EmployeeInput() {
           </div>
         </div>
       </div>
-      <div className='flex w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4'>
-        <Input
-          type='file'
-          onChange={handleRecLetter}
-          label='Recommendation Letter'
-          placeholder=' '
-          labelPlacement='outside'
-          variant={variant}
-          endContent={
-            recLetAnchor ? (
-              <Link
-                isExternal
-                showAnchorIcon
-                href={recLetAnchor}
-                anchorIcon={<AnchorIcon />}
-              ></Link>
-            ) : (
-              ''
-            )
-          }
-        />
-        <Input
-          type='file'
-          onChange={handleProfile}
-          label='Profile'
-          placeholder=' '
-          labelPlacement='outside'
-          variant={variant}
-          endContent={
-            profileAnchor ? (
-              <Link
-                isExternal
-                showAnchorIcon
-                href={profileAnchor}
-                anchorIcon={<AnchorIcon />}
-              ></Link>
-            ) : (
-              ''
-            )
-          }
-        />
-        <div></div>
+      <div className='flex justify-between mb-6 md:mb-0 gap-4 py-4'>
+        <div className='w-full'>
+          <label className='font-semibold'>Recommendation Letter</label>
+          <FileUploader
+            // multiple={true}
+            handleChange={handleRecLetter}
+            name='file'
+            className='py-3'
+          />
+        </div>
+
+        <div className='flex flex-col w-[800px] gap-4'>
+          <label className='font-semibold'>Profile</label>
+          <FileUploader
+            // multiple={true}
+            handleChange={handleProfile}
+            name='file'
+            className='py-3'
+          />
+          <div className='border border-blue-500 rounded-md shadow-lg'>
+            <img src={profile ? URL.createObjectURL(profile) : profileAnchor} className="w-full md:w-[200px]" />
+          </div>
+        </div>
+
+
       </div>
 
       <div className='block w-full flex-wrap md:flex-nowrap mb-4 md:mb-0 gap-4 mt-7 '>
