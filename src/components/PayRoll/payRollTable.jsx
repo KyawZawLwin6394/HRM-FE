@@ -377,7 +377,7 @@ export default function PayrollTable() {
                 {item?.relatedUser?.relatedDepartment?.name}
               </TableCell>
               <TableCell>
-                {item.relatedUser.employeeSalary ? item.relatedUser.employeeSalary : item?.relatedUser?.relatedPosition?.basicSalary}
+                {item?.relatedUser ? item?.relatedUser?.employeeSalary : item?.relatedUser?.relatedPosition?.basicSalary}
               </TableCell>
               <TableCell className="text-center">
                 {item.totalAttendance}

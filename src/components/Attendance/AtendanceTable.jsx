@@ -42,7 +42,22 @@ import { PlusIcon } from "../../assets/Icons/PlusIcon";
 import { convertAndDisplayTZ, convertToWeekDayNames } from "../../util/Util";
 
 export default function AttendanceTable() {
+  const months = [
+    "Jan",
+    "Feb",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const [attendanceList, setAttendanceList] = useState([]);
+  const [monthValue, setMonthValue] = useState("")
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [delID, setDelID] = useState(null);
   const [popOverOpen, setPopOverOpen] = useState(false);
@@ -212,172 +227,304 @@ export default function AttendanceTable() {
       onClose();
     });
   };
+  const handleCalculatePayroll = async (month) => {
 
+    Swal.fire({
+      title: "Please Wait...",
+      html: "Processing your request...",
+      allowOutsideClick: false, // Prevent closing by clicking outside
+      didOpen: () => {
+        Swal.showLoading(); // Show the loading spinner
+      },
+    })
+      ;
+    // console.log("showLoading")
+
+    try {
+      await apiInstance
+        .post("attendances/calculatePayroll", {
+          month: month,
+          year: new Date().toISOString()
+        })
+      // console.log(all, 'all')
+      Swal.close();
+      Swal.fire({
+        icon: 'success',
+        title: 'Successfully Payroll Calculated',
+        showConfirmButton: false,
+        timer: 4000
+      })
+      window.location.reload()
+    } catch (error) {
+      Swal.close();
+      Swal.fire({
+        icon: 'error',
+        title: error,
+        showConfirmButton: false,
+        timer: 4000
+      })
+    }
+
+  };
+
+  const handleUpdateAttendanceList = async () => {
+
+    // Swal.showLoading()
+    Swal.fire({
+      title: "Please Wait...",
+      html: "Processing your request...",
+      allowOutsideClick: false, // Prevent closing by clicking outside
+      didOpen: () => {
+        Swal.showLoading(); // Show the loading spinner
+      },
+    });
+
+    try {
+      await apiInstance.post('attendances/updateList', {
+        month: monthValue,
+        year: new Date().toISOString()
+      }).then((result) => {
+        console.log(result.data.data, 'data')
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated Attendances List',
+          confirmButtonText: 'Calculate Payroll!',
+          allowOutsideClick: false, // Disable clicking outside the modal
+          allowEscapeKey: false,    // Disable closing with the Esc key
+          allowEnterKey: false,     // Disable closing with the Enter key
+          backdrop: true            // Keep the backdrop visible
+        })
+          .then(async (res) => {
+            if (res.isConfirmed) {
+              // console.log(res, 'data')
+
+
+              handleCalculatePayroll(monthValue)
+              // const month = result.data.data[result.data.data?.length - 1]?.monthValue
+
+
+            }
+
+          })
+      })
+    } catch (error) {
+      console.log(error, 'er')
+      Swal.close();
+      Swal.fire({
+        icon: 'error',
+        title: error.response.data.message,
+        showConfirmButton: false,
+        timer: 4000
+      })
+    }
+
+  }
   return (
     <>
       <div className='flex flex-row gap-5 justify-between'>
-        <div className='flex gap-4 mb-3 flex-row'>
-          <Dropdown>
-            <DropdownTrigger className='hidden sm:flex'>
-              <Button
-                endContent={<ChevronDownIcon className='text-small' />}
-                variant='flat'
+        <div className='flex flex-col gap-2'>
+          <div className='flex gap-4 mb-3 flex-row'>
+            <Dropdown>
+              <DropdownTrigger className='hidden sm:flex'>
+                <Button
+                  endContent={<ChevronDownIcon className='text-small' />}
+                  variant='flat'
+                >
+                  Department
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                onAction={(value) => handleDepartmentDropDown(value)}
+                disallowEmptySelection
+                aria-label='Table Columns'
+                closeOnSelect={false}
+                selectionMode='single'
               >
-                Department
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              onAction={(value) => handleDepartmentDropDown(value)}
-              disallowEmptySelection
-              aria-label='Table Columns'
-              closeOnSelect={false}
-              selectionMode='single'
-            >
-              {departmentList.map((item) => (
+                {departmentList.map((item) => (
+                  <DropdownItem
+                    key={item._id}
+                    value={item._id}
+                    className='capitalize'
+                  >
+                    {item.name}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+            <Dropdown>
+              <DropdownTrigger
+                isDisabled={isDepSelected}
+                className='hidden sm:flex'
+              >
+                <Button
+                  endContent={<ChevronDownIcon className='text-small' />}
+                  variant='flat'
+                >
+                  Employee
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                onAction={(value) => handleFilterInput(value, "relatedUser")}
+                disallowEmptySelection
+                aria-label='Table Columns'
+                closeOnSelect={false}
+                selectionMode='single'
+              >
+                {employeeList.map((item) => (
+                  <DropdownItem
+                    key={item._id}
+                    value={item._id}
+                    className='capitalize'
+                  >
+                    {item.givenName}
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            </Dropdown>
+            <Dropdown>
+              <DropdownTrigger className='hidden sm:flex'>
+                <Button
+                  endContent={<ChevronDownIcon className='text-small' />}
+                  variant='flat'
+                >
+                  Type
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                disallowEmptySelection
+                aria-label='Table Columns'
+                closeOnSelect={false}
+                selectionMode='single'
+              >
+                <DropdownItem key='M-F' value='M-F' className='capitalize'>
+                  All
+                </DropdownItem>
+                <DropdownItem key='M-S' value='M-S' className='capitalize'>
+                  Attend
+                </DropdownItem>
                 <DropdownItem
-                  key={item._id}
-                  value={item._id}
+                  key='All Day'
+                  value='All Day'
                   className='capitalize'
                 >
-                  {item.name}
+                  Dismiss
                 </DropdownItem>
-              ))}
-            </DropdownMenu>
-          </Dropdown>
+              </DropdownMenu>
+            </Dropdown>
+            <div className='w-60 flex gap-2'>
+              <Input
+                type='date'
+                startContent='From: '
+                onChange={(event) =>
+                  handleFilterInput(event.target.value, "fromDate")
+                }
+              />
+              <Input
+                type='date'
+                startContent='To: '
+                onChange={(event) =>
+                  handleFilterInput(event.target.value, "toDate")
+                }
+              />
+              <Button
+                color='primary'
+                endContent={<SearchIcon className='w-5 h-4' />}
+                onClick={handleSearch}
+              >
+                Search
+              </Button>
+            </div>
+          </div>
+          <div className='flex gap-2 mb-3 flex-row'>
+            <Popover
+              isOpen={popOverOpen}
+              placement='bottom'
+              offset={20}
+              showArrow
+            >
+              <PopoverTrigger>
+                <Button
+                  color='primary'
+                  onClick={() => setPopOverOpen(true)}
+                  endContent={<TfiImport />}
+                >
+                  Import
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mx-auto my-auto'>
+                  <div className='mt-7'></div>
+                  <FileUploader
+                    multiple={true}
+                    handleChange={handleChange}
+                    name='file'
+                    className='py-3'
+                  />
+                  <div className='py-4 flex flex-row justify-between'>
+                    <Button
+                      color='danger'
+                      variant='light'
+                      onClick={() => setPopOverOpen(false)}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      color='primary'
+                      endContent={<BsCloudArrowUpFill />}
+                      onPress={onClose}
+                      onClick={() => handleExcelImport()}
+                    >
+                      Upload
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+            <Link to='/att-add'>
+              <Button endContent={<PlusIcon />} color='primary'>
+                Add
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+
+        <div className='flex gap-2 mb-3 flex-row'>
           <Dropdown>
             <DropdownTrigger
-              isDisabled={isDepSelected}
+              // isDisabled={isDepSelected}
               className='hidden sm:flex'
             >
               <Button
                 endContent={<ChevronDownIcon className='text-small' />}
-                variant='flat'
+                variant='bordered'
               >
-                Employee
+                {monthValue ? monthValue : "Months"}
               </Button>
             </DropdownTrigger>
             <DropdownMenu
-              onAction={(value) => handleFilterInput(value, "relatedUser")}
+              onAction={(value) => setMonthValue(value)}
               disallowEmptySelection
               aria-label='Table Columns'
-              closeOnSelect={false}
               selectionMode='single'
             >
-              {employeeList.map((item) => (
+              {months.map((item) => (
                 <DropdownItem
-                  key={item._id}
-                  value={item._id}
+                  key={item}
+                  value={item}
                   className='capitalize'
                 >
-                  {item.givenName}
+                  {item}
                 </DropdownItem>
               ))}
             </DropdownMenu>
           </Dropdown>
-          <Dropdown>
-            <DropdownTrigger className='hidden sm:flex'>
-              <Button
-                endContent={<ChevronDownIcon className='text-small' />}
-                variant='flat'
-              >
-                Type
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              disallowEmptySelection
-              aria-label='Table Columns'
-              closeOnSelect={false}
-              selectionMode='single'
-            >
-              <DropdownItem key='M-F' value='M-F' className='capitalize'>
-                All
-              </DropdownItem>
-              <DropdownItem key='M-S' value='M-S' className='capitalize'>
-                Attend
-              </DropdownItem>
-              <DropdownItem
-                key='All Day'
-                value='All Day'
-                className='capitalize'
-              >
-                Dismiss
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-          <div className='w-60 flex gap-2'>
-            <Input
-              type='date'
-              startContent='From: '
-              onChange={(event) =>
-                handleFilterInput(event.target.value, "fromDate")
-              }
-            />
-            <Input
-              type='date'
-              startContent='To: '
-              onChange={(event) =>
-                handleFilterInput(event.target.value, "toDate")
-              }
-            />
-            <Button
-              color='primary'
-              endContent={<SearchIcon className='w-5 h-4' />}
-              onClick={handleSearch}
-            >
-              Search
+          <div >
+            <Button isDisabled={monthValue ? false : true} color='primary' onClick={handleUpdateAttendanceList}>
+              Calculate
             </Button>
           </div>
-        </div>
-        <div className='flex gap-2 mb-3 flex-row'>
-          <Popover
-            isOpen={popOverOpen}
-            placement='bottom'
-            offset={20}
-            showArrow
-          >
-            <PopoverTrigger>
-              <Button
-                color='primary'
-                onClick={() => setPopOverOpen(true)}
-                endContent={<TfiImport />}
-              >
-                Import
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <div className='block w-full flex-wrap md:flex-nowrap mb-6 md:mb-0 gap-4 mx-auto my-auto'>
-                <div className='mt-7'></div>
-                <FileUploader
-                  multiple={true}
-                  handleChange={handleChange}
-                  name='file'
-                  className='py-3'
-                />
-                <div className='py-4 flex flex-row justify-between'>
-                  <Button
-                    color='danger'
-                    variant='light'
-                    onClick={() => setPopOverOpen(false)}
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    color='primary'
-                    endContent={<BsCloudArrowUpFill />}
-                    onPress={onClose}
-                    onClick={() => handleExcelImport()}
-                  >
-                    Upload
-                  </Button>
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-          <Link to='/att-add'>
-            <Button endContent={<PlusIcon />} color='primary'>
-              Add
-            </Button>
-          </Link>
         </div>
       </div>
       <div className='flex justify-between items-center mb-3'>
